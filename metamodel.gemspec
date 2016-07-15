@@ -1,9 +1,12 @@
 # encoding: UTF-8
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'metamodel/version'
 require 'date'
 
 Gem::Specification.new do |s|
   s.name     = "metamodel"
-  s.version  = '0.0.1'
+  s.version  = MetaModel::VERSION
   s.date     = Date.today
   s.license  = "MIT"
   s.email    = ["stark.draven@gmail.com"]
