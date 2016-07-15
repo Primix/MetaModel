@@ -17,5 +17,11 @@ Gem::Specification.new do |s|
   s.description = "Not desc for now."
 
   s.files = Dir["lib/**/*.rb"]
-end
 
+  s.add_runtime_dependency 'claide',                '>= 1.0.0', '< 2.0'
+  s.add_runtime_dependency 'colored',       '~> 1.2'
+
+  s.add_development_dependency 'bundler', '~> 1.3'
+  s.add_development_dependency 'rake',    '~> 10.0'
+
+end
