@@ -1,3 +1,3 @@
 module MetaModel
-  autoload :Command, 'cocoapods/command'
+  autoload :Command, 'metamodel/command'
 end

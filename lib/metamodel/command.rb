@@ -1,9 +1,13 @@
+require 'metamodel/version'
+
 require 'colored'
 require 'claide'
 
 module MetaModel
 
   class Command < CLAide::Command
+    require 'metamodel/command/generate'
+
     self.abstract_command = true
     self.command = 'mm'
     self.version = VERSION
@@ -11,6 +15,7 @@ module MetaModel
     self.plugin_prefixes = %w(claide mm)
 
     def self.run(argv)
+      puts "Run"
       super(argv)
     end
   end

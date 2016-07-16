@@ -1,7 +1,5 @@
 # encoding: UTF-8
-lib = File.expand_path('../lib', __FILE__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'metamodel/version'
+require File.expand_path('../lib/metamodel/version', __FILE__)
 require 'date'
 
 Gem::Specification.new do |s|
