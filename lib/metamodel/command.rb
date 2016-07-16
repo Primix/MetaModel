@@ -9,5 +9,10 @@ module MetaModel
     self.version = VERSION
     self.description = 'MetaModel, the Model generator.'
     self.plugin_prefixes = %w(claide mm)
+
+    def self.run(argv)
+      super(argv)
+    end
   end
+
 end
