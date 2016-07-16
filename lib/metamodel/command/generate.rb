@@ -10,7 +10,7 @@ module MetaModel
       end
 
       def run
-        puts "Running"
+
       end
 
     end

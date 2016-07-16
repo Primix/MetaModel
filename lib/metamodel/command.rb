@@ -15,7 +15,6 @@ module MetaModel
     self.plugin_prefixes = %w(claide mm)
 
     def self.run(argv)
-      puts "Run"
       super(argv)
     end
   end
