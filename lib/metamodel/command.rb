@@ -1,9 +1,10 @@
-require 'metamodel/version'
-
 require 'colored'
 require 'claide'
 
 module MetaModel
+  class PlainInformative
+    include CLAide::InformativeError
+  end
 
   class Command < CLAide::Command
     require 'metamodel/command/init'
@@ -19,6 +20,18 @@ module MetaModel
     def self.run(argv)
       super(argv)
     end
-  end
 
+    #-------------------------------------------------------------------------#
+
+    include Config::Mixin
+
+    private
+
+    def verify_scaffold_exists!
+      unless config.scaffold
+        puts "No `scaffold' folder found in the project directory."
+        # raise Informative, "No `MetaModel' folder found in the project directory."
+      end
+    end
+  end
 end
