@@ -6,7 +6,9 @@ require 'claide'
 module MetaModel
 
   class Command < CLAide::Command
+    require 'metamodel/command/init'
     require 'metamodel/command/generate'
+    require 'metamodel/command/build'
 
     self.abstract_command = true
     self.command = 'mm'
