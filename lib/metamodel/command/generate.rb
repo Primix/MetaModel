@@ -15,11 +15,8 @@ module MetaModel
       end
 
       def run
-        if config.scaffold_folder
-          @file_path.open('w') { |f| f << model_template(@model_name) }
-        else
-          puts "Hello"
-        end
+        verify_scaffold_exists!
+        @file_path.open('w') { |f| f << model_template(@model_name) }
       end
 
       private
