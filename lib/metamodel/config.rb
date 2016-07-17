@@ -22,7 +22,6 @@ module MetaModel
     def installation_root
       current_dir = ActiveSupport::Multibyte::Unicode.normalize(Dir.pwd)
       current_path = Pathname.new(current_dir)
-      puts current_path
       unless @installation_root
         until current_path.root?
           if scaffold_path_in_dir(current_path)
@@ -50,7 +49,7 @@ module MetaModel
     # @return [Nil]
     #
     def scaffold_path
-      @scaffold_path_in_dir ||= scaffold_path_in_dir(installation_root)
+      @scaffold_path_in_dir ||= installation_root + 'scaffold'
     end
 
     # Returns the path of the scaffold folder in the given dir if any exists.

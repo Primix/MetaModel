@@ -29,8 +29,7 @@ module MetaModel
 
     def verify_scaffold_exists!
       unless config.scaffold
-        puts "No `scaffold' folder found in the project directory."
-        # raise Informative, "No `MetaModel' folder found in the project directory."
+        raise Informative, "No `scaffold' folder found in the project directory."
       end
     end
   end
