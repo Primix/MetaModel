@@ -17,7 +17,7 @@ module MetaModel
     # @!group Paths
 
     # @return [Pathname] the root of the MetaModel installation where the
-    #         MetaModel folder is located.
+    #         scaffold folder is located.
     #
     def installation_root
       current_dir = ActiveSupport::Multibyte::Unicode.normalize(Dir.pwd)
@@ -25,7 +25,7 @@ module MetaModel
       puts current_path
       unless @installation_root
         until current_path.root?
-          if metamodel_path_in_dir(current_path)
+          if scaffold_path_in_dir(current_path)
             @installation_root = current_path
             break
           else
