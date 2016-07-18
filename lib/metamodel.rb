@@ -6,13 +6,6 @@ module MetaModel
   require 'metamodel/version'
   require 'metamodel/config'
 
-  # Indicates an user error. This is defined in cocoapods-core.
-  #
-  # class Informative < PlainInformative
-  #   def message
-  #     "[!] #{super}".red
-  #   end
-  # end
-
-  autoload :Command, 'metamodel/command'
+  autoload :Command,   'metamodel/command'
+  autoload :Exception, 'metamodel/exception'
 end
