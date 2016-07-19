@@ -2,10 +2,6 @@ require 'colored'
 require 'claide'
 
 module MetaModel
-  class PlainInformative
-    include CLAide::InformativeError
-  end
-
   class Command < CLAide::Command
     require 'metamodel/command/init'
     require 'metamodel/command/generate'
@@ -27,9 +23,9 @@ module MetaModel
 
     private
 
-    # Description of method
+    # Checks that scaffold folder exists
     #
-    # @return [Type] description of returned object
+    # @return [void]
     def verify_scaffold_exists!
       unless config.scaffold_folder
         raise Informative, "No `scaffold' folder found in the project directory."
