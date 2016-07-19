@@ -10,7 +10,7 @@ module MetaModel
 
       def initialize(argv)
         @model_name = argv.shift_argument
-        @file_path = Pathname.pwd + "#{@model_name.downcase}.rb"
+        @file_path = config.scaffold_path + "#{@model_name.downcase}.rb"
         super
       end
 

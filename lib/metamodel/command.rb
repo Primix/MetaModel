@@ -27,7 +27,6 @@ module MetaModel
 
     private
 
-
     # Description of method
     #
     # @return [Type] description of returned object
