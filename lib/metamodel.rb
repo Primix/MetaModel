@@ -17,6 +17,5 @@ module MetaModel
   require 'metamodel/version'
   require 'metamodel/config'
 
-  autoload :Exception, 'metamodel/exception'
   autoload :Command,   'metamodel/command'
 end
