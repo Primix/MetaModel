@@ -13,6 +13,7 @@ module MetaModel
   end
 
   require 'pathname'
+  require 'active_record'
 
   require 'metamodel/version'
   require 'metamodel/config'

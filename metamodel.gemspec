@@ -19,9 +19,10 @@ Gem::Specification.new do |s|
   s.executables = %w{ mm }
   s.require_paths = %w{ lib }
 
-  s.add_runtime_dependency 'claide',        '>= 1.0.0', '< 2.0'
-  s.add_runtime_dependency 'colored',       '~> 1.2'
+  s.add_runtime_dependency 'claide',         '>= 1.0.0', '< 2.0'
+  s.add_runtime_dependency 'colored',        '~> 1.2'
   s.add_runtime_dependency 'xcodeproj',      '~> 1.2'
+  s.add_runtime_dependency 'active_record',  '~> 5.0'
 
   s.add_development_dependency 'bundler',   '~> 1.3'
   s.add_development_dependency 'rake',      '~> 10.0'
