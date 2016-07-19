@@ -27,6 +27,10 @@ module MetaModel
 
     private
 
+
+    # Description of method
+    #
+    # @return [Type] description of returned object
     def verify_scaffold_exists!
       unless config.scaffold_folder
         raise Informative, "No `scaffold' folder found in the project directory."
