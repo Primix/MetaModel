@@ -8,7 +8,9 @@ module MetaModel
 
     def initialize(scaffold_path)
       @scaffold_path = scaffold_path
+      @models = []
       parse
+      puts @models
     end
 
     def parse
@@ -32,8 +34,7 @@ module MetaModel
 
       yield PropertyConstructor.new(model)
 
-      puts model
-      p model.properties
+      @models << model
     end
 
   end
