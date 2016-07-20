@@ -19,4 +19,5 @@ module MetaModel
   require 'metamodel/config'
 
   autoload :Command,   'metamodel/command'
+  autoload :Parser,    'metamodel/parser'
 end

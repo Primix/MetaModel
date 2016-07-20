@@ -7,12 +7,11 @@ module MetaModel
       DESC
 
       def initialize(argv)
-
         super
       end
 
       def run
-
+        Parser.new(config.scaffold_path)
       end
 
       private

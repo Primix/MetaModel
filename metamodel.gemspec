@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'claide',         '>= 1.0.0', '< 2.0'
   s.add_runtime_dependency 'colored',        '~> 1.2'
   s.add_runtime_dependency 'xcodeproj',      '~> 1.2'
-  s.add_runtime_dependency 'active_record',  '~> 5.0'
+  s.add_runtime_dependency 'activerecord',   '~> 5.0'
 
   s.add_development_dependency 'bundler',   '~> 1.3'
   s.add_development_dependency 'rake',      '~> 10.0'
