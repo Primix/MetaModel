@@ -4,19 +4,23 @@ module MetaModel
 
     attr_reader :model
 
-    define_method :string do |json_key, property_key = nil|
-      save_property CocoaProperty.new(json_key, :string, property_key)
-    end
-
     def initialize(model)
       @model = model
     end
 
-    def method_missing(symbol, *arguments)
-      define_method symbol do |json_key, property_key = nil|
-        save_property CocoaProperty.new(json_key, symbol, property_key)
+    def method_missing(meth, *arguments, &block)
+
+      if meth == :string
+        (class << self; self; end).class_eval do
+          define_method meth do |json_key, property_key = nil|
+            save_property CocoaProperty.new(json_key, meth, property_key)
+          end
+        end
+        self.send meth, arguments
+      else
+        super
       end
-      eval symbol, arguments
+
     end
 
     private
@@ -27,6 +31,7 @@ module MetaModel
     # @return [Void]
     def save_property(property)
       @model.properties << property
+      p property
     end
   end
 
