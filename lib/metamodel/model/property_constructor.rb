@@ -9,14 +9,13 @@ module MetaModel
     end
 
     def method_missing(meth, *arguments, &block)
-
       if meth == :string
         (class << self; self; end).class_eval do
           define_method meth do |json_key, property_key = nil|
             save_property CocoaProperty.new(json_key, meth, property_key)
           end
         end
-        self.send meth, arguments
+        self.send meth, *arguments
       else
         super
       end
