@@ -8,7 +8,11 @@ module MetaModel
     def initialize(json_key, type = :string, **arguments)
       @json_key = json_key
       @key = json_key.to_s.camelize(:lower).to_sym
-      @type = type
+      @type = convert_symbol_to_type type
+    end
+
+    def convert_symbol_to_type(symbol)
+      symbol.to_s.capitalize
     end
 
   end
