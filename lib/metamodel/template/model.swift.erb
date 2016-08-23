@@ -18,10 +18,17 @@ public struct <%= model.name %> {
 }
 
 extension <%= model.name %> {
+    public init(record: SQLite.Row) {
+      self.init(<%= model.properties.map { |property| "#{property.key}: record[meta.#{property.key}]" }.join(", ") %>)
+    }
+}
+
+extension <%= model.name %> {
     struct meta {
-        static let table = Table("<%= "#{model.name.to_s.pluralize}" %>")
+        static let table = Table("<%= "#{model.table_name}" %>")
         static let id = Expression<Int>("id")
-        <% model.properties.each do |property| %><%= "static let #{property.key} = Expression<#{property.type}>(\"#{property.key}\")\n" %><% end %>
+        <% model.properties.each do |property| %><%= "static let #{property.key} = Expression<#{property.type}>(\"#{property.key}\")" %>
+        <% end %>
         static var query: QueryType { get { return meta.table.filter(meta.id == self.id) } }
 
         static func createTable() {

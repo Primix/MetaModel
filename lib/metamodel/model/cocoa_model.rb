@@ -8,6 +8,10 @@ module MetaModel
       @name = name
       @properties = []
     end
+
+    def table_name
+      name.to_s.pluralize.underscore
+    end
   end
 
 end
