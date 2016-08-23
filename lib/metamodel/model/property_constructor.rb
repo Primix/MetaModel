@@ -10,7 +10,7 @@ module MetaModel
 
     def method_missing(meth, *arguments, &block)
       (class << self; self; end).class_eval do
-        define_method meth do |json_key **arguments|
+        define_method meth do |json_key, **arguments|
           save_property CocoaProperty.new(json_key, meth, arguments)
         end
       end

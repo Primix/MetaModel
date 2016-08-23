@@ -22,7 +22,7 @@ module MetaModel
 
     def generate
       @models.each do |model|
-
+        
       end
     end
 
