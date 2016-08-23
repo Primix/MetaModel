@@ -1,5 +1,5 @@
 //
-//  <%= model.model_name %>.swift
+//  <%= model.name %>.swift
 //  MetaModel
 //
 //  Created by MetaModel script.
@@ -8,11 +8,43 @@
 import Foundation
 import SQLite
 
-public struct <%= model.model_name %> {
+public struct <%= model.name %> {
     public let id: Int
     <% model.properties.each do |property| %>
-    <%= """public var #{property.property_key}: #{property.property_type} {
-      didSet { try! db.run(meta.query.update(meta.#{property.property_key} <- #{property.property_key})) }
+    <%= """public var #{property.key}: #{property.type} {
+      didSet { try! db.run(meta.query.update(meta.#{property.key} <- #{property.key})) }
     }""" %>
     <% end %>
+}
+
+extension <%= model.name %> {
+    struct meta {
+        static let table = Table("<%= "#{model.name.to_s.pluralize}" %>")
+        static let id = Expression<Int>("id")
+        <% model.properties.each do |property| %><%= "static let #{property.key} = Expression<#{property.type}>(\"#{property.key}\")\n" %><% end %>
+        static var query: QueryType { get { return meta.table.filter(meta.id == self.id) } }
+
+        static func createTable() {
+            let _ = try? db.run(table.create { t in
+                t.column(id, primaryKey: true)
+                <% model.properties.each do |property| %><%= "t.column(property.key)\n" %><% end %>
+            })
+        }
+
+        static func findOne(query: QueryType) -> <%= model.name %>? {
+            for record in try! db.prepare(query) {
+                return <%= model.name %>(record: record)
+            }
+            return nil
+        }
+
+        static func findAll(query: QueryType) -> [<%= model.name %>] {
+            var result: [<%= model.name %>] = []
+            for record in try! db.prepare(query) {
+                result.append(<%= model.name %>(record: record))
+            }
+            return result
+        }
+    }
+
 }

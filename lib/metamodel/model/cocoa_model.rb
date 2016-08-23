@@ -1,11 +1,11 @@
 module MetaModel
 
   class CocoaModel
-    attr_reader :model_name
+    attr_reader :name
     attr_reader :properties
 
-    def initialize(model_name)
-      @model_name = model_name
+    def initialize(name)
+      @name = name
       @properties = []
     end
   end

@@ -21,20 +21,12 @@ module MetaModel
     end
 
     def render
-      template_path = File.expand_path(File.join(File.dirname(__FILE__), "template/model.swift.erb"))
-      template = File.read template_path
-      puts template
-      vars = { :model => @model }
-      puts ErbalT::render_from_hash(template, vars)
-
+      template = File.read File.expand_path(File.join(File.dirname(__FILE__), "template/model.swift.erb"))
+      result = ErbalT::render_from_hash(template, { :model => @model })
+      puts result
     end
 
     private
-
-    def template
-      <<-TEMPLATE.strip_heredoc
-      TEMPLATE
-    end
 
   end
 end
