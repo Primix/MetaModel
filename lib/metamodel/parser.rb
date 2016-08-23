@@ -5,6 +5,7 @@ module MetaModel
     require 'metamodel/model/cocoa_model'
     require 'metamodel/model/cocoa_property'
     require 'metamodel/model/property_constructor'
+    require 'metamodel/render'
 
     def initialize(scaffold_path)
       @scaffold_path = scaffold_path
@@ -18,12 +19,11 @@ module MetaModel
         scaffold_code = File.read(@scaffold_path + scaffold_file)
         eval scaffold_code
       end
-    end
 
-    def generate
-      @models.each do |model|
-        
-      end
+      Render.new(@models.first)
+      # @models.each do |model|
+      #   Render.new(model)
+      # end
     end
 
     private
