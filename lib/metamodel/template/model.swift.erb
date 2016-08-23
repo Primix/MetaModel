@@ -80,3 +80,32 @@ public extension <%= model.name %> {
     }
 
 }
+
+public extension <%= model.name %> {
+    static func findBy(id id: Int) -> <%= model.name %>? {
+        return meta.findOne(meta.table.filter(meta.id == id))
+    }
+
+    static func findBy(name name: String) -> [<%= model.name %>] {
+        return meta.findAll(meta.table.filter(meta.name == name))
+    }
+
+    static func findBy(email email: String) -> [<%= model.name %>] {
+        return meta.findAll(meta.table.filter(meta.email == email))
+    }
+}
+
+public extension <%= model.name %> {
+    func delete() {
+        try! db.run(meta.query.delete())
+    }
+
+    <% model.properties.each do |property| %>
+    <%= """
+    mutating func update(#{property.name} name: #{property.type}) -> <%= model.name %> {
+        self.#{property.name} = #{property.name}
+        return self
+    }
+    """ %>
+    <% end %>
+}
