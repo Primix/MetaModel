@@ -8,10 +8,10 @@ module MetaModel
     require 'metamodel/command/build'
 
     self.abstract_command = true
-    self.command = 'mm'
+    self.command = 'meta'
     self.version = VERSION
     self.description = 'MetaModel, the Model generator.'
-    self.plugin_prefixes = %w(claide mm)
+    self.plugin_prefixes = %w(claide meta)
 
     def self.run(argv)
       super(argv)

@@ -14,9 +14,9 @@ Gem::Specification.new do |s|
   s.summary     = "The Cocoa models generator."
   s.description = "Not desc for now."
 
-  s.files = Dir["lib/**/*.rb"] + %w{ bin/mm README.md LICENSE }
+  s.files = Dir["lib/**/*.rb"] + %w{ bin/meta README.md LICENSE }
 
-  s.executables = %w{ mm }
+  s.executables = %w{ meta }
   s.require_paths = %w{ lib }
 
   s.add_runtime_dependency 'claide',         '>= 1.0.0', '< 2.0'
