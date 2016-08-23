@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.summary     = "The Cocoa models generator."
   s.description = "Not desc for now."
 
-  s.files = Dir["lib/**/*.rb"] + %w{ bin/meta README.md LICENSE }
+  s.files = Dir["lib/**/*.rb"] + %w{ bin/meta README.md LICENSE } + Dir["lib/**/*.erb"]
 
   s.executables = %w{ meta }
   s.require_paths = %w{ lib }

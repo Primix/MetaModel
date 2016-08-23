@@ -1,0 +1,18 @@
+//
+//  <%= model.model_name %>.swift
+//  MetaModel
+//
+//  Created by MetaModel script.
+//
+
+import Foundation
+import SQLite
+
+public struct <%= model.model_name %> {
+    public let id: Int
+    <% model.properties.each do |property| %>
+    <%= """public var #{property.property_key}: #{property.property_type} {
+      didSet { try! db.run(meta.query.update(meta.#{property.property_key} <- #{property.property_key})) }
+    }""" %>
+    <% end %>
+}
