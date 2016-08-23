@@ -73,7 +73,7 @@ public extension <%= model.name %> {
         return db.scalar(meta.table.count)
     }
 
-    static func create(<%= model.properties.map { |property| "#{property.key}: #{property.type}" }.join(", ") %>) -> <%= model.name %> {
+    static func create(<%= model.properties.map { |property| ", #{property.key}: #{property.type}" }.join("") %>) -> <%= model.name %> {
         let insert = meta.table.insert(<%= model.properties.map { |property| "meta.#{property.key} <- #{property.key}" }.join(", ") %>)
         let _ = try? db.run(insert)
         return <%= model.name %>(<%= model.properties.map { |property| "#{property.key}: #{property.key}" }.join(", ") %>)
@@ -85,14 +85,14 @@ public extension <%= model.name %> {
     static func findBy(id id: Int) -> <%= model.name %>? {
         return meta.findOne(meta.table.filter(meta.id == id))
     }
-
-    static func findBy(name name: String) -> [<%= model.name %>] {
-        return meta.findAll(meta.table.filter(meta.name == name))
+    <% model.properties.each do |property| %>
+    <%= """
+    static func findBy(#{property.name} #{property.name}: #{property.type}) -> <%= model.name %> {
+        return meta.findAll(meta.table.filter(meta.#{property.name} == #{property.name}))
     }
+    """ %>
+    <% end %>
 
-    static func findBy(email email: String) -> [<%= model.name %>] {
-        return meta.findAll(meta.table.filter(meta.email == email))
-    }
 }
 
 public extension <%= model.name %> {
@@ -102,7 +102,7 @@ public extension <%= model.name %> {
 
     <% model.properties.each do |property| %>
     <%= """
-    mutating func update(#{property.name} name: #{property.type}) -> <%= model.name %> {
+    mutating func update(#{property.name} #{property.name}: #{property.type}) -> <%= model.name %> {
         self.#{property.name} = #{property.name}
         return self
     }
