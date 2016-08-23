@@ -1,0 +1,119 @@
+//
+//  {{ model.name }}  .swift
+//  MetaModel
+//
+//  Created by MetaModel Script
+//
+
+import Foundation
+import SQLite
+
+public struct {{ model.name }}  {
+    public let id: Int
+    public var name: String? {
+        didSet {
+            try! db.run(meta.query.update(meta.name <- name))
+        }
+    }
+    public var email: String {
+        didSet {
+            try! db.run(meta.query.update(meta.email <- email))
+        }
+    }
+}
+
+extension {{ model.name }}  {
+    public init(record: SQLite.Row) {
+        self.init(id: record[meta.id], name: record[meta.name], email: record[meta.email])
+    }
+}
+
+extension {{ model.name }}   {
+    struct meta {
+        static let table = Table("people")
+        static let id = Expression<Int>("id")
+        static let name = Expression<String?>("name")
+        static let email = Expression<String>("email")
+
+        static var query: QueryType { get { return meta.table.filter(meta.id == self.id) } }
+
+        static func createTable() {
+            let _ = try? db.run(table.create { t in
+                t.column(id, primaryKey: true)
+                t.column(name)
+                t.column(email, unique: true)
+            })
+        }
+
+        static func findOne(query: QueryType) -> {{ model.name }}  ? {
+            for record in try! db.prepare(query) {
+                return {{ model.name }}  (record: record)
+            }
+            return nil
+        }
+
+        static func findAll(query: QueryType) -> [{{ model.name }}  ] {
+            var result: [{{ model.name }}  ] = []
+            for record in try! db.prepare(query) {
+                result.append({{ model.name }}  (record: record))
+            }
+            return result
+        }
+    }
+
+}
+
+public extension {{ model.name }}   {
+    static func all() -> [{{ model.name }}  ] {
+        var result: [{{ model.name }}  ] = []
+        for record in try! db.prepare(meta.table) {
+            result.append({{ model.name }}  (record: record))
+        }
+        return result
+    }
+
+    static func deleteAll() {
+        let _ = try? db.run(meta.table.delete())
+    }
+
+    static func count() -> Int {
+        return db.scalar(meta.table.count)
+    }
+
+    static func create(id: Int, name: String?, email: String) -> {{ model.name }}   {
+        let insert = meta.table.insert(meta.name <- name, meta.email <- email)
+        let _ = try? db.run(insert)
+        return {{ model.name }}  (id: id, name: name, email: email)
+    }
+
+}
+
+public extension {{ modle }}  {
+    static func find(id id: Int) -> {{ model.name }}  ? {
+        return meta.findOne(meta.table.filter(meta.id == id))
+    }
+
+    static func findBy(name name: String) -> [{{ model.name }}  ] {
+        return meta.findAll(meta.table.filter(meta.name == name))
+    }
+
+    static func findBy(email email: String) -> [{{ model.name }}  ] {
+        return meta.findAll(meta.table.filter(meta.email == email))
+    }
+}
+
+public extension {{ model.name }}   {
+    func delete() {
+        try! db.run(meta.query.delete())
+    }
+
+    mutating func update(name name: String?) -> {{ model.name }}   {
+        self.name = name
+        return self
+    }
+
+    mutating func update(email email: String) -> {{ model.name }}   {
+        self.email = email
+        return self
+    }
+}

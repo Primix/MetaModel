@@ -20,6 +20,12 @@ module MetaModel
       end
     end
 
+    def generate
+      @models.each do |model|
+
+      end
+    end
+
     private
 
     def metamodel_version(version)

@@ -5,8 +5,8 @@ module MetaModel
     attr_reader :property_key
     attr_reader :property_type
 
-    def initialize(json_key, property_type, property_key = nil, **arguments)
-      @property_key = property_key ||= json_key.camelize(:lower)
+    def initialize(json_key, property_key = nil, **arguments)
+      @property_key = json_key.camelize(:lower)
       @json_key = json_key
       @property_type = property_type
       puts arguments
