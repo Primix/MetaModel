@@ -55,3 +55,28 @@ extension <%= model.name %> {
     }
 
 }
+
+public extension <%= model.name %> {
+    static func all() -> [<%= model.name %>] {
+        var result: [<%= model.name %>] = []
+        for record in try! db.prepare(meta.table) {
+            result.append(<%= model.name %>(record: record))
+        }
+        return result
+    }
+
+    static func deleteAll() {
+        let _ = try? db.run(meta.table.delete())
+    }
+
+    static func count() -> Int {
+        return db.scalar(meta.table.count)
+    }
+
+    static func create(<%= model.properties.map { |property| "#{property.key}: #{property.type}" }.join(", ") %>) -> <%= model.name %> {
+        let insert = meta.table.insert(<%= model.properties.map { |property| "meta.#{property.key} <- #{property.key}" }.join(", ") %>)
+        let _ = try? db.run(insert)
+        return <%= model.name %>(<%= model.properties.map { |property| "#{property.key}: #{property.key}" }.join(", ") %>)
+    }
+
+}
