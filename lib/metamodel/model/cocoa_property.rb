@@ -29,7 +29,6 @@ module MetaModel
     end
 
     def has_default_value?
-      # p @modifiers
       @modifiers[:default].nil?
     end
 
