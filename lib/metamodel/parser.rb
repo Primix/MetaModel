@@ -20,10 +20,9 @@ module MetaModel
         eval scaffold_code
       end
 
-      Render.new(@models.first)
-      # @models.each do |model|
-      #   Render.new(model)
-      # end
+      @models.each do |model|
+        Render.new(model)
+      end
     end
 
     private
