@@ -34,7 +34,8 @@ extension <%= model.name %> {
         static func createTable() {
             let _ = try? db.run(table.create { t in
                 t.column(id, primaryKey: true)
-                <% model.properties.each do |property| %><%= "t.column(property.key)\n" %><% end %>
+                <!-- <% model.properties.each do |property| %><%= "t.column(property.key)\n" %><% end %> -->
+                <%= model.build_table %>
             })
         }
     }

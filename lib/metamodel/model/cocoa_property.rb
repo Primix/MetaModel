@@ -5,7 +5,6 @@ module MetaModel
     attr_reader :key
     attr_reader :type
     attr_reader :modifiers
-    attr_reader :default_value
 
     def initialize(json_key, type = :string, *modifiers)
       @json_key = json_key
@@ -32,6 +31,9 @@ module MetaModel
       @modifiers[:default].nil?
     end
 
+    def default_value
+      modifiers[:default]
+    end
   end
 
 end
