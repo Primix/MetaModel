@@ -24,47 +24,23 @@ extension <%= model.name %> {
 }
 
 extension <%= model.name %> {
-    struct meta {
-        static let table = Table("<%= "#{model.table_name}" %>")
-        static let id = Expression<Int>("id")
-        <% model.properties.each do |property| %><%= "static let #{property.key} = Expression<#{property.type}>(\"#{property.key}\")" %>
-        <% end %>
-        static var query: QueryType { get { return meta.table.filter(meta.id == self.id) } }
+    static let table = Table("<%= "#{model.table_name}" %>")
+    static let id = Expression<Int>("id")
+    <% model.properties.each do |property| %><%= "static let #{property.key} = Expression<#{property.type}>(\"#{property.key}\")" %>
+    <% end %>
+    static var itself: QueryType { get { return meta.table.filter(meta.id == self.id) } }
 
+    struct meta {
         static func createTable() {
             let _ = try? db.run(table.create { t in
                 t.column(id, primaryKey: true)
                 <% model.properties.each do |property| %><%= "t.column(property.key)\n" %><% end %>
             })
         }
-
-        static func findOne(query: QueryType) -> <%= model.name %>? {
-            for record in try! db.prepare(query) {
-                return <%= model.name %>(record: record)
-            }
-            return nil
-        }
-
-        static func findAll(query: QueryType) -> [<%= model.name %>] {
-            var result: [<%= model.name %>] = []
-            for record in try! db.prepare(query) {
-                result.append(<%= model.name %>(record: record))
-            }
-            return result
-        }
     }
-
 }
 
 public extension <%= model.name %> {
-    static func all() -> [<%= model.name %>] {
-        var result: [<%= model.name %>] = []
-        for record in try! db.prepare(meta.table) {
-            result.append(<%= model.name %>(record: record))
-        }
-        return result
-    }
-
     static func deleteAll() {
         let _ = try? db.run(meta.table.delete())
     }
@@ -82,30 +58,69 @@ public extension <%= model.name %> {
 }
 
 public extension <%= model.name %> {
-    static func findBy(id id: Int) -> <%= model.name %>? {
-        return meta.findOne(meta.table.filter(meta.id == id))
-    }
-    <% model.properties.each do |property| %>
-    <%= """
-    static func findBy(#{property.name} #{property.name}: #{property.type}) -> <%= model.name %> {
-        return meta.findAll(meta.table.filter(meta.#{property.name} == #{property.name}))
-    }
-    """ %>
-    <% end %>
-
-}
-
-public extension <%= model.name %> {
     func delete() {
         try! db.run(meta.query.delete())
     }
+    <% model.properties.each do |property| %>
+    <%= """mutating func update(#{property.key} #{property.key}: #{property.type}) -> #{model.name} {
+        self.#{property.key} = #{property.key}
+        return self
+    }""" %>
+    <% end %>
+}
+
+
+public extension <%= model.name %> {
+    static private func findAll(query: QueryType) -> [<%= model.name %>] {
+        var result: [<%= model.name %>] = []
+        for record in try! db.prepare(query) {
+            result.append(<%= model.name %>(record: record))
+        }
+        return result
+    }
+
+    static var all: <%= model.relation_name %> {
+        get {
+            return <%= model.relation_name %>()
+        }
+    }
+    <% model.properties.each do |property| %>
+    <%= """static func findBy(#{property.key} #{property.key}: #{property.type}) -> #{model.name} {
+        return #{model.relation_name}().findBy(#{property.key}: #{property.key})
+    }""" %>
+    <% end %>
+    static func limit(length: Int, offset: Int = 0) -> <%= model.relation_name %> {
+        return <%= model.relation_name %>().limit(length, offset: offset)
+    }
+
+    static func group(params: Expressible...) -> <%= model.relation_name %> {
+        return <%= model.relation_name %>().group(params)
+    }
+}
+
+public class <%= model.relation_name %>: Relation<<%= model.name %>> {
+    init() {
+        super.init(query: <%= model.name %>.table)
+    }
 
     <% model.properties.each do |property| %>
-    <%= """
-    mutating func update(#{property.name} #{property.name}: #{property.type}) -> <%= model.name %> {
-        self.#{property.name} = #{property.name}
+    <%= """public func findBy(#{property.key} #{property.key}: #{property.type}) -> Self {
+        query = query.filter(#{model.name}.#{property.key} == #{property.key})
+        return self
+    }""" %>
+    <% end %>
+    public func limit(length: Int, offset: Int = 0) -> Self {
+        query = query.limit(length, offset: offset)
         return self
     }
-    """ %>
-    <% end %>
+
+    public func group(params: Expressible...) -> Self {
+        return group(params)
+    }
+
+    public func group(params: [Expressible]) -> Self {
+        query = query.group(params)
+        return self
+    }
+
 }
