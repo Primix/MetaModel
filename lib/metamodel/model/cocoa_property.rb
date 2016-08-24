@@ -10,13 +10,14 @@ module MetaModel
       @json_key = json_key
       @key = json_key.to_s.camelize(:lower).to_sym
       @type = convert_symbol_to_type type
-      @modifiers = modifiers.flatten
-    end
 
-    private
+      @modifiers = {}
+      @modifiers.default = false
 
-    def convert_symbol_to_type(symbol)
-      symbol.to_s.capitalize
+      modifiers.flatten.map do |modifier|
+        @modifiers[modifier] = true if modifier.is_a? Symbol
+        @modifiers[:default] = modifier[:default] if modifier.is_a? Hash and modifier[:default]
+      end
     end
 
     def is_unique?
@@ -28,12 +29,19 @@ module MetaModel
     end
 
     def has_default_value?
+      # p @modifiers
       @modifiers[:default].nil?
     end
 
     def default_value
       modifiers[:default]
     end
+    private
+
+    def convert_symbol_to_type(symbol)
+      symbol.to_s.capitalize
+    end
+
   end
 
 end

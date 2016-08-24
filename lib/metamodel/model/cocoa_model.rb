@@ -23,7 +23,7 @@ module MetaModel
       property_keys = @properties.map { |property| property.key }
 
       unless property_keys.include? :id
-        property_id = CocoaProperty.new(id, :int, :primary)
+        property_id = CocoaProperty.new(:id, :int, :primary)
         @properties << property_id
       end
     end
