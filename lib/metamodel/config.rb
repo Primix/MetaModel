@@ -47,6 +47,14 @@ module MetaModel
       "git@github.com:Draveness/MetaModel-Template.git"
     end
 
+    # Returns the path of the MetaModel.xcodeproj.
+    #
+    # @return [String]
+    #
+    def metamodel_xcode_project
+      "./MetaModel/MetaModel.xcodeproj"
+    end
+
     def scaffold_folder
       Pathname.new(scaffold_path).exist?
     end
