@@ -11,6 +11,10 @@ module MetaModel
       validate
     end
 
+    def properties_exclude_id
+      @properties.select { |property| property.key != :id }
+    end
+
     def table_name
       name.to_s.pluralize.underscore
     end
