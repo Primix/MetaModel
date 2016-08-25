@@ -23,6 +23,8 @@ module MetaModel
     def render
       template = File.read File.expand_path(File.join(File.dirname(__FILE__), "template/model.swift.erb"))
       result = ErbalT::render_from_hash(template, { :model => @model })
+
+      puts result
     end
 
     private

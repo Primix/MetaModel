@@ -35,6 +35,10 @@ module MetaModel
     def default_value
       modifiers[:default]
     end
+
+    def table_column
+    end
+
     private
 
     def convert_symbol_to_type(symbol)
