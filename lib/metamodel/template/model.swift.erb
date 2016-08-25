@@ -12,23 +12,22 @@ public struct <%= model.name %> {
     public let id: Int
     <% model.properties.each do |property| %>
     <%= """public var #{property.key}: #{property.type} {
-      didSet { try! db.run(meta.query.update(meta.#{property.key} <- #{property.key})) }
+      didSet { try! db.run(itself.update(meta.#{property.key} <- #{property.key})) }
     }""" %>
     <% end %>
 }
 
-extension <%= model.name %> {
+extension <%= model.name %>: Recordable {
     public init(record: SQLite.Row) {
-      self.init(<%= model.properties.map { |property| "#{property.key}: record[meta.#{property.key}]" }.join(", ") %>)
+      self.init(<%= model.properties.map { |property| "#{property.key}: record[#{model.name}.#{property.key}]" }.join(", ") %>)
     }
 }
 
 extension <%= model.name %> {
     static let table = Table("<%= "#{model.table_name}" %>")
-    static let id = Expression<Int>("id")
     <% model.properties.each do |property| %><%= "static let #{property.key} = Expression<#{property.type}>(\"#{property.key}\")" %>
     <% end %>
-    static var itself: QueryType { get { return meta.table.filter(meta.id == self.id) } }
+    static var itself: QueryType { get { return <%= model.name %>.table.filter(<%= model.name %>.id == self.id) } }
 
     struct meta {
         static func createTable() {
@@ -41,15 +40,15 @@ extension <%= model.name %> {
 
 public extension <%= model.name %> {
     static func deleteAll() {
-        let _ = try? db.run(meta.table.delete())
+        let _ = try? db.run(<%= model.name %>.table.delete())
     }
 
     static func count() -> Int {
-        return db.scalar(meta.table.count)
+        return db.scalar(<%= model.name %>.table.count)
     }
 
     static func create(<%= model.properties.map { |property| ", #{property.key}: #{property.type}" }.join("") %>) -> <%= model.name %> {
-        let insert = meta.table.insert(<%= model.properties.map { |property| "meta.#{property.key} <- #{property.key}" }.join(", ") %>)
+        let insert = <%= model.name %>.table.insert(<%= model.properties.map { |property| "#{model.name}.#{property.key} <- #{property.key}" }.join(", ") %>)
         let _ = try? db.run(insert)
         return <%= model.name %>(<%= model.properties.map { |property| "#{property.key}: #{property.key}" }.join(", ") %>)
     }
@@ -58,7 +57,7 @@ public extension <%= model.name %> {
 
 public extension <%= model.name %> {
     func delete() {
-        try! db.run(meta.query.delete())
+        try! db.run(<%= model.name %>.query.delete())
     }
     <% model.properties.each do |property| %>
     <%= """mutating func update(#{property.key} #{property.key}: #{property.type}) -> #{model.name} {
@@ -84,7 +83,7 @@ public extension <%= model.name %> {
         }
     }
     <% model.properties.each do |property| %>
-    <%= """static func findBy(#{property.key} #{property.key}: #{property.type}) -> #{model.name} {
+    <%= """static func findBy(#{property.key} #{property.key}: #{property.type}) -> #{model.relation_name} {
         return #{model.relation_name}().findBy(#{property.key}: #{property.key})
     }""" %>
     <% end %>
