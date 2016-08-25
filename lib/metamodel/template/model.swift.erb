@@ -31,7 +31,7 @@ extension <%= model.name %> {
 
     static func createTable() {
         let _ = try? db.run(table.create { t in
-            <%= model.build_table %>
+            <%= model.build_table.chop %>
         })
     }
 }
