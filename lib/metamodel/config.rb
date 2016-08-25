@@ -39,6 +39,10 @@ module MetaModel
     attr_writer :installation_root
     alias_method :project_root, :installation_root
 
+    # Returns the path of the metamodel template uri.
+    #
+    # @return [String]
+    #
     def metamodel_template_uri
       "git@github.com:Draveness/MetaModel-Template.git"
     end
