@@ -29,12 +29,10 @@ extension <%= model.name %> {
     <% end %>
     var itself: QueryType { get { return <%= model.name %>.table.filter(<%= model.name %>.id == self.id) } }
 
-    struct meta {
-        static func createTable() {
-            let _ = try? db.run(table.create { t in
-                <%= model.build_table %>
-            })
-        }
+    static func createTable() {
+        let _ = try? db.run(table.create { t in
+            <%= model.build_table %>
+        })
     }
 }
 
