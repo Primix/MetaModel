@@ -409,4 +409,5 @@ module MetaModel
       end
     end
   end
+  UI = UserInterface
 end

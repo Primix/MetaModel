@@ -14,6 +14,33 @@ module MetaModel
 
     #-------------------------------------------------------------------------#
 
+    # @!group UI
+
+    # @return [Bool] Whether CocoaPods should provide detailed output about the
+    #         performed actions.
+    #
+    attr_accessor :verbose
+    alias_method :verbose?, :verbose
+
+    # @return [Bool] Whether CocoaPods should produce not output.
+    #
+    attr_accessor :silent
+    alias_method :silent?, :silent
+
+    public
+
+    #-------------------------------------------------------------------------#
+
+    # @!group Initialization
+
+    def verbose
+      @verbose && !silent
+    end
+
+    public
+
+    #-------------------------------------------------------------------------#
+
     # @!group Paths
 
     # @return [Pathname] the root of the MetaModel installation where the

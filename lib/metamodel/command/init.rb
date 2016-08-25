@@ -22,7 +22,10 @@ module MetaModel
       end
 
       def run
-        git = Git.clone(config.metamodel_template_uri, 'MetaModel')
+        UI.section "Initiating MetaModel project" do
+          # UI
+          Git.clone(config.metamodel_template_uri, 'MetaModel')
+        end
         FileUtils.mkdir(@scaffold_path)
       end
 
