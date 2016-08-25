@@ -24,7 +24,6 @@ module MetaModel
       def run
         git = Git.clone(config.metamodel_template_uri, 'metamodel', :path => './MetaModel')
         FileUtils.mkdir(@scaffold_path)
-        # git.clone()
       end
 
       private
