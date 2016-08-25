@@ -18,6 +18,11 @@ module MetaModel
   require 'metamodel/version'
   require 'metamodel/config'
 
+  # Loaded immediately after dependencies to ensure proper override of their
+  # UI methods.
+  #
+  require 'metamodel/user_interface'
+
   autoload :Command,   'metamodel/command'
   autoload :Parser,    'metamodel/parser'
 end
