@@ -39,15 +39,15 @@ module MetaModel
         if property.has_default_value?
           default_value = property.default_value
           if default_value.is_a? String
-            table << "t.column(#{property_key}, defaultValue: \"#{default_value}\")\n"
+            table << "t.column(#{property_key}, defaultValue: \"#{default_value}\")\n\t\t\t"
           else
-            table << "t.column(#{property_key}, defaultValue: #{default_value})\n"
+            table << "t.column(#{property_key}, defaultValue: #{default_value})\n\t\t\t"
           end
         else
-          table << "t.column(#{property_key})\n"
+          table << "t.column(#{property_key})\n\t\t\t"
         end
-        table << "t.primaryKey(#{property_key})\n" if property.is_primary?
-        table << "t.unique(#{property_key})\n" if property.is_unique?
+        table << "t.primaryKey(#{property_key})\n\t\t\t" if property.is_primary?
+        table << "t.unique(#{property_key})\n\t\t\t" if property.is_unique?
       end
       table
     end
