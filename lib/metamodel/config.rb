@@ -6,7 +6,7 @@ module MetaModel
   class Config
 
     DEFAULTS = {
-      :verbose             => false,
+      :verbose             => true,
       :silent              => false,
     }
 
@@ -21,11 +21,6 @@ module MetaModel
     #
     attr_accessor :verbose
     alias_method :verbose?, :verbose
-
-    # @return [Bool] Whether CocoaPods should produce not output.
-    #
-    attr_accessor :silent
-    alias_method :silent?, :silent
 
     public
 

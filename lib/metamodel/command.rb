@@ -7,6 +7,8 @@ module MetaModel
     require 'metamodel/command/generate'
     require 'metamodel/command/build'
 
+    include Config::Mixin
+
     self.abstract_command = true
     self.command = 'meta'
     self.version = VERSION
@@ -17,9 +19,12 @@ module MetaModel
       super(argv)
     end
 
-    #-------------------------------------------------------------------------#
+    def initialize(argv)
+      super
+      config.verbose = self.verbose?
+    end
 
-    include Config::Mixin
+    #-------------------------------------------------------------------------#
 
     private
 

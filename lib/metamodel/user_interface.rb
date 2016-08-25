@@ -317,13 +317,12 @@ module MetaModel
       # @!group Basic methods
       #-----------------------------------------------------------------------#
 
-      # prints a message followed by a new line unless config is silent.
+      # prints a message followed by a new line.
       #
       # @param [String] message
       #        The message to print.
       #
       def puts(message = '')
-        return if config.silent?
         begin
           (output_io || STDOUT).puts(message)
         rescue Errno::EPIPE
@@ -331,13 +330,12 @@ module MetaModel
         end
       end
 
-      # prints a message followed by a new line unless config is silent.
+      # prints a message followed by a new line.
       #
       # @param [String] message
       #        The message to print.
       #
       def print(message)
-        return if config.silent?
         begin
           (output_io || STDOUT).print(message)
         rescue Errno::EPIPE

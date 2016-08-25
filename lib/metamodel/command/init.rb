@@ -23,10 +23,14 @@ module MetaModel
 
       def run
         UI.section "Initiating MetaModel project" do
-          # UI
-          Git.clone(config.metamodel_template_uri, 'MetaModel')
+          UI.section "Cloning MetaModel project into `./MetaModel` folder" do
+            Git.clone(config.metamodel_template_uri, 'MetaModel')
+            UI.message "Using `./MetaModel/MetaModel.xcodeproj` to build module"
+          end
+          UI.section "Creating `scaffold` folder for MetaModel" do
+            FileUtils.mkdir(@scaffold_path)
+          end
         end
-        FileUtils.mkdir(@scaffold_path)
       end
 
       private
