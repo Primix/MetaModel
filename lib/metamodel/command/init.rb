@@ -22,7 +22,7 @@ module MetaModel
       end
 
       def run
-        git = Git.clone(config.metamodel_template_uri, 'metamodel', :path => './MetaModel')
+        git = Git.clone(config.metamodel_template_uri, 'MetaModel')
         FileUtils.mkdir(@scaffold_path)
       end
 

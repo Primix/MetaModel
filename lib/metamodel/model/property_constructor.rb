@@ -25,7 +25,6 @@ module MetaModel
     # @return [Void]
     def save_property(property)
       @model.properties << property
-      p property
     end
   end
 
