@@ -1,5 +1,8 @@
+require 'git'
+
 module MetaModel
   class Command
+
     class Init < Command
       self.summary = "Generate a scaffold folder for the current directory."
       self.description = <<-DESC
@@ -19,7 +22,9 @@ module MetaModel
       end
 
       def run
+        git = Git.clone(config.metamodel_template_uri, 'metamodel', :path => './MetaModel')
         FileUtils.mkdir(@scaffold_path)
+        # git.clone()
       end
 
       private

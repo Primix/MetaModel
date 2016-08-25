@@ -39,6 +39,10 @@ module MetaModel
     attr_writer :installation_root
     alias_method :project_root, :installation_root
 
+    def metamodel_template_uri
+      "git@github.com:Draveness/MetaModel-Template.git"
+    end
+
     def scaffold_folder
       Pathname.new(scaffold_path).exist?
     end
