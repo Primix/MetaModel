@@ -17,7 +17,7 @@
 .dat*
 .repl_history
 build/
-!lib/metamodel/build/
+!lib/metamodel/command/build/
 *.bridgesupport
 build-iPhoneOS/
 build-iPhoneSimulator/
