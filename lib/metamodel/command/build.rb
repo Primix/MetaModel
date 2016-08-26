@@ -36,7 +36,6 @@ module MetaModel
         end
       end
 
-
       def parse_template
         parser = Parser.new
         @models = parser.parse
