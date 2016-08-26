@@ -5,7 +5,8 @@ module MetaModel
 
       self.summary = "Clean MetaModel project from current folder."
       self.description = <<-DESC
-
+        Remove MetaModel folder which contains MetaModel.xcodeproj and model
+        files from current path.
       DESC
 
       def initialize(argv)
@@ -15,7 +16,6 @@ module MetaModel
       def run
         UI.section "Removing MetaModel project" do
           FileUtil.rm_rf 'MetaModel'
-          FileUtil.rm_rf 'scaffold'
           UI.message "Already clean up the whole MetaModel project from current folder"
         end
       end
