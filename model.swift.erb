@@ -1,0 +1,122 @@
+//
+//  <%= model.name %>.swift
+//  MetaModel
+//
+//  Created by MetaModel script.
+//
+
+import Foundation
+import SQLite
+
+public struct <%= model.name %> {
+    public let id: Int
+    <% model.properties_exclude_id.each do |property| %>
+    <%= """public var #{property.key}: #{property.type} {
+      didSet { try! db.run(itself.update(#{model.name}.#{property.key} <- #{property.key})) }
+    }""" %>
+    <% end %>
+}
+
+extension <%= model.name %>: Recordable {
+    public init(record: SQLite.Row) {
+      self.init(<%= model.properties.map { |property| "#{property.key}: record[#{model.name}.#{property.key}]" }.join(", ") %>)
+    }
+}
+
+extension <%= model.name %> {
+    static let table = Table("<%= "#{model.table_name}" %>")
+    <% model.properties.each do |property| %><%= "static let #{property.key} = Expression<#{property.type}>(\"#{property.key}\")" %>
+    <% end %>
+    var itself: QueryType { get { return <%= model.name %>.table.filter(<%= model.name %>.id == self.id) } }
+
+    static func createTable() {
+        let _ = try? db.run(table.create { t in
+            <%= model.build_table.chop %>
+        })
+    }
+}
+
+public extension <%= model.name %> {
+    static func deleteAll() {
+        let _ = try? db.run(<%= model.name %>.table.delete())
+    }
+
+    static func count() -> Int {
+        return db.scalar(<%= model.name %>.table.count)
+    }
+
+    static func create(<%= model.properties.map { |property| "#{property.key}: #{property.type}" }.join(", ") %>) -> <%= model.name %> {
+        let insert = <%= model.name %>.table.insert(<%= model.properties.map { |property| "#{model.name}.#{property.key} <- #{property.key}" }.join(", ") %>)
+        let _ = try? db.run(insert)
+        return <%= model.name %>(<%= model.properties.map { |property| "#{property.key}: #{property.key}" }.join(", ") %>)
+    }
+
+}
+
+public extension <%= model.name %> {
+    func delete() {
+        try! db.run(itself.delete())
+    }
+    <% model.properties_exclude_id.each do |property| %>
+    <%= """mutating func update(#{property.key} #{property.key}: #{property.type}) -> #{model.name} {
+        self.#{property.key} = #{property.key}
+        return self
+    }""" %>
+    <% end %>
+}
+
+
+public extension <%= model.name %> {
+    static private func findAll(query: QueryType) -> [<%= model.name %>] {
+        var result: [<%= model.name %>] = []
+        for record in try! db.prepare(query) {
+            result.append(<%= model.name %>(record: record))
+        }
+        return result
+    }
+
+    static var all: <%= model.relation_name %> {
+        get {
+            return <%= model.relation_name %>()
+        }
+    }
+    <% model.properties.each do |property| %>
+    <%= """static func findBy(#{property.key} #{property.key}: #{property.type}) -> #{model.relation_name} {
+        return #{model.relation_name}().findBy(#{property.key}: #{property.key})
+    }""" %>
+    <% end %>
+    static func limit(length: Int, offset: Int = 0) -> <%= model.relation_name %> {
+        return <%= model.relation_name %>().limit(length, offset: offset)
+    }
+
+    static func group(params: Expressible...) -> <%= model.relation_name %> {
+        return <%= model.relation_name %>().group(params)
+    }
+}
+
+public class <%= model.relation_name %>: Relation<<%= model.name %>> {
+    init() {
+        super.init(query: <%= model.name %>.table)
+    }
+
+    <% model.properties.each do |property| %>
+    <%= """public func findBy(#{property.key} #{property.key}: #{property.type}) -> Self {
+        query = query.filter(#{model.name}.#{property.key} == #{property.key})
+        return self
+    }""" %>
+    <% end %>
+    public func limit(length: Int, offset: Int = 0) -> Self {
+        query = query.limit(length, offset: offset)
+        return self
+    }
+
+    public func group(params: Expressible...) -> Self {
+        return group(params)
+    }
+
+    public func group(params: [Expressible]) -> Self {
+        query = query.group(params)
+        return self
+    }
+
+}
