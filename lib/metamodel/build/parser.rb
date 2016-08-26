@@ -10,7 +10,6 @@ module MetaModel
     def initialize(scaffold_path)
       @scaffold_path = scaffold_path
       @models = []
-      parse
     end
 
     def parse

@@ -14,13 +14,13 @@ module MetaModel
 
       def run
         UI.section "Building MetaModel project" do
-          Parser.new(config.scaffold_path)
           clone_project
+          Parser.new(config.scaffold_path)
         end
       end
 
       def clone_project
-        if FileUtils.exist? config.metamodel_xcode_project
+        if File.exist? config.metamodel_xcode_project
           UI.message "Existing project `#{config.metamodel_xcode_project}`"
         else
           UI.section "Cloning MetaModel project into `./MetaModel` folder" do
