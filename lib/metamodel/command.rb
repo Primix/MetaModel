@@ -21,7 +21,8 @@ module MetaModel
 
     def initialize(argv)
       super
-      config.verbose = self.verbose?
+      # config.verbose = self.verbose?
+      config.verbose = true
     end
 
     #-------------------------------------------------------------------------#
