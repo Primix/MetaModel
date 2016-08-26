@@ -6,6 +6,7 @@ module MetaModel
     require 'metamodel/command/init'
     require 'metamodel/command/generate'
     require 'metamodel/command/build'
+    require 'metamodel/command/clean'
 
     include Config::Mixin
 
