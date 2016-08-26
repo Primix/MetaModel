@@ -77,6 +77,10 @@ module MetaModel
       "./MetaModel/MetaModel.xcodeproj"
     end
 
+    # Returns whether or not scaffold folder is in current project.
+    #
+    # @return [Bool]
+    #
     def scaffold_folder
       Pathname.new(scaffold_path).exist?
     end
