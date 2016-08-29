@@ -34,7 +34,7 @@ module MetaModel
         modelfile << <<-TEMPLATE.strip_heredoc
           define :#{model} do |j|
             # define #{model} model like this
-            # j.string 'nickname'
+            # j.nickname :string
           end
         TEMPLATE
         modelfile
