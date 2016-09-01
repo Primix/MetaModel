@@ -40,9 +40,59 @@ sudo gem install metamodel --verbose
 
 ## Quick Start
 
+After installation , run `meta init` in your iOS project root folder which will make a `scaffold` directory in current folder.
 
-a brand new xcode project in `./MetaModel` folder, just add the whole Xcode Project into your folder
+```shell
+$ cd /path/to/project
+$ meta init
 
+Initialing MetaModel project
+
+Creating `scaffold` folder for MetaModel
+```
+
+Generate your model scaffold file with `meta generate`.
+
+```shell
+$ meta generate User
+
+Generating model scaffold file
+
+-> Adding `user.rb` to scaffold folder
+
+[!] `user.rb` has already generated, use the command below to edit it.
+
+  vim scaffold/user.rb
+```
+
+Edit scaffold file using vim, Emacs or other editor and run `meta build`.
+
+```shell
+$ meta build
+
+Building MetaModel project
+
+Cloning MetaModel project into `./MetaModel` folder
+Using `./MetaModel/MetaModel.xcodeproj` to build module
+
+Analyzing scaffold files
+-> Resolving `user.rb`
+
+Generating model files
+-> Using User.swift file
+```
+
+This command create a brand new xcode project in `./MetaModel` folder, just add the `MetaModel.project` into your project or workspace. And add `MetaModel.framework` to **Linked frameworks and Libraries** phrase which located in `General` tab.
+
+![add-metamodel-project-demo](images/add-metamodel-project-demo.png)
+
+Add this line of code in your project.
+
+```swift
+import MetaModel
+```
+
+![import-metamodel-module](images/import-metamodel-module.png)
 
 ## License
 

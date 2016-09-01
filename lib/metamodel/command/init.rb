@@ -20,7 +20,7 @@ module MetaModel
       end
 
       def run
-        UI.section "Initiating MetaModel project" do
+        UI.section "Initialing MetaModel project" do
           UI.section "Creating `scaffold` folder for MetaModel" do
             FileUtils.mkdir(@scaffold_path)
           end
