@@ -1,5 +1,6 @@
 module MetaModel
-
+  # The code in this file is mainly borrowed from cocoapods/user_interface.rb
+  # which used to generate output messages to user.
   module UserInterface
     require 'colored'
 
@@ -393,7 +394,7 @@ module MetaModel
       #
       # @return [String]        The formatted string.
       #
-      # @note If CocoaPods is not being run in a terminal or the width of the
+      # @note If MetaModel is not being run in a terminal or the width of the
       # terminal is too small a width of 80 is assumed.
       #
       def wrap_string(string, indent = 0)
