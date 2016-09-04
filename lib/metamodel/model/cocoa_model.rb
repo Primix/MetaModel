@@ -16,7 +16,7 @@ module MetaModel
     end
 
     def table_name
-      name.to_s.pluralize.underscore
+      name.to_s.tableize
     end
 
     def relation_name
