@@ -1,0 +1,16 @@
+extension Person {
+    public init(json: [String: Any]) {
+        let id: Int = json["id"] as! Int
+        <% model.properties_exclude_id.each do |property| %>
+        <%= """let #{property.key}: #{property.type} = json[\"#{property.key}\"] as! #{property.type}
+        """ %>
+        <% end %>
+
+        self.init(<%= model.property_key_value_pairs %>)
+    }
+
+    public init(jsonData: NSData) throws {
+        let json = try NSJSONSerialization.JSONObjectWithData(jsonData, options: .AllowFragments) as! [String: Any]
+        self.init(json: json)
+    }
+}

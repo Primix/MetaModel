@@ -28,6 +28,10 @@ module MetaModel
       @modifiers.include? :primary
     end
 
+    def is_optional?
+      @type.to_s.end_with? "?"
+    end
+
     def has_default_value?
       @modifiers[:default].nil?
     end
