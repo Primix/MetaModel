@@ -1,5 +1,5 @@
 extension <%= model.name %> {
-    public static func parse(json: [String: AnyObject]) -> Person {
+    public static func parse(json: [String: AnyObject]) -> <%= model.name %> {
         let id: Int = json["id"] as! Int
         <% model.properties_exclude_id.each do |property| %>
         <%= """let #{property.key}: #{property.type} = json[\"#{property.key}\"] as! #{property.type}
