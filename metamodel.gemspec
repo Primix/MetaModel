@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.authors  = ["Draveness Zuo"]
 
   s.summary     = "The Cocoa models generator."
-  s.description = "Not desc for now."
+  s.description = "Automatically generate model layout for iOS project."
 
   s.files = Dir["lib/**/*.rb"] + %w{ bin/meta README.md LICENSE } + Dir["lib/**/*.erb"]
 
