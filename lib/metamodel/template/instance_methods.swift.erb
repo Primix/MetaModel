@@ -6,20 +6,20 @@ public extension <%= model.name %> {
         executeSQL(deleteSQL)
     }
 
-    mutating func update(name name: String?) -> <%= model.name %> {
-        return self.update([.name: name])
-    }
-
-    mutating func update(email email: String) -> <%= model.name %> {
-        return self.update([.email: email])
-    }
+    <% model.properties_exclude_id.each do |property| %>
+    <%= """mutating func update(#{property.key} #{property.key}: #{property.type}) -> <%= model.name %> {
+        return self.update([.(#{property.key}: (#{property.key}])
+    }""" %>
+    <% end %>
 
     mutating func update(attributes: [<%= model.name %>.Column: Any]) -> <%= model.name %> {
         var setSQL: [String] = []
         for (key, _) in attributes {
             switch key {
-            case .name: setSQL.append("\(key.unwrapped) = \(self.name?.unwrapped)")
-            case .email: setSQL.append("\(key.unwrapped) = \(self.email.unwrapped)")
+            <% model.properties_exclude_id.each do |property| %>
+            <%= """case .(#{property.key}: setSQL.append(\"\(key.unwrapped) = \(self.(#{property.key}#{property.is_optional? : "?" : ""}.unwrapped)\")
+            """ %>
+            <% end %>
             default: break
             }
         }
@@ -27,8 +27,10 @@ public extension <%= model.name %> {
         executeSQL(updateSQL) {
             for (key, value) in attributes {
                 switch key {
-                case .name: self.name = value as? String
-                case .email: self.email = value as! String
+                <% model.properties_exclude_id.each do |property| %>
+                <%= """case .(#{property.key}: self.#{property.key} = value as#{property.is_optional? ? "?" : "!"} #{property.key_without_optional}
+                """ %>
+                <% end %>
                 default: break
                 }
             }

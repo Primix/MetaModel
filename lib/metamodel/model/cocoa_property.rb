@@ -20,6 +20,11 @@ module MetaModel
       end
     end
 
+    def key_without_optional
+      return key.to_s[0..-2] if key.to_s.end_with? "?"
+      key
+    end
+
     def is_unique?
       @modifiers.include? :unique
     end
