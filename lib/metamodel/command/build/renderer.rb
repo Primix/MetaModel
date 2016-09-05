@@ -32,7 +32,6 @@ module MetaModel
             result = templates.map { |template|
               ErbalT::render_from_hash(template, { :model => model })
             }.join("\n")
-            puts templates
             model_path = Pathname.new("./MetaModel/MetaModel/#{model.name}.swift")
             File.write model_path, result
 
