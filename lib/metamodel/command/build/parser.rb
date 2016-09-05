@@ -15,15 +15,13 @@ module MetaModel
         end
 
         def parse
-          title_options = { :verbose_prefix => '-> '.green }
           UI.section "Analyzing scaffold files" do
             scaffold_path = config.scaffold_path
             scaffolds = Dir[scaffold_path + "*.rb"]
             scaffolds.each do |scaffold_file|
-              UI.titled_section "Resolving `#{File.basename(scaffold_file)}`", title_options do
-                scaffold_code = File.read(scaffold_path + scaffold_file)
-                eval scaffold_code
-              end
+              UI.messag '-> '.green + "Resolving `#{File.basename(scaffold_file)}`"
+              scaffold_code = File.read(scaffold_path + scaffold_file)
+              eval scaffold_codee
             end
           end
           @models
