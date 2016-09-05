@@ -1,20 +1,20 @@
 public extension <%= model.name %> {
-    var itself: String { get { return "WHERE \(Person.tableName.unwrapped).\("id".unwrapped) = \(id)" } }
+    var itself: String { get { return "WHERE \(<%= model.name %>.tableName.unwrapped).\("id".unwrapped) = \(id)" } }
 
     func delete() {
-        let deleteSQL = "DELETE FROM \(Person.tableName.unwrapped) \(itself)"
+        let deleteSQL = "DELETE FROM \(<%= model.name %>.tableName.unwrapped) \(itself)"
         executeSQL(deleteSQL)
     }
 
-    mutating func update(name name: String?) -> Person {
+    mutating func update(name name: String?) -> <%= model.name %> {
         return self.update([.name: name])
     }
 
-    mutating func update(email email: String) -> Person {
+    mutating func update(email email: String) -> <%= model.name %> {
         return self.update([.email: email])
     }
 
-    mutating func update(attributes: [Person.Column: Any]) -> Person {
+    mutating func update(attributes: [<%= model.name %>.Column: Any]) -> <%= model.name %> {
         var setSQL: [String] = []
         for (key, _) in attributes {
             switch key {
@@ -23,7 +23,7 @@ public extension <%= model.name %> {
             default: break
             }
         }
-        let updateSQL = "UPDATE \(Person.tableName.unwrapped) SET \(setSQL.joinWithSeparator(", ")) \(itself)"
+        let updateSQL = "UPDATE \(<%= model.name %>.tableName.unwrapped) SET \(setSQL.joinWithSeparator(", ")) \(itself)"
         executeSQL(updateSQL) {
             for (key, value) in attributes {
                 switch key {
