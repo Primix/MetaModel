@@ -32,7 +32,7 @@ public class MetaModel {
     }
 }
 
-func executeSQL(sql: String, success: (() -> ())? = nil) -> Statement? {
+func executeSQL(sql: String, silent: Bool = false, success: (() -> ())? = nil) -> Statement? {
     defer { print("\n") }
     print("-> Begin Transaction")
     let startDate = NSDate()

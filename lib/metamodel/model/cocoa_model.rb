@@ -33,7 +33,7 @@ module MetaModel
     end
 
     def hash_value
-      self.hash.to_s
+      self.hash.to_s(16)
     end
 
     def property_key_value_pairs
@@ -44,8 +44,13 @@ module MetaModel
       @properties.map { |property| "#{property.key.to_s}: #{property.type.to_s}" }.join(", ")
     end
 
-    def property_exclude_id_key_value_pairs(prefix = true)
-      result = properties_exclude_id.map { |property| "#{property.key.to_s}: #{property.key.to_s}" }.join(", ")
+    def property_exclude_id_key_value_pairs(prefix = true, cast = false)
+      result = ""
+      if cast
+        result = properties_exclude_id.map { |property| "#{property.key.to_s}: #{property.type_without_optional == "Int" ? "Int(#{property.key.to_s})" : property.key.to_s}" }.join(", ")
+      else
+        result = properties_exclude_id.map { |property| "#{property.key.to_s}: #{property.key.to_s}" }.join(", ")
+      end
       return result unless prefix
       return result.length > 0 ? ", #{result}" : ""
     end

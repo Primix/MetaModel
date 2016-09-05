@@ -36,6 +36,10 @@ module MetaModel
       end
     end
 
+    def real_type
+      type_without_optional == "Int" ? "Int64" : type_without_optional
+    end
+
     def is_unique?
       @modifiers.include? :unique
     end
