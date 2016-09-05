@@ -43,12 +43,8 @@ module MetaModel
       end
 
       def render_model_files
-        title_options = { :verbose_prefix => '-> '.green }
         UI.section "Generating model files" do
           Renderer.render(@models)
-          @models.each do |model|
-            Renderer.render(@models)
-          end
         end
       end
 

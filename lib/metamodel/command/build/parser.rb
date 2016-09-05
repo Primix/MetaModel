@@ -19,9 +19,9 @@ module MetaModel
             scaffold_path = config.scaffold_path
             scaffolds = Dir[scaffold_path + "*.rb"]
             scaffolds.each do |scaffold_file|
-              UI.messag '-> '.green + "Resolving `#{File.basename(scaffold_file)}`"
+              UI.message '-> '.green + "Resolving `#{File.basename(scaffold_file)}`"
               scaffold_code = File.read(scaffold_path + scaffold_file)
-              eval scaffold_codee
+              eval scaffold_code
             end
           end
           @models
@@ -36,9 +36,7 @@ module MetaModel
 
         def define(model_name)
           model = CocoaModel.new(model_name)
-
           yield PropertyConstructor.new(model)
-
           @models << model
         end
       end

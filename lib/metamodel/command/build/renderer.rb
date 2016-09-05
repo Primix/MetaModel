@@ -55,7 +55,6 @@ module MetaModel
             target.add_file_references file_refs
 
             project.save
-
           end
         end
 
