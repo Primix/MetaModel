@@ -16,11 +16,12 @@ MetaModel is an iOS framework designed to help developer to deal with data persi
 MetaModel provides convenience chainable APIs to manipulate models like ActiveRecord.
 
 ```swift
-let json = ["id": 1, name: "Buzz", email: "i@metamodel.info"]
-Person(json: json).save
+let json = ["id": 1, "name": "Buzz", "email": "i@metamodel.info"]
+Person.parse(json).save
 
-let person = Person.all.first
-person.update(name: "Draven")
+if var person = Person.find(1) {
+    person.update(name: "Draven")
+}
 
 print(Person.all)
 ```
