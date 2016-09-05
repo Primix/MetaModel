@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/draveness/metamodel/blob/master/LICENSE)
 [![Gem](https://img.shields.io/gem/v/metamodel.svg?style=flat)](http://rubygems.org/gems/metamodel)
 
-MetaModel is an iOS framework that includes everything about model layer, data persistent, JSON to model constructor and a bunch of APIs which provides a way of dealing with client side database very easily.
+MetaModel is an iOS framework designed to help developer to deal with data persistent, JSON to model constructor and a bunch of APIs which provides an approach of handling client side database very easily.
 
 > MetaModel is under-development, API may constantly change before gets to 1.0.0.
 
@@ -13,7 +13,21 @@ MetaModel is an iOS framework that includes everything about model layer, data p
 + [x] Dealing with database without writing SQL
 + [x] Most concise API to retrieve data from persistent level
 
-Use a meta file to define your model:
+MetaModel provides convenience chainable APIs to manipulate models like ActiveRecord.
+
+```swift
+let json = ["id": 1, name: "Buzz", email: "i@metamodel.info"]
+Person(json: json).save
+
+let person = Person.all.first
+person.update(name: "Draven")
+
+print(Person.all)
+```
+
+## Usage
+
+Use a meta file in `./meta` folder to define your model:
 
 ```ruby
 define :User do |j|
