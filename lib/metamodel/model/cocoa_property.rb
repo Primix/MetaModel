@@ -21,8 +21,8 @@ module MetaModel
     end
 
     def type_without_optional
-      return key.to_s[0..-2] if key.to_s.end_with? "?"
-      key
+      return type.to_s[0..-2] if key.to_s.end_with? "?"
+      type
     end
 
     def database_type

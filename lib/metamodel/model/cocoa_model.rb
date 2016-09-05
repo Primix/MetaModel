@@ -40,19 +40,20 @@ module MetaModel
       @properties.map { |property| "#{property.key.to_s}: #{property.type.to_s}" }.join(", ")
     end
 
-    def property_exclude_id_key_value_pairs
+    def property_exclude_id_key_value_pairs(prefix = true)
       result = properties_exclude_id.map { |property| "#{property.key.to_s}: #{property.key.to_s}" }.join(", ")
+      return result unless prefix
       return result.length > 0 ? ", #{result}" : ""
     end
 
-    def property_exclude_id_key_type_pairs
+    def property_exclude_id_key_type_pairs(prefix = true)
       result = properties_exclude_id.map { |property| "#{property.key.to_s}: #{property.type.to_s}" }.join(", ")
+      return result unless prefix
       return result.length > 0 ? ", #{result}" : ""
     end
 
     def build_table
       table = "CREATE TABLE #{table_name}"
-      p properties
       main_sql = @properties.map do |property|
         result = "#{property.key} #{property.database_type}"
         result << " NOT NULL" if !property.is_optional?

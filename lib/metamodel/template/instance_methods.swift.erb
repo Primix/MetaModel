@@ -17,7 +17,7 @@ public extension <%= model.name %> {
         for (key, _) in attributes {
             switch key {
             <% model.properties_exclude_id.each do |property| %>
-            <%= """case .(#{property.key}: setSQL.append(\"\(key.unwrapped) = \(self.(#{property.key}#{property.is_optional? ? "?" : ""}.unwrapped)\")
+            <%= """case .#{property.key}: setSQL.append(\"\(key.unwrapped) = \(self.(#{property.key}#{property.is_optional? ? "?" : ""}.unwrapped)\")
             """ %>
             <% end %>
             default: break
@@ -28,7 +28,7 @@ public extension <%= model.name %> {
             for (key, value) in attributes {
                 switch key {
                 <% model.properties_exclude_id.each do |property| %>
-                <%= """case .(#{property.key}: self.#{property.key} = value as#{property.is_optional? ? "?" : "!"} #{property.type_without_optional}
+                <%= """case .#{property.key}: self.#{property.key} = value as#{property.is_optional? ? "?" : "!"} #{property.type_without_optional}
                 """ %>
                 <% end %>
                 default: break
