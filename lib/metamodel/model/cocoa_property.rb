@@ -25,6 +25,17 @@ module MetaModel
       key
     end
 
+    def database_type
+      lowercase_type = self.type.downcase
+      if lowercase_type == "string"
+        return "TEXT"
+      elsif lowercase_type == "int"
+        return "INTEGER"
+      elsif lowercase_type == "double"
+        return "REAL"
+      end
+    end
+
     def is_unique?
       @modifiers.include? :unique
     end

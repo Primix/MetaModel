@@ -51,23 +51,18 @@ module MetaModel
     end
 
     def build_table
-      table = ""
-      @properties.each do |property|
-        property_key = property.key
-        if property.has_default_value?
-          default_value = property.default_value
-          if default_value.is_a? String
-            table << "t.column(#{property_key}, defaultValue: \"#{default_value}\")\n\t\t\t"
-          else
-            table << "t.column(#{property_key}, defaultValue: #{default_value})\n\t\t\t"
-          end
-        else
-          table << "t.column(#{property_key})\n\t\t\t"
-        end
-        table << "t.primaryKey(#{property_key})\n\t\t\t" if property.is_primary?
-        table << "t.unique(#{property_key})\n\t\t\t" if property.is_unique?
-      end
-      table
+      table = "CREATE TABLE #{table_name}"
+      p properties
+      main_sql = @properties.map do |property|
+        result = "#{property.key} #{property.database_type}"
+        result << " NOT NULL" if !property.is_optional?
+        result << " PRIMARY KEY" if property.is_primary?
+        result << " UNIQUE" if property.is_unique?
+        result << " DEFAULT #{property.default_value}" if property.has_default_value?
+        result
+      end.join(", ")
+      main_sql = "(#{main_sql});"
+      table + main_sql
     end
   end
 
