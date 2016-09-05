@@ -1,0 +1,38 @@
+public extension <%= model.name %> {
+    var itself: String { get { return "WHERE \(Person.tableName.unwrapped).\("id".unwrapped) = \(id)" } }
+
+    func delete() {
+        let deleteSQL = "DELETE FROM \(Person.tableName.unwrapped) \(itself)"
+        executeSQL(deleteSQL)
+    }
+
+    mutating func update(name name: String?) -> Person {
+        return self.update([.name: name])
+    }
+
+    mutating func update(email email: String) -> Person {
+        return self.update([.email: email])
+    }
+
+    mutating func update(attributes: [Person.Column: Any]) -> Person {
+        var setSQL: [String] = []
+        for (key, _) in attributes {
+            switch key {
+            case .name: setSQL.append("\(key.unwrapped) = \(self.name?.unwrapped)")
+            case .email: setSQL.append("\(key.unwrapped) = \(self.email.unwrapped)")
+            default: break
+            }
+        }
+        let updateSQL = "UPDATE \(Person.tableName.unwrapped) SET \(setSQL.joinWithSeparator(", ")) \(itself)"
+        executeSQL(updateSQL) {
+            for (key, value) in attributes {
+                switch key {
+                case .name: self.name = value as? String
+                case .email: self.email = value as! String
+                default: break
+                }
+            }
+        }
+        return self
+    }
+}
