@@ -21,7 +21,7 @@ module MetaModel
     end
 
     def type_without_optional
-      return type.to_s[0..-2] if key.to_s.end_with? "?"
+      return type.to_s[0..-2] if type.to_s.end_with? "?"
       type
     end
 
