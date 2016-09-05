@@ -14,9 +14,8 @@ public extension <%= model.name %> {
         var setSQL: [String] = []
         for (key, _) in attributes {
             switch key {
-            <% model.properties_exclude_id.each do |property| %><%= """case .#{property.key}: setSQL.append(\"\\(key.unwrapped) = self.\\(#{property.key}#{property.is_optional? ? "?" : ""}.unwrapped)\")""" %>
-            <% end %>
-            default: break
+            <% model.properties_exclude_id.each do |property| %><%= """case .#{property.key}: setSQL.append(\"\\(Person.tableName.unwrapped).\\(key.unwrapped)) = \\(#{property.key}#{property.is_optional? ? "?" : ""}.unwrapped)\")""" %>
+            <% end %>default: break
             }
         }
         let updateSQL = "UPDATE \(<%= model.name %>.tableName.unwrapped) SET \(setSQL.joinWithSeparator(", ")) \(itself)"
@@ -24,8 +23,7 @@ public extension <%= model.name %> {
             for (key, value) in attributes {
                 switch key {
                 <% model.properties_exclude_id.each do |property| %><%= """case .#{property.key}: self.#{property.key} = value as#{property.is_optional? ? "?" : "!"} #{property.type_without_optional}""" %>
-                <% end %>
-                default: break
+                <% end %>default: break
                 }
             }
         }

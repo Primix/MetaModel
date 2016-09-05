@@ -17,9 +17,10 @@ MetaModel provides convenience chainable APIs to manipulate models like ActiveRe
 
 ```swift
 let json = ["id": 1, "name": "Buzz", "email": "i@metamodel.info"]
-Person.parse(json).save
+let person = Person.parse(json)
+person.save // INSERT INTO "people" (id, name, email) VALUES (1, "Buzz", "i@metamodel.info")
 
-if var person = Person.find(1) {
+if var person = Person.find(1) { // SELECT "people".* FROM "people" WHERE "people"."id" = 1 LIMIT 1
     person.update(name: "Draven")
 }
 
