@@ -22,7 +22,7 @@ module MetaModel
           clone_project
           parse_template
           render_model_files
-          update_intialize_method
+          update_initialize_method
         end
       end
 
@@ -52,10 +52,11 @@ module MetaModel
         end
       end
 
-      def update_intialize_method
+      def update_initialize_method
+        puts @models
         template = File.read File.expand_path(File.join(File.dirname(__FILE__), "../template/metamodel.swift.erb"))
-        ErbalT::render_from_hash(template, { :model => model })
-        model_path = Pathname.new("./MetaModel/MetaModel.swift")
+        result = ErbalT::render_from_hash(template, { :models => @models })
+        model_path = Pathname.new("./MetaModel/MetaModel/MetaModel.swift")
         File.write model_path, result
       end
 
