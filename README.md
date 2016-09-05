@@ -13,7 +13,7 @@ MetaModel is an iOS framework that includes everything about model layer, data p
 + [x] Dealing with database without writing SQL
 + [x] Most concise API to retrieve data from persistent level
 
-Use a scaffold file to define your model:
+Use a meta file to define your model:
 
 ```ruby
 metamodel_version '0.0.1'
@@ -38,7 +38,7 @@ sudo gem install metamodel --verbose
 
 ## Quick Start
 
-After installation , run `meta init` in your iOS project root folder which will make a `scaffold` directory in current folder.
+After installation , run `meta init` in your iOS project root folder which will make a `meta` directory in current folder.
 
 ```shell
 $ cd /path/to/project
@@ -46,24 +46,24 @@ $ meta init
 
 Initialing MetaModel project
 
-Creating `scaffold` folder for MetaModel
+Creating `meta` folder for MetaModel
 ```
 
-Generate your model scaffold file with `meta generate`.
+Generate your model meta file with `meta generate`.
 
 ```shell
 $ meta generate User
 
-Generating model scaffold file
+Generating model meta file
 
--> Adding `user.rb` to scaffold folder
+-> Adding `user.rb` to meta folder
 
 [!] `user.rb` has already generated, use the command below to edit it.
 
-  vim scaffold/user.rb
+  vim meta/user.rb
 ```
 
-Edit scaffold file using vim, Emacs or other editor and run `meta build`.
+Edit meta file using vim, Emacs or other editor and run `meta build`.
 
 ```shell
 $ meta build
@@ -73,7 +73,7 @@ Building MetaModel project
 Cloning MetaModel project into `./MetaModel` folder
 Using `./MetaModel/MetaModel.xcodeproj` to build module
 
-Analyzing scaffold files
+Analyzing meta files
 -> Resolving `user.rb`
 
 Generating model files

@@ -30,12 +30,12 @@ module MetaModel
 
     private
 
-    # Checks that scaffold folder exists
+    # Checks that meta folder exists
     #
     # @return [void]
-    def verify_scaffold_exists!
-      unless config.scaffold_folder
-        raise Informative, "No `scaffold' folder found in the project directory."
+    def verify_meta_exists!
+      unless config.meta_folder
+        raise Informative, "No `meta' folder found in the project directory."
       end
     end
   end

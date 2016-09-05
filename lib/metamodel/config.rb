@@ -39,14 +39,14 @@ module MetaModel
     # @!group Paths
 
     # @return [Pathname] the root of the MetaModel installation where the
-    #         scaffold folder is located.
+    #         meta folder is located.
     #
     def installation_root
       current_dir = ActiveSupport::Multibyte::Unicode.normalize(Dir.pwd)
       current_path = Pathname.new(current_dir)
       unless @installation_root
         until current_path.root?
-          if scaffold_path_in_dir(current_path)
+          if meta_path_in_dir(current_path)
             @installation_root = current_path
             break
           else
@@ -77,33 +77,33 @@ module MetaModel
       "./MetaModel/MetaModel.xcodeproj"
     end
 
-    # Returns whether or not scaffold folder is in current project.
+    # Returns whether or not meta folder is in current project.
     #
     # @return [Bool]
     #
-    def scaffold_folder
-      Pathname.new(scaffold_path).exist?
+    def meta_folder
+      Pathname.new(meta_path).exist?
     end
 
-    # Returns the path of the scaffold.
+    # Returns the path of the meta.
     #
     # @return [Pathname]
     # @return [Nil]
     #
-    def scaffold_path
-      @scaffold_path_in_dir ||= installation_root + 'scaffold'
+    def meta_path
+      @meta_path_in_dir ||= installation_root + 'meta'
     end
 
-    # Returns the path of the scaffold folder in the given dir if any exists.
+    # Returns the path of the meta folder in the given dir if any exists.
     #
     # @param  [Pathname] dir
-    #         The directory where to look for the scaffold.
+    #         The directory where to look for the meta.
     #
-    # @return [Pathname] The path of the scaffold.
-    # @return [Nil] If not scaffold was found in the given dir
+    # @return [Pathname] The path of the meta.
+    # @return [Nil] If not meta was found in the given dir
     #
-    def scaffold_path_in_dir(dir)
-      candidate = dir + 'scaffold'
+    def meta_path_in_dir(dir)
+      candidate = dir + 'meta'
       if candidate.exist?
         return candidate
       end

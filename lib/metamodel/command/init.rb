@@ -2,27 +2,27 @@ module MetaModel
   class Command
 
     class Init < Command
-      self.summary = "Generate a scaffold folder for the current directory."
+      self.summary = "Generate a meta folder for the current directory."
       self.description = <<-DESC
-        Creates a scaffold folder for the current directory if none exits. Call
+        Creates a meta folder for the current directory if none exits. Call
         this command before all other metamodel command.
       DESC
 
       def initialize(argv)
-        @scaffold_path = Pathname.pwd + 'scaffold'
+        @meta_path = Pathname.pwd + 'meta'
         @project_path = argv.shift_argument
         super
       end
 
       def validate!
         super
-        raise Informative, 'Existing scaffold folder in directory' unless config.scaffold_path_in_dir(Pathname.pwd).nil?
+        raise Informative, 'Existing meta folder in directory' unless config.meta_path_in_dir(Pathname.pwd).nil?
       end
 
       def run
         UI.section "Initialing MetaModel project" do
-          UI.section "Creating `scaffold` folder for MetaModel" do
-            FileUtils.mkdir(@scaffold_path)
+          UI.section "Creating `meta` folder for MetaModel" do
+            FileUtils.mkdir(@meta_path)
           end
         end
       end
