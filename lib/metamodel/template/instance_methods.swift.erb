@@ -6,18 +6,15 @@ public extension <%= model.name %> {
         executeSQL(deleteSQL)
     }
 
-    <% model.properties_exclude_id.each do |property| %>
-    <%= """mutating func update(#{property.key} #{property.key}: #{property.type}) -> #{model.name} {
+    <% model.properties_exclude_id.each do |property| %><%= """mutating func update(#{property.key} #{property.key}: #{property.type}) -> #{model.name} {
         return self.update([.#{property.key}: #{property.key}])
     }""" %>
     <% end %>
-
     mutating func update(attributes: [<%= model.name %>.Column: Any]) -> <%= model.name %> {
         var setSQL: [String] = []
         for (key, _) in attributes {
             switch key {
-            <% model.properties_exclude_id.each do |property| %>
-            <%= """case .#{property.key}: setSQL.append(\"\(key.unwrapped) = \(self.(#{property.key}#{property.is_optional? ? "?" : ""}.unwrapped)\")""" %>
+            <% model.properties_exclude_id.each do |property| %><%= """case .#{property.key}: setSQL.append(\"\\(key.unwrapped) = self.\\(#{property.key}#{property.is_optional? ? "?" : ""}.unwrapped)\")""" %>
             <% end %>
             default: break
             }
@@ -26,8 +23,7 @@ public extension <%= model.name %> {
         executeSQL(updateSQL) {
             for (key, value) in attributes {
                 switch key {
-                <% model.properties_exclude_id.each do |property| %>
-                <%= """case .#{property.key}: self.#{property.key} = value as#{property.is_optional? ? "?" : "!"} #{property.type_without_optional}""" %>
+                <% model.properties_exclude_id.each do |property| %><%= """case .#{property.key}: self.#{property.key} = value as#{property.is_optional? ? "?" : "!"} #{property.type_without_optional}""" %>
                 <% end %>
                 default: break
                 }
