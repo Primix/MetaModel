@@ -16,8 +16,6 @@
 ## Specific to RubyMotion:
 .dat*
 .repl_history
-build/
-!lib/metamodel/command/build/
 *.bridgesupport
 build-iPhoneOS/
 build-iPhoneSimulator/
