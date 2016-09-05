@@ -1,16 +1,29 @@
 extension <%= model.name %> {
-    public init(json: [String: Any]) {
+    public static func parse(json: [String: Any]) -> Person {
         let id: Int = json["id"] as! Int
         <% model.properties_exclude_id.each do |property| %>
         <%= """let #{property.key}: #{property.type} = json[\"#{property.key}\"] as! #{property.type}
         """ %>
         <% end %>
-
-        self.init(<%= model.property_key_value_pairs %>)
+        return Person(<%= model.property_key_value_pairs %>l)
     }
 
-    public init(jsonData: NSData) throws {
-        let json = try NSJSONSerialization.JSONObjectWithData(jsonData, options: .AllowFragments) as! [String: Any]
-        self.init(json: json)
+    public static func parse(jsons: [[String: Any]]) -> [<%= model.name %>] {
+        var results: [<%= model.name %>] = []
+        for json in jsons {
+            results.append(<%= model.name %>.parse(json))
+        }
+        return results
     }
+
+    public static func parse(data: NSData) throws -> <%= model.name %> {
+        let json = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments) as! [String: Any]
+        return <%= model.name %>.parse(json)
+    }
+
+    public static func parses(data: NSData) throws -> [<%= model.name %>] {
+        let json = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments) as! [[String: Any]]
+        return <%= model.name %>.parse(json)
+    }
+
 }
