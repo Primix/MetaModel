@@ -1,0 +1,10 @@
+extension <%= model.name %>: Recordable {
+    public init(values: Array<Optional<Binding>>) {
+        let id: Int64 = values[0] as! Int64
+        <% model.properties_exclude_id.each_with_index do |property, index| %>
+        <%= """let #{property.key}: #{property.type} = values[#{index + 1}] as! #{property.type}
+        """ %>
+        <% end %>
+        self.init(id: Int(id), <%= model.property_exclude_id_key_value_pairs %>)
+    }
+}
