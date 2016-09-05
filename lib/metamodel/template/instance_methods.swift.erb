@@ -14,7 +14,7 @@ public extension <%= model.name %> {
         var setSQL: [String] = []
         for (key, _) in attributes {
             switch key {
-            <% model.properties_exclude_id.each do |property| %><%= """case .#{property.key}: setSQL.append(\"\\(Person.tableName.unwrapped).\\(key.unwrapped)) = \\(#{property.key}#{property.is_optional? ? "?" : ""}.unwrapped)\")""" %>
+            <% model.properties_exclude_id.each do |property| %><%= """case .#{property.key}: setSQL.append(\"\\(Person.tableName.unwrapped).\\(key.unwrapped) = \\(#{property.key}#{property.is_optional? ? "?" : ""}.unwrapped)\")""" %>
             <% end %>default: break
             }
         }
