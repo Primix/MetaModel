@@ -32,6 +32,10 @@ module MetaModel
       end
     end
 
+    def hash_value
+      self.hash.to_s
+    end
+
     def property_key_value_pairs
       @properties.map { |property| "#{property.key.to_s}: #{property.key.to_s}" }.join(", ")
     end
