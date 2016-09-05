@@ -22,6 +22,7 @@ module MetaModel
           clone_project
           parse_template
           render_model_files
+          update_intialize_method
         end
       end
 
@@ -51,12 +52,30 @@ module MetaModel
         end
       end
 
+      def update_intialize_method
+        template = File.read File.expand_path(File.join(File.dirname(__FILE__), "../template/metamodel.swift.erb"))
+        ErbalT::render_from_hash(template, { :model => model })
+        model_path = Pathname.new("./MetaModel/MetaModel.swift")
+        File.write model_path, result
+      end
+
       def validate!
         super
         raise Informative, 'No scaffold folder in directory' unless config.scaffold_path_in_dir(Pathname.pwd)
       end
 
       private
+
+      class ErbalT < OpenStruct
+        def self.render_from_hash(t, h)
+          ErbalT.new(h).render(t)
+        end
+
+        def render(template)
+          ERB.new(template).result(binding)
+        end
+      end
+
     end
   end
 end
