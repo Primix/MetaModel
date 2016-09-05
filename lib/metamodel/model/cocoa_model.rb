@@ -36,8 +36,16 @@ module MetaModel
       @properties.map { |property| "#{property.key.to_s}: #{property.key.to_s}" }.join(", ")
     end
 
+    def property_key_type_pairs
+      @properties.map { |property| "#{property.key.to_s}: #{property.type.to_s}" }.join(", ")
+    end
+
     def property_exclude_id_key_value_pairs
       properties_exclude_id.map { |property| "#{property.key.to_s}: #{property.key.to_s}" }.join(", ")
+    end
+
+    def property_exclude_id_key_type_pairs
+      properties_exclude_id.map { |property| "#{property.key.to_s}: #{property.type.to_s}" }.join(", ")
     end
 
     def build_table
