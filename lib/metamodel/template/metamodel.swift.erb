@@ -29,10 +29,6 @@ public class MetaModel {
             #{model.name}.deinitialize()
         }""" %>
         <% end %>
-        if infos[Person.tableName] != "daadaadada" {
-            updateMetaModelTableInfos(Person.tableName, hashValue: "daadaadada")
-            Person.deinitialize()
-        }
     }
 }
 
