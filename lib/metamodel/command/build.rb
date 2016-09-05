@@ -45,9 +45,8 @@ module MetaModel
         title_options = { :verbose_prefix => '-> '.green }
         UI.section "Generating model files" do
           @models.each do |model|
-            UI.titled_section "Using #{model.name}.swift file", title_options do
-              Renderer.render(model)
-            end
+            Renderer.render(model)
+            UI.message '-> '.green + "Using #{model.name}.swift file"
           end
         end
       end

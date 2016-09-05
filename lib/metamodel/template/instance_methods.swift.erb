@@ -7,8 +7,8 @@ public extension <%= model.name %> {
     }
 
     <% model.properties_exclude_id.each do |property| %>
-    <%= """mutating func update(#{property.key} #{property.key}: #{property.type}) -> <%= model.name %> {
-        return self.update([.(#{property.key}: (#{property.key}])
+    <%= """mutating func update(#{property.key} #{property.key}: #{property.type}) -> #{model.name} {
+        return self.update([.#{property.key}: #{property.key}])
     }""" %>
     <% end %>
 
@@ -17,7 +17,7 @@ public extension <%= model.name %> {
         for (key, _) in attributes {
             switch key {
             <% model.properties_exclude_id.each do |property| %>
-            <%= """case .(#{property.key}: setSQL.append(\"\(key.unwrapped) = \(self.(#{property.key}#{property.is_optional? : "?" : ""}.unwrapped)\")
+            <%= """case .(#{property.key}: setSQL.append(\"\(key.unwrapped) = \(self.(#{property.key}#{property.is_optional? ? "?" : ""}.unwrapped)\")
             """ %>
             <% end %>
             default: break
