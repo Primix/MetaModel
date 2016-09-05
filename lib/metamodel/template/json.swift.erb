@@ -5,7 +5,7 @@ extension <%= model.name %> {
         <%= """let #{property.key}: #{property.type} = json[\"#{property.key}\"] as! #{property.type}
         """ %>
         <% end %>
-        return Person(<%= model.property_key_value_pairs %>l)
+        return Person(<%= model.property_key_value_pairs %>)
     }
 
     public static func parse(jsons: [[String: Any]]) -> [<%= model.name %>] {
