@@ -1,4 +1,4 @@
-extension Person {
+extension <%= model.name %> {
     public init(json: [String: Any]) {
         let id: Int = json["id"] as! Int
         <% model.properties_exclude_id.each do |property| %>

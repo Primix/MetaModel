@@ -5,6 +5,6 @@ extension <%= model.name %>: Recordable {
         <%= """let #{property.key}: #{property.type} = values[#{index + 1}] as! #{property.type}
         """ %>
         <% end %>
-        self.init(id: Int(id), <%= model.property_exclude_id_key_value_pairs %>)
+        self.init(id: Int(id)<%= model.property_exclude_id_key_value_pairs %>)
     }
 }

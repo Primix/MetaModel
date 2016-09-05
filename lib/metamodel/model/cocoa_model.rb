@@ -41,11 +41,13 @@ module MetaModel
     end
 
     def property_exclude_id_key_value_pairs
-      properties_exclude_id.map { |property| "#{property.key.to_s}: #{property.key.to_s}" }.join(", ")
+      return = properties_exclude_id.map { |property| "#{property.key.to_s}: #{property.key.to_s}" }.join(", ")
+      return result.length > 0 ? ", #{result}" : ""
     end
 
     def property_exclude_id_key_type_pairs
-      properties_exclude_id.map { |property| "#{property.key.to_s}: #{property.type.to_s}" }.join(", ")
+      result = properties_exclude_id.map { |property| "#{property.key.to_s}: #{property.type.to_s}" }.join(", ")
+      return result.length > 0 ? ", #{result}" : ""
     end
 
     def build_table
