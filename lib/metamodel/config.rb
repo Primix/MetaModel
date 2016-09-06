@@ -74,7 +74,7 @@ module MetaModel
     # @return [String]
     #
     def metamodel_xcode_project
-      "./MetaModel/MetaModel.xcodeproj"
+      "./metamodel/MetaModel.xcodeproj"
     end
 
     # Returns whether or not meta folder is in current project.
