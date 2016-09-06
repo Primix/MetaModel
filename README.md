@@ -99,7 +99,7 @@ Generating model files
 Generating MetaModel.framework
   -> MetaModel.framework located in current folder
 
-[!] Please drag MetaModel.framework into Linked Frameworks and Libraries section
+[!] Please drag MetaModel.framework into Linked Frameworks and Libraries phrase.
 ```
 
 This command build a `MetaModel.framework` in project root folder, you need to add this framework to **Linked frameworks and Libraries** phrase which located in `General` tab.
