@@ -30,9 +30,9 @@ module MetaModel
         if File.exist? config.metamodel_xcode_project
           UI.message "Existing project `#{config.metamodel_xcode_project}`"
         else
-          UI.section "Cloning MetaModel project into `./MetaModel` folder" do
+          UI.section "Cloning MetaModel project into `./metamodel` folder" do
             Git.clone(config.metamodel_template_uri, 'MetaModel')
-            UI.message "Using `./MetaModel/MetaModel.xcodeproj` to build module"
+            UI.message "Using `./metamodel/MetaModel.xcodeproj` to build module"
           end
         end
       end
@@ -51,8 +51,12 @@ module MetaModel
       def update_initialize_method
         template = File.read File.expand_path(File.join(File.dirname(__FILE__), "../template/metamodel.swift.erb"))
         result = ErbalT::render_from_hash(template, { :models => @models })
-        model_path = Pathname.new("./MetaModel/MetaModel/MetaModel.swift")
+        model_path = Pathname.new("./metamodel/MetaModel/MetaModel.swift")
         File.write model_path, result
+      end
+
+      def build_metamodel_framework
+
       end
 
       def validate!
