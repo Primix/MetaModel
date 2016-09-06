@@ -73,9 +73,12 @@ module MetaModel
 
           copy_command = "cp -rf metamodel/Build/Products/Release-iphoneos/MetaModel.framework . && \
             cp -rf metamodel/Build/Products/Release-iphonesimulator/MetaModel.framework/Modules/MetaModel.swiftmodule/* MetaModel.framework/Modules/MetaModel.swiftmodule/"
+          lipo_command = "lipo -create -output MetaModel.framework/MetaModel \
+            ./MetaModel/Build/Products/Release-iphonesimulator/MetaModel.framework/MetaModel \
+            ./MetaModel/Build/Products/Release-iphoneos/MetaModel.framework/MetaModel"
           # os_result = system "cp -rf #{iphoneos_framework_path} #{config.installation_root}/"
           # simulator_result = system "cp -rf #{iphonesimulator_framework_path} #{config.installation_root}/"
-          result = system copy_command
+          result = system "#{copy_command} && #{lipo_command}"
           raise Informative, 'Copy framework to current folder failed.' unless result
           UI.message "-> ".green + "MetaModel.framework located in current folder"
         end
