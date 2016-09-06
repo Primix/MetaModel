@@ -78,14 +78,26 @@ module MetaModel
 
           raise Informative, 'Building framework failed.' unless result
 
-          copy_command = "cp -rf metamodel/Build/Products/Release-iphoneos/MetaModel.framework . && \
-            cp -rf metamodel/Build/Products/Release-iphonesimulator/MetaModel.framework/Modules/MetaModel.swiftmodule/* MetaModel.framework/Modules/MetaModel.swiftmodule/"
+          build_products_folder = "./metamodel/Build/Products"
+
+          copy_command = "cp -rf #{build_products_folder}/Release-iphoneos/MetaModel.framework . && \
+            cp -rf #{build_products_folder}/Release-iphonesimulator/MetaModel.framework/Modules/MetaModel.swiftmodule/* \
+                    MetaModel.framework/Modules/MetaModel.swiftmodule/"
           lipo_command = "lipo -create -output MetaModel.framework/MetaModel \
-            ./MetaModel/Build/Products/Release-iphonesimulator/MetaModel.framework/MetaModel \
-            ./MetaModel/Build/Products/Release-iphoneos/MetaModel.framework/MetaModel"
+            #{build_products_folder}/Release-iphonesimulator/MetaModel.framework/MetaModel \
+            #{build_products_folder}/Release-iphoneos/MetaModel.framework/MetaModel"
           # os_result = system "cp -rf #{iphoneos_framework_path} #{config.installation_root}/"
           # simulator_result = system "cp -rf #{iphonesimulator_framework_path} #{config.installation_root}/"
           result = system "#{copy_command} && #{lipo_command}"
+
+          copy_command = "cp -rf metamodel/Build/Products/Release-iphoneos/SQLite.framework . && \
+            cp -rf metamodel/Build/Products/Release-iphonesimulator/SQLite.framework/Modules/SQLite.swiftmodule/* SQLite.framework/Modules/SQLite.swiftmodule/"
+            lipo_command = "lipo -create -output SQLite.framework/SQLite \
+              ./metamodel/Build/Products/Release-iphonesimulator/SQLite.framework/SQLite \
+              ./metamodel/Build/Products/Release-iphoneos/SQLite.framework/SQLite"
+
+          result = system "#{copy_command} && #{lipo_command}"
+
           raise Informative, 'Copy framework to current folder failed.' unless result
           UI.message "-> ".green + "MetaModel.framework located in current folder"
         end
