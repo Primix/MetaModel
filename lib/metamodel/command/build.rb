@@ -58,11 +58,21 @@ module MetaModel
 
       def build_metamodel_framework
         UI.section "Generating MetaModel.framework" do
-          command = "xcodebuild -project metamodel/MetaModel.xcodeproj -scheme MetaModel > /dev/null 2>&1"
-          result = system command
+
+          build_iphoneos = "xcodebuild -scheme MetaModel \
+            -project MetaModel/MetaModel.xcodeproj \
+            -configuration Release -sdk iphoneos \
+            -derivedDataPath '.' \
+            ONLY_ACTIVE_ARCH=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="
+          build_iphonesimulator = build_iphoneos.gsub("iphoneos", "iphonesimulator")
+          result = system "#{build_iphoneos} && #{build_iphonesimulator}"
+
           raise Informative, 'Building framework failed.' unless result
-          result = system "cp -rf MetaModel/Build/Products/Debug-iphoneos/MetaModel.framework #{config.installation_root}"
-          raise Informative, 'Copy framework to current folder failed.' unless result
+          # os_result = system "cp -rf #{iphoneos_framework_path} #{config.installation_root}/"
+          # simulator_result = system "cp -rf #{iphonesimulator_framework_path} #{config.installation_root}/"
+          raise Informative, 'Copy framework to current folder failed.' unless os_result && simulator_result
           UI.message "-> ".green + "MetaModel.framework located in current folder"
         end
       end
