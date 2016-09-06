@@ -18,12 +18,14 @@ module MetaModel
       end
 
       def run
-        UI.section "Building MetaModel project" do
+        UI.section "Building MetaModel.framework in project" do
           clone_project
           parse_template
           render_model_files
           update_initialize_method
+          build_metamodel_framework
         end
+        UI.notice "Please drag MetaModel.framework into Linked Frameworks and Libraries section\n"
       end
 
       def clone_project
@@ -47,7 +49,6 @@ module MetaModel
           Renderer.render(@models)
         end
       end
-
       def update_initialize_method
         template = File.read File.expand_path(File.join(File.dirname(__FILE__), "../template/metamodel.swift.erb"))
         result = ErbalT::render_from_hash(template, { :models => @models })
@@ -56,7 +57,14 @@ module MetaModel
       end
 
       def build_metamodel_framework
-
+        UI.section "Generating MetaModel.framework" do
+          command = "xcodebuild -project metamodel/MetaModel.xcodeproj -scheme MetaModel > /dev/null 2>&1"
+          result = system command
+          raise Informative, 'Building framework failed.' unless result
+          result = system "cp -rf MetaModel/Build/Products/Debug-iphoneos/MetaModel.framework #{config.installation_root}"
+          raise Informative, 'Copy framework to current folder failed.' unless result
+          UI.message "-> ".green + "MetaModel.framework located in current folder"
+        end
       end
 
       def validate!

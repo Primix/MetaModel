@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.date     = Date.today
   s.license  = "MIT"
   s.email    = ["stark.draven@gmail.com"]
-  s.homepage = "https://github.com/Draveness/MetaModel"
+  s.homepage = "https://github.com/MModel/MetaModel"
   s.authors  = ["Draveness Zuo"]
 
   s.summary     = "The Cocoa models generator."
