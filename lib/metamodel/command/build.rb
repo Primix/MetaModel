@@ -63,10 +63,17 @@ module MetaModel
             -project MetaModel/MetaModel.xcodeproj \
             -configuration Release -sdk iphoneos \
             -derivedDataPath './metamodel' \
+            BITCODE_GENERATION_MODE=bitcode \
             ONLY_ACTIVE_ARCH=NO \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGN_IDENTITY="
-          build_iphonesimulator = build_iphoneos.gsub("iphoneos", "iphonesimulator")
+          build_iphonesimulator = "xcodebuild -scheme MetaModel \
+            -project MetaModel/MetaModel.xcodeproj \
+            -configuration Release -sdk iphonesimulator \
+            -derivedDataPath './metamodel' \
+            ONLY_ACTIVE_ARCH=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="
           result = system "#{build_iphoneos} && #{build_iphonesimulator}"
 
           raise Informative, 'Building framework failed.' unless result
