@@ -104,7 +104,7 @@ Generating MetaModel.framework
 
 This command build a `MetaModel.framework` in project root folder, you need to add this framework to **Linked frameworks and Libraries** phrase which located in `General` tab.
 
-![add-metamodel-project-demo](images/add-metamodel-project-demo.png)
+![integrate-metamodel-framework](images/integrate-metamodel-framework.png)
 
 Add this line of code in your project.
 
