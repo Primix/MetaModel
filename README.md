@@ -87,19 +87,22 @@ Edit meta file using vim, Emacs or other editor and run `meta build`.
 ```shell
 $ meta build
 
-Building MetaModel project
-
-Cloning MetaModel project into `./MetaModel` folder
-Using `./MetaModel/MetaModel.xcodeproj` to build module
+Building MetaModel.framework in project
+  Existing project `./metamodel/MetaModel.xcodeproj`
 
 Analyzing meta files
--> Resolving `user.rb`
+  -> Resolving `user.rb`
 
 Generating model files
--> Using User.swift file
+  -> Using User.swift file
+
+Generating MetaModel.framework
+  -> MetaModel.framework located in current folder
+
+[!] Please drag MetaModel.framework into Linked Frameworks and Libraries section
 ```
 
-This command create a brand new xcode project in `./MetaModel` folder, just add the `MetaModel.project` into your project or workspace. And add `MetaModel.framework` to **Linked frameworks and Libraries** phrase which located in `General` tab.
+This command build a `MetaModel.framework` in project root folder, you need to add this framework to **Linked frameworks and Libraries** phrase which located in `General` tab.
 
 ![add-metamodel-project-demo](images/add-metamodel-project-demo.png)
 
