@@ -46,9 +46,15 @@ module MetaModel
       end
 
       def validate_models
-        existing_types = @models.map { |m| m.properties.map { |p| p.type } }.flatten.uniq
+        existing_types = @models.map { |m| m.properties.map { |property| property.type } }.flatten.uniq
         unsupported_types = existing_types - supported_types
         raise Informative, "Unsupported types #{unsupported_types}" unless unsupported_types == []
+        # class_types = supported_types - built_in_types
+        # @models.each do |model|
+        #   model.properties do |property|
+        #
+        #   end
+        # end
       end
 
       def render_model_files
@@ -117,6 +123,12 @@ module MetaModel
         def render(template)
           ERB.new(template).result(binding)
         end
+      end
+
+      def built_in_types
+        %w[Int Double String].map do |t|
+          [t, "#{t}?"]
+        end.flatten
       end
 
       def supported_types

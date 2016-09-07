@@ -8,11 +8,7 @@ extension <%= model.name %> {
     }
 
     public static func parse(jsons: [[String: AnyObject]]) -> [<%= model.name %>] {
-        var results: [<%= model.name %>] = []
-        for json in jsons {
-            results.append(<%= model.name %>.parse(json))
-        }
-        return results
+        return jsons.map(<%= model.name %>.parse)
     }
 
     public static func parse(data: NSData) throws -> <%= model.name %> {
