@@ -5,4 +5,5 @@ define :User do |j|
   j.nickname :string
   j.avatar :string
   j.email :string, :unique, default: "default@gmail.com"
+  j.person :person
 end

@@ -21,9 +21,10 @@ module MetaModel
         UI.section "Building MetaModel.framework in project" do
           clone_project
           parse_template
+          validate_models
           render_model_files
           update_initialize_method
-          build_metamodel_framework
+          # build_metamodel_framework
         end
         UI.notice "Please drag MetaModel.framework into Embedded Binaries phrase.\n"
       end
@@ -42,6 +43,12 @@ module MetaModel
       def parse_template
         parser = Parser.new
         @models = parser.parse
+      end
+
+      def validate_models
+        existing_types = @models.map { |m| m.properties.map { |p| p.type } }.flatten.uniq
+        unsupported_types = existing_types - supported_types
+        raise Informative, "Unsupported types #{unsupported_types}" unless unsupported_types == []
       end
 
       def render_model_files
@@ -110,6 +117,14 @@ module MetaModel
         def render(template)
           ERB.new(template).result(binding)
         end
+      end
+
+      def supported_types
+        @models.reduce(%w[Int Double String]) { |types, model|
+          types << model.name.to_s
+        }.map { |type|
+          [type, "#{type}?"]
+        }.flatten
       end
 
     end
