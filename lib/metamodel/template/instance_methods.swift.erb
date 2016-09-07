@@ -31,7 +31,7 @@ public extension <%= model.name %> {
     }
     mutating var save: <%= model.name %> {
         get {
-            if <%= model.name %>.find(id) {
+            if let _ = <%= model.name %>.find(id) {
                 update([<% model.properties.each do |property| %><%= ".#{property.name}: #{property.name}" %><% end.join(", ") %>])
             } else {
                 <%= model.name %>.create(id<%= model.property_exclude_id_key_value_pairs %>)
