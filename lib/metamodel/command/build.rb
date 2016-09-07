@@ -25,7 +25,7 @@ module MetaModel
           update_initialize_method
           build_metamodel_framework
         end
-        UI.notice "Please drag MetaModel.framework into Linked Frameworks and Libraries phrase.\n"
+        UI.notice "Please drag MetaModel.framework into Embedded Binaries phrase.\n"
       end
 
       def clone_project
