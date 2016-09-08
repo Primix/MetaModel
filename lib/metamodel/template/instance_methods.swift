@@ -12,18 +12,20 @@ public extension <%= model.name %> {
     <% end %>
     mutating func update(attributes: [<%= model.name %>.Column: Any]) -> <%= model.name %> {
         var setSQL: [String] = []
-        for (key, _) in attributes {
-            switch key {
-            <% model.properties_exclude_id.each do |property| %><%= """case .#{property.name}: setSQL.append(\"\\(key.unwrapped) = \\(#{property.name}#{property.is_optional? ? "?" : ""}.unwrapped)\")""" %>
-            <% end %>default: break
-            }
-        }
-        let updateSQL = "UPDATE \(<%= model.name %>.tableName.unwrapped) SET \(setSQL.joinWithSeparator(", ")) \(itself)"
-        executeSQL(updateSQL) {
+        if let attributes = attributes as? [Comment.Column: Unwrapped] {
             for (key, value) in attributes {
                 switch key {
-                <% model.properties_exclude_id.each do |property| %><%= """case .#{property.name}: self.#{property.name} = value as#{property.is_optional? ? "?" : "!"} #{property.type_without_optional}""" %>
+                <% model.properties_exclude_id.each do |property| %><%= """case .#{property.name}: setSQL.append(\"\\(key.unwrapped) = \\(value.unwrapped)\")""" %>
                 <% end %>default: break
+                }
+            }
+            let updateSQL = "UPDATE \(<%= model.name %>.tableName.unwrapped) SET \(setSQL.joinWithSeparator(", ")) \(itself)"
+            executeSQL(updateSQL) {
+                for (key, value) in attributes {
+                    switch key {
+                    <% model.properties_exclude_id.each do |property| %><%= """case .#{property.name}: self.#{property.name} = value as#{property.is_optional? ? "?" : "!"} #{property.type_without_optional}""" %>
+                    <% end %>default: break
+                    }
                 }
             }
         }
