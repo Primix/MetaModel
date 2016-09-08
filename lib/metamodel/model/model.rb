@@ -81,9 +81,14 @@ module MetaModel
         result << " UNIQUE" if property.is_unique?
         result << " DEFAULT #{property.default_value}" if property.has_default_value?
         result
-      end.join(", ")
-      main_sql = "(#{main_sql});"
-      table + main_sql
+      end
+      foreign_sql = @properties.map do |property|
+        next unless property.is_foreign?
+        reference_table_name = property.type.tableize
+        "FOREIGN KEY(#{property.name}) REFERENCES #{reference_table_name}(id)"
+      end
+
+      table + "(#{(main_sql + foreign_sql).compact.join(", ")});"
     end
   end
 
