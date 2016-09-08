@@ -43,10 +43,14 @@ module MetaModel
           current_model.properties << CocoaProperty.new(key, type, args)
         end
 
-        def has_many(name, type)
-          property = CocoaProperty.new(name, type)
+        def has_many(name, model)
+          property = CocoaProperty.new(name, model)
           raise Informative, "Property type in has_many relation can't be optional" if property.is_optional?
           current_model.extra_properties << property
+        end
+
+        def belongs_to(name, model)
+          current_model.extra_properties << CocoaProperty.new(name, model)
         end
 
         private
