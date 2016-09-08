@@ -27,8 +27,7 @@
             }
         }
     }
-}""" %>
-<% elsif property.belongs_to? %>
+}""" %><% elsif property.belongs_to? %>
 <%= """public extension #{model.name} {
     var #{property.name}: #{property.type}? {
         get {
