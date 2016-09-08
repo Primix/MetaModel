@@ -33,15 +33,19 @@ public class MetaModel {
 
 func executeSQL(sql: String, silent: Bool = false, success: (() -> ())? = nil) -> Statement? {
     defer { print("\n") }
-    print("-> Begin Transaction")
+    if !silent {
+        print("-> Begin Transaction")
+    }
     let startDate = NSDate()
     do {
         let result = try db.run(sql)
         let endDate = NSDate()
         let interval = endDate.timeIntervalSinceDate(startDate) * 1000
-        print("\tSQL (\(interval.format("0.2"))ms) \(sql)")
-        print("-> Commit Transaction")
 
+        if !silent {
+            print("\tSQL (\(interval.format("0.2"))ms) \(sql)")
+            print("-> Commit Transaction")
+        }
         if let success = success {
             success()
         }
@@ -50,22 +54,28 @@ func executeSQL(sql: String, silent: Bool = false, success: (() -> ())? = nil) -
     } catch let error {
         let endDate = NSDate()
         let interval = endDate.timeIntervalSinceDate(startDate) * 1000
-        print("\tSQL (\(interval.format("0.2"))ms) \(sql)")
-        print("\t\(error)")
-        print("-> Rollback transaction")
+        if !silent {
+            print("\tSQL (\(interval.format("0.2"))ms) \(sql)")
+            print("\t\(error)")
+            print("-> Rollback transaction")
+        }
     }
     return nil
 }
 
 func executeScalarSQL(sql: String, silent: Bool = false, success: (() -> ())? = nil) -> Binding? {
     defer { print("\n") }
-    print("-> Begin Transaction")
+    if !silent {
+        print("-> Begin Transaction")
+    }
     let startDate = NSDate()
     let result = db.scalar(sql)
     let endDate = NSDate()
     let interval = endDate.timeIntervalSinceDate(startDate) * 1000
-    print("\tSQL (\(interval.format("0.2"))ms) \(sql)")
-    print("-> Commit Transaction")
+    if !silent {
+        print("\tSQL (\(interval.format("0.2"))ms) \(sql)")
+        print("-> Commit Transaction")
+    }
 
     if let success = success {
         success()
