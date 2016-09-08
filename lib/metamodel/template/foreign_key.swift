@@ -39,5 +39,14 @@
         }
     }
 
-}""" %>
-<% end %><% end %>
+}""" %><% elsif property.has_one? %>
+<%= """public extension #{model.name} {
+var #{property.name}: #{property.type}? {
+    get {
+        return #{property.type}.find(id)
+    }
+    set {
+        guard let newValue = newValue else { return }
+        update(#{property.type.camelize(:lower)}Id: newValue.id)
+    }
+}"""%><% end %><% end %>

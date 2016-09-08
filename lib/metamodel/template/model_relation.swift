@@ -79,4 +79,17 @@ public class <%= model.relation_name %>: Relation<<%= model.name %>> {
         return self
     }
 
+    public func updateAll(column: <%= model.name %>.Column, value: Any) {
+        self.result.forEach { (element) in
+            var element = element
+            element.update([column: value])
+        }
+    }
+
+    public var deleteAll: Bool {
+        get {
+            self.result.map { $0.delete }
+            return true
+        }
+    }
 }

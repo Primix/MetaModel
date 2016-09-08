@@ -1,9 +1,12 @@
 public extension <%= model.name %> {
     var itself: String { get { return "WHERE \(<%= model.name %>.tableName.unwrapped).\("id".unwrapped) = \(id)" } }
 
-    func delete() {
-        let deleteSQL = "DELETE FROM \(<%= model.name %>.tableName.unwrapped) \(itself)"
-        executeSQL(deleteSQL)
+    var delete: Bool {
+        get {
+            let deleteSQL = "DELETE FROM \(<%= model.name %>.tableName.unwrapped) \(itself)"
+            executeSQL(deleteSQL)
+            return true
+        }
     }
 
     <% model.properties_exclude_id.each do |property| %><%= """mutating func update(#{property.name} #{property.name}: #{property.type}) -> #{model.name} {
