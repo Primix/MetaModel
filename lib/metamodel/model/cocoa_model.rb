@@ -29,7 +29,7 @@ module MetaModel
       property_keys = @properties.map { |property| property.name }
 
       unless property_keys.include? :id
-        property_id = CocoaProperty.new(:id, :int, :primary)
+        property_id = CocoaProperty.new(:id, :int, :primary, :default => -1)
         @properties << property_id
       end
     end
@@ -43,7 +43,7 @@ module MetaModel
     end
 
     def property_key_type_pairs
-      @properties.map { |property| "#{property.name.to_s}: #{property.type.to_s}" }.join(", ")
+      key_type_pairs_with_property(@properties, false)
     end
 
     def property_exclude_id_key_value_pairs(prefix = true, cast = false)
@@ -58,7 +58,16 @@ module MetaModel
     end
 
     def property_exclude_id_key_type_pairs(prefix = true)
-      result = properties_exclude_id.map { |property| "#{property.name.to_s}: #{property.type.to_s}" }.join(", ")
+      key_type_pairs_with_property(properties_exclude_id, prefix)
+    end
+
+    def key_type_pairs_with_property(properties, prefix = true)
+      result = properties.map { |property|
+        has_default_value = property.has_default_value?
+        default_value = property.type_without_optional == "String" ?
+          "\"#{property.default_value}\"" : property.default_value
+        "#{property.name.to_s}: #{property.type.to_s}#{if has_default_value then " = " + "#{default_value}" end}"
+      }.join(", ")
       return result unless prefix
       return result.length > 0 ? ", #{result}" : ""
     end

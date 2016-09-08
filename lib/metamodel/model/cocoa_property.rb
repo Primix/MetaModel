@@ -57,10 +57,11 @@ module MetaModel
     end
 
     def has_default_value?
-      @modifiers[:default].nil?
+      !!@modifiers[:default]
     end
 
     def default_value
+      return "" unless modifiers[:default]
       modifiers[:default]
     end
 
