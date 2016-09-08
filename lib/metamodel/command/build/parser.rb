@@ -51,7 +51,7 @@ module MetaModel
 
         def belongs_to(name, model)
           current_model.relation_properties << Property.new(name, model, :belongs_to)
-          current_model.properties << Property.new("#{name}_id".camelize, "Int", :foreign)
+          current_model.properties << Property.new("#{name}_id".camelize, "Int", :foreign, :default => 0)
         end
 
         private
