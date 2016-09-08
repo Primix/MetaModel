@@ -61,8 +61,7 @@ module MetaModel
     end
 
     def default_value
-      return "" unless modifiers[:default]
-      modifiers[:default]
+      has_default_value? ? modifiers[:default] : ""
     end
 
     private

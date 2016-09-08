@@ -9,7 +9,7 @@ public extension <%= model.name %> {
         return Int(count)
     }
 
-    static func new(id: Int = -1, <%= model.property_exclude_id_key_type_pairs(false) %>) -> <%= model.name %> {
+    static func new(<%= model.property_key_type_pairs %>>) -> <%= model.name %> {
         return <%= model.name %>(<%= model.property_key_value_pairs %>)
     }
 
