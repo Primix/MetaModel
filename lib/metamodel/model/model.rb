@@ -1,6 +1,6 @@
 module MetaModel
 
-  class CocoaModel
+  class Model
     attr_reader :name
     attr_reader :properties
     attr_reader :extra_properties
@@ -29,7 +29,7 @@ module MetaModel
       property_keys = @properties.map { |property| property.name }
 
       unless property_keys.include? :id
-        property_id = CocoaProperty.new(:id, :int, :primary, :default => -1)
+        property_id = Property.new(:id, :int, :primary, :default => -1)
         @properties << property_id
       end
     end

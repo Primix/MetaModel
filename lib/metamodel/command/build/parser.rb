@@ -5,8 +5,8 @@ module MetaModel
 
         include Config::Mixin
 
-        require 'metamodel/model/cocoa_model'
-        require 'metamodel/model/cocoa_property'
+        require 'metamodel/model/model'
+        require 'metamodel/model/property'
         require 'metamodel/command/build/renderer'
 
         def initialize
@@ -35,22 +35,22 @@ module MetaModel
         end
 
         def define(model_name)
-          @models << CocoaModel.new(model_name)
+          @models << Model.new(model_name)
           yield
         end
 
         def attr(key, type = :string, *args)
-          current_model.properties << CocoaProperty.new(key, type, args)
+          current_model.properties << Property.new(key, type, args)
         end
 
         def has_many(name, model)
-          property = CocoaProperty.new(name, model)
+          property = Property.new(name, model)
           raise Informative, "Property type in has_many relation can't be optional" if property.is_optional?
           current_model.extra_properties << property
         end
 
         def belongs_to(name, model)
-          current_model.extra_properties << CocoaProperty.new(name, model)
+          current_model.extra_properties << Property.new(name, model)
         end
 
         private

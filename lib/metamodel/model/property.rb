@@ -1,6 +1,6 @@
 module MetaModel
 
-  class CocoaProperty
+  class Property
     attr_reader :json_key
     attr_reader :name
     attr_reader :type
