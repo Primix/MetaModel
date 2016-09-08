@@ -88,7 +88,7 @@ public class <%= model.relation_name %>: Relation<<%= model.name %>> {
 
     public var deleteAll: Bool {
         get {
-            self.result.map { $0.delete }
+            self.result.forEach { $0.delete }
             return true
         }
     }

@@ -46,7 +46,7 @@
             return #{property.type}.find(id)
         }
         set {
-            #{property.type}.filter(.#{property.type.camelize(:lower)}Id, value: id).deleteAll
+            #{property.type}.filter(.#{model.name.to_s.camelize(:lower)}Id, value: id).deleteAll
             guard var newValue = newValue else { return }
             newValue.update(articleId: id)
         }
