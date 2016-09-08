@@ -41,12 +41,14 @@
 
 }""" %><% elsif property.has_one? %>
 <%= """public extension #{model.name} {
-var #{property.name}: #{property.type}? {
-    get {
-        return #{property.type}.find(id)
-    }
-    set {
-        guard let newValue = newValue else { return }
-        update(#{property.type.camelize(:lower)}Id: newValue.id)
+    var #{property.name}: #{property.type}? {
+        get {
+            return #{property.type}.find(id)
+        }
+        set {
+            #{property.type}.filter(.#{property.type.camelize(:lower)}Id, value: id).deleteAll
+            guard var newValue = newValue else { return }
+            newValue.update(articleId: id)
+        }
     }
 }"""%><% end %><% end %>
