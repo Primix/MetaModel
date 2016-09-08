@@ -43,6 +43,10 @@ module MetaModel
           current_model.properties << Property.new(key, type, args)
         end
 
+        def has_one(name, model)
+          current_model.relation_properties << Property.new(name, model, :has_one)
+        end
+
         def has_many(name, model)
           property = Property.new(name, model, :has_many)
           raise Informative, "Property type in has_many relation can't be optional" if property.is_optional?
