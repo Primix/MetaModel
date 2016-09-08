@@ -63,7 +63,7 @@ module MetaModel
         end
       end
       def update_initialize_method
-        template = File.read File.expand_path(File.join(File.dirname(__FILE__), "../template/metamodel.swift.erb"))
+        template = File.read File.expand_path(File.join(File.dirname(__FILE__), "../template/metamodel.swift"))
         result = ErbalT::render_from_hash(template, { :models => @models })
         model_path = Pathname.new("./metamodel/MetaModel/MetaModel.swift")
         File.write model_path, result
