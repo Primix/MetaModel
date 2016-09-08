@@ -17,6 +17,10 @@ module MetaModel
       @properties.select { |property| property.name != :id }
     end
 
+    def foreign_id
+      "#{name}_id".camelize(:lower)
+    end
+
     def table_name
       name.to_s.tableize
     end

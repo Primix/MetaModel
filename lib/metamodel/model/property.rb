@@ -68,6 +68,18 @@ module MetaModel
       @type.to_s.end_with? "?"
     end
 
+    def has_one?
+      @modifiers.include? :has_one
+    end
+
+    def has_many?
+      @modifiers.include? :has_many
+    end
+
+    def belongs_to?
+      @modifiers.include? :belongs_to
+    end
+
     def has_default_value?
       !!@modifiers[:default]
     end
