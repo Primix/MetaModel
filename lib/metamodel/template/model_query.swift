@@ -21,8 +21,8 @@ public extension <%= model.name %> {
 
     <% model.properties_exclude_id.each do |property| %><%= """static func findBy(#{property.name} #{property.name}: #{property.type_without_optional}) -\> #{model.name}? {
         return #{model.relation_name}().findBy(#{property.name}: #{property.name}).first
-    }""" %>
-    <% end %>
+    }
+    """ %><% end %>
     static func filter(column: <%= model.name %>.Column, value: Any) -> <%= model.relation_name %> {
         return <%= model.relation_name %>().filter([column: value])
     }
