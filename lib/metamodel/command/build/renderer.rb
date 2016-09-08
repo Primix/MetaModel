@@ -23,7 +23,7 @@ module MetaModel
             # file_paths = %w{file_header attributes json recordable initialize static_methods instance_methods model_query model_relation}
             file_paths = %w{file_header attributes recordable initialize static_methods instance_methods model_query model_relation}
             file_paths.each do |file_path|
-              template = File.read File.expand_path(File.join(File.dirname(__FILE__), "../../template/#{file_path}.swift.erb"))
+              template = File.read File.expand_path(File.join(File.dirname(__FILE__), "../../template/#{file_path}.swift"))
               results << template
             end
             results

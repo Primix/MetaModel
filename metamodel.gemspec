@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.summary     = "The Cocoa models generator."
   s.description = "Automatically generate model layout for iOS project."
 
-  s.files = Dir["lib/**/*.rb"] + %w{ bin/meta README.md LICENSE } + Dir["lib/**/*.erb"]
+  s.files = Dir["lib/**/*.rb"] + %w{ bin/meta README.md LICENSE } + Dir["lib/**/*.swift"]
 
   s.executables = %w{ meta }
   s.require_paths = %w{ lib }
