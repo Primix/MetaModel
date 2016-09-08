@@ -12,7 +12,7 @@ public extension <%= model.name %> {
     <% end %>
     mutating func update(attributes: [<%= model.name %>.Column: Any]) -> <%= model.name %> {
         var setSQL: [String] = []
-        if let attributes = attributes as? [Comment.Column: Unwrapped] {
+        if let attributes = attributes as? [<%= model.name %>.Column: Unwrapped] {
             for (key, value) in attributes {
                 switch key {
                 <% model.properties_exclude_id.each do |property| %><%= """case .#{property.name}: setSQL.append(\"\\(key.unwrapped) = \\(value.unwrapped)\")""" %>
