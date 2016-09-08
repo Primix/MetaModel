@@ -3,10 +3,12 @@ module MetaModel
   class CocoaModel
     attr_reader :name
     attr_reader :properties
+    attr_reader :extra_properties
 
     def initialize(name)
       @name = name
       @properties = []
+      @extra_properties = []
 
       validate
     end

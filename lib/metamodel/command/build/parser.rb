@@ -7,7 +7,6 @@ module MetaModel
 
         require 'metamodel/model/cocoa_model'
         require 'metamodel/model/cocoa_property'
-        require 'metamodel/model/property_constructor'
         require 'metamodel/command/build/renderer'
 
         def initialize
@@ -43,6 +42,14 @@ module MetaModel
         def attr(key, type = :string, *args)
           current_model.properties << CocoaProperty.new(key, type, args)
         end
+
+        def has_many(name, type)
+          property = CocoaProperty.new(name, type)
+          raise Informative, "Property type in has_many relation can't be optional" if property.is_optional?
+          current_model.extra_properties << property
+        end
+
+        private
 
         def current_model
           @models.last
