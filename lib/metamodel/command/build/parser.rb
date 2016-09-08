@@ -24,6 +24,7 @@ module MetaModel
               eval meta_code
             end
           end
+          p @models
           @models
         end
 
@@ -35,9 +36,16 @@ module MetaModel
         end
 
         def define(model_name)
-          model = CocoaModel.new(model_name)
-          yield PropertyConstructor.new(model)
-          @models << model
+          @models << CocoaModel.new(model_name)
+          yield
+        end
+
+        def attr(key, type = :string, *args)
+          current_model.properties << CocoaProperty.new(key, type, args)
+        end
+
+        def current_model
+          @models.last
         end
       end
     end

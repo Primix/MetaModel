@@ -20,12 +20,12 @@ public extension <%= model.name %> {
         columnsSQL.append(.id)
         valuesSQL.append(id)
         <% model.properties_exclude_id.each do |property| %><% if property.is_optional? %>
-        <%= """if let #{property.key} = #{property.key} {
-            columnsSQL.append(.#{property.key})
-            valuesSQL.append(#{property.key})
+        <%= """if let #{property.name} = #{property.name} {
+            columnsSQL.append(.#{property.name})
+            valuesSQL.append(#{property.name})
         }""" %><% else %>
-        <%= """columnsSQL.append(.#{property.key})
-        valuesSQL.append(#{property.key})
+        <%= """columnsSQL.append(.#{property.name})
+        valuesSQL.append(#{property.name})
         """ %><% end %><% end %>
 
         let insertSQL = "INSERT INTO \(tableName.unwrapped) (\(columnsSQL.map { $0.rawValue }.joinWithSeparator(", "))) VALUES (\(valuesSQL.map { $0.unwrapped }.joinWithSeparator(", ")))"

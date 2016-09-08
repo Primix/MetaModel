@@ -2,7 +2,7 @@ extension <%= model.name %> {
     public static func parse(json: [String: AnyObject]) -> <%= model.name %> {
         let id: Int = json["id"] as! Int
         <% model.properties_exclude_id.each do |property| %>
-        <%= """let #{property.key}: #{property.type} = json[\"#{property.key}\"] as! #{property.type}""" %>
+        <%= """let #{property.name}: #{property.type} = json[\"#{property.name}\"] as! #{property.type}""" %>
         <% end %>
         return <%= model.name %>(<%= model.property_key_value_pairs %>)
     }

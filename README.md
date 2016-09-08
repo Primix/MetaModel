@@ -37,11 +37,11 @@ print(Person.all)
 Use a meta file in `./meta` folder to define your model:
 
 ```ruby
-define :User do |j|
+define :User do
   # define User model like this
-  j.nickname :string
-  j.avatar :string
-  j.email :string, :unique, default: "default@gmail.com"
+  attr :nickname, :string
+  attr :avatar, :string?
+  attr :email, :string, :unique, default: "default@gmail.com"
 end
 ```
 

@@ -19,8 +19,8 @@ public class <%= model.relation_name %>: Relation<<%= model.name %>> {
     }
 
     <% model.properties_exclude_id.each do |property| %>
-    <%= """public func findBy(#{property.key} #{property.key}: #{property.type_without_optional}) -\> Self {
-        return self.filter([.#{property.key}: #{property.key}])
+    <%= """public func findBy(#{property.name} #{property.name}: #{property.type_without_optional}) -\> Self {
+        return self.filter([.#{property.name}: #{property.name}])
     }""" %>
     <% end %>
 
