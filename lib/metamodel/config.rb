@@ -66,7 +66,7 @@ module MetaModel
     # @return [String]
     #
     def metamodel_template_uri
-      "git@github.com:MetaModel-Framework/MetaModel-Template.git"
+      "git@github.com:MModel/MetaModel-Template.git"
     end
 
     # Returns the path of the MetaModel.xcodeproj.

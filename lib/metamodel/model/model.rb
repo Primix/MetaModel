@@ -25,11 +25,17 @@ module MetaModel
       "#{name}Relation"
     end
 
+    def all_properties
+      all_properties = properties.clone
+      all_properties.push Property.primary_id
+      all_properties
+    end
+
     def validate
       property_keys = @properties.map { |property| property.name }
 
       unless property_keys.include? :id
-        property_id = Property.new(:id, :int, :primary, :default => -1)
+        property_id = Property.new(:id, :int, :unique, :default => 0)
         @properties << property_id
       end
     end
@@ -76,7 +82,6 @@ module MetaModel
       table = "CREATE TABLE #{table_name}"
       main_sql = @properties.map do |property|
         result = "#{property.name} #{property.database_type}"
-        result << " NOT NULL" if !property.is_optional?
         result << " PRIMARY KEY" if property.is_primary?
         result << " UNIQUE" if property.is_unique?
         result << " DEFAULT #{property.default_value}" if property.has_default_value?
@@ -85,10 +90,10 @@ module MetaModel
       foreign_sql = @properties.map do |property|
         next unless property.is_foreign?
         reference_table_name = property.type.tableize
-        "FOREIGN KEY(#{property.name}) REFERENCES #{reference_table_name}(id)"
+        "FOREIGN KEY(#{property.name}) REFERENCES #{reference_table_name}(_id)"
       end
 
-      table + "(#{(main_sql + foreign_sql).compact.join(", ")});"
+      table + "(_id INTEGER PRIMARY KEY, #{(main_sql + foreign_sql).compact.join(", ")});"
     end
   end
 

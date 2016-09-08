@@ -2,7 +2,7 @@ module MetaModel
 
   class Property
     attr_reader :json_key
-    attr_reader :name
+    attr_accessor :name
     attr_reader :type
     attr_reader :modifiers
 
@@ -17,6 +17,14 @@ module MetaModel
       modifiers.flatten.map do |modifier|
         @modifiers[modifier] = true if modifier.is_a? Symbol
         @modifiers[:default] = modifier[:default] if modifier.is_a? Hash and modifier[:default]
+      end
+    end
+
+    class << self
+      def primary_id
+        property = Property.new(:_id, :int, :primary)
+        property.name = :_id
+        property
       end
     end
 
