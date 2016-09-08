@@ -32,9 +32,9 @@ module MetaModel
         modelfile = ''
         modelfile << "metamodel_version '#{VERSION}'\n\n"
         modelfile << <<-TEMPLATE.strip_heredoc
-          define :#{model} do |j|
+          define :#{model} do
             # define #{model} model like this
-            # j.nickname :string
+            # attr nickname, :string
           end
         TEMPLATE
         modelfile
