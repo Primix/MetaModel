@@ -3,12 +3,12 @@ module MetaModel
   class Model
     attr_reader :name
     attr_reader :properties
-    attr_reader :extra_properties
+    attr_reader :relation_properties
 
     def initialize(name)
       @name = name
       @properties = []
-      @extra_properties = []
+      @relation_properties = []
 
       validate
     end

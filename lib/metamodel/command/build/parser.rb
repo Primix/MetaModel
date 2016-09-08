@@ -46,11 +46,11 @@ module MetaModel
         def has_many(name, model)
           property = Property.new(name, model)
           raise Informative, "Property type in has_many relation can't be optional" if property.is_optional?
-          current_model.extra_properties << property
+          current_model.relation_properties << property
         end
 
         def belongs_to(name, model)
-          current_model.extra_properties << Property.new(name, model)
+          current_model.relation_properties << Property.new(name, model)
           current_model.properties << Property.new("#{name}_id".camelize, "Int", :foreign)
         end
 
