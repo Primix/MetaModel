@@ -23,7 +23,6 @@ module MetaModel
               eval meta_code
             end
           end
-          p @models
           @models
         end
 
