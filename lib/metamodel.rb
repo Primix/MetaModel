@@ -13,7 +13,8 @@ module MetaModel
   end
 
   require 'pathname'
-  require 'active_record'
+  require 'active_support/inflector'
+  require 'active_support/core_ext/string'
 
   require 'metamodel/version'
   require 'metamodel/config'
