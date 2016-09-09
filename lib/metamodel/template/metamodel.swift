@@ -30,7 +30,7 @@ public class MetaModel {
     }
 }
 
-func executeSQL(sql: String, verbose: Bool = false, success: (() -> ())? = nil) -> Statement? {
+func executeSQL(sql: String, verbose: Bool = false, suppress: Bool = false, success: (() -> ())? = nil) -> Statement? {
     if verbose {
         print("-> Begin Transaction")
     }
@@ -63,7 +63,7 @@ func executeSQL(sql: String, verbose: Bool = false, success: (() -> ())? = nil) 
     return nil
 }
 
-func executeScalarSQL(sql: String, verbose: Bool = false, success: (() -> ())? = nil) -> Binding? {
+func executeScalarSQL(sql: String, verbose: Bool = false, suppress: Bool = false, success: (() -> ())? = nil) -> Binding? {
     if verbose {
         print("-> Begin Transaction")
     }
