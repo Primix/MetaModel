@@ -125,14 +125,21 @@ module MetaModel
         end
       end
 
+      CURRENT_SUPPORTED_BUILT_IN_TYPES = %w[
+        Int
+        Double
+        String
+        Bool
+      ]
+
       def built_in_types
-        %w[Int Double String].map do |t|
+        CURRENT_SUPPORTED_BUILT_IN_TYPES.map do |t|
           [t, "#{t}?"]
         end.flatten
       end
 
       def supported_types
-        @models.reduce(%w[Int Double String]) { |types, model|
+        @models.reduce(CURRENT_SUPPORTED_BUILT_IN_TYPES) { |types, model|
           types << model.name.to_s
         }.map { |type|
           [type, "#{type}?"]
