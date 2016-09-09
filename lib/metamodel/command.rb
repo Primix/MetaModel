@@ -16,7 +16,15 @@ module MetaModel
     self.description = 'MetaModel, the Model generator.'
     self.plugin_prefixes = %w(claide meta)
 
+    METAMODEL_COMMAND_ALIAS = {
+      "g"  => "generate",
+      "i"  => "init",
+      "b"  => "build",
+      "c"  => "clean"
+    }
+
     def self.run(argv)
+      p argv
       super(argv)
     end
 

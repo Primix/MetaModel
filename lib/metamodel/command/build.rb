@@ -6,9 +6,10 @@ module MetaModel
       require 'metamodel/command/build/parser'
       require 'metamodel/command/build/renderer'
 
-      self.summary = ""
+      self.summary = "Build a MetaModel.framework from Metafile"
       self.description = <<-DESC
-
+        Clone a metamodel project template from GitHub, parsing Metafile, validating models,
+        generate model swift file and build MetaModel.framework.
       DESC
 
       attr_accessor :models
@@ -35,7 +36,7 @@ module MetaModel
         else
           UI.section "Cloning MetaModel project into `./metamodel` folder" do
             Git.clone(config.metamodel_template_uri, 'metamodel', :depth => 1)
-            UI.message "Using `./metamodel/MetaModel.xcodeproj` to build module"
+            UI.message "Using `#{metamodel_xcode_project}` to build module"
           end
         end
       end
