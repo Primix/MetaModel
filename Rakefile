@@ -19,7 +19,7 @@ task :install do
 end
 
 task :clean do
-  system %(rm #{build_product_file})
+  system %(rm *.gem)
 end
 
 def build_product_file
