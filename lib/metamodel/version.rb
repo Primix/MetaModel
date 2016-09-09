@@ -1,5 +1,5 @@
 module MetaModel
   # The version of the MetaModel command line tool.
   #
-  VERSION = '0.1.1'.freeze unless defined? MetaModel::MetaModel
+  VERSION = '0.1.2' unless defined? MetaModel::VERSION
 end

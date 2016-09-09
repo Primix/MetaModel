@@ -1,11 +1,27 @@
-require 'metamodel/version'
+require_relative 'lib/metamodel/version'
 
-task default: :install
+require "pathname"
 
-desc "Build pristine gem file with spec"
-task :install do
-  gem_file = "metamodel-#{MetaModel::VERSION}.gem"
+task :default => [:build, :install, :clean]
+
+task :release => [:build, :push, :clean]
+
+task :push do
+  system %(gem push #{build_product_file})
+end
+
+task :build do
   system %(gem build metamodel.gemspec)
-  system %(gem install #{gem_file})
-  system %(rm #{gem_file})
+end
+
+task :install do
+  system %(gem install #{build_product_file})
+end
+
+task :clean do
+  system %(rm #{build_product_file})
+end
+
+def build_product_file
+  "metamodel-#{MetaModel::VERSION}.gem"
 end
