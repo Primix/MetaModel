@@ -83,7 +83,7 @@ $ meta generate Article
 
 Generating model meta file
 
--> Adding `Article model to Metafile
+-> Adding `Article` model to Metafile
 
 [!] Adding `Article` model scaffold to Metafile, use the command below to edit it.
 
