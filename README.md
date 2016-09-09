@@ -34,22 +34,22 @@ print(Person.all)
 
 ## Usage
 
-Use a meta file in `./meta` folder to define your model:
+Use Metafile in project folder to define your model:
 
 ```ruby
 metamodel_version '0.1.0'
 
 define :Article do
-  attr :title, :string
-  attr :content, :string
+  attr :title
+  attr :content
 
-  has_many :comments, :comment
+  has_many :comments
 end
 
 define :Comment do
-  attr :content, :string
+  attr :content
 
-  belongs_to :article, :article
+  belongs_to :article
 end
 ```
 
