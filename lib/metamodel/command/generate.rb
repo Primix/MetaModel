@@ -24,7 +24,7 @@ module MetaModel
               source.puts model_template(@model_name)
             end
           end
-          UI.notice "Adding `#{@model_name.camelize}` has already generated, use the command below to edit it.\n"
+          UI.notice "Adding `#{@model_name.camelize}` model scaffold to Metafile, use the command below to edit it.\n"
           UI.message "vim Metafile"
         end
       end
