@@ -10,7 +10,7 @@
     }
 
     func delete#{property.type}(id: Int) {
-        #{property.type}.filter(.#{model.foreign_id}, value: id).findBy(id: id).first?.delete()
+        #{property.type}.filter(.#{model.foreign_id}, value: id).findBy(id: id).first?.delete
     }
     var #{property.name}: [#{property.type}] {
         get {
