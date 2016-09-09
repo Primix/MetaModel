@@ -1,11 +1,9 @@
 ![MetaModel-banner](./images/banner.png)
 
-<p align="center">
-<a href="https://github.com/draveness/metamodel/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat"></a>
-<a href="http://rubygems.org/gems/metamodel"><img src="https://img.shields.io/gem/v/metamodel.svg?style=flat"></a>
-</p>
-
 # MetaModel
+
+[![License](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/draveness/metamodel/blob/master/LICENSE)
+[![Gem](https://img.shields.io/gem/v/metamodel.svg?style=flat)](http://rubygems.org/gems/metamodel)
 
 MetaModel is an iOS framework designed to help developer to deal with data persistent, JSON parsing and a bunch of APIs which provides an approach of handling client side database very easily.
 
