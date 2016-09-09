@@ -36,7 +36,7 @@ module MetaModel
         else
           UI.section "Cloning MetaModel project into `./metamodel` folder" do
             Git.clone(config.metamodel_template_uri, 'metamodel', :depth => 1)
-            UI.message "Using `#{metamodel_xcode_project}` to build module"
+            UI.message "Using `#{config.metamodel_xcode_project}` to build module"
           end
         end
       end
