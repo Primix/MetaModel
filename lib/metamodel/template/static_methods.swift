@@ -12,12 +12,12 @@ public extension <%= model.name %> {
         }
     }
 
-    static func new(<%= model.property_key_type_pairs_without_prefix %>) -> <%= model.name %> {
+    static func new(<%= model.property_key_type_pairs %>) -> <%= model.name %> {
         return <%= model.name %>(<%= model.property_key_value_pairs %>)
     }
 
-    static func create(<%= model.property_key_type_pairs_without_prefix %>) -> <%= model.name %>? {
-        if <%= model.properties.select { |p| p.name.to_s.downcase.end_with? "id" }.map { |p| "#{p.name} == 0" }.join(" || ") %> { return nil }
+    static func create(<%= model.property_key_type_pairs %>) -> <%= model.name %>? {
+        if <%= model.properties.select { |p| p.name.downcase.end_with? "id" }.map { |p| "#{p.name} == 0" }.join(" || ") %> { return nil }
 
         var columnsSQL: [<%= model.name %>.Column] = []
         var valuesSQL: [Unwrapped] = []

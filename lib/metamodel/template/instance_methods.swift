@@ -39,7 +39,7 @@ public extension <%= model.name %> {
             if let _ = <%= model.name %>.find(id) {
                 update([<% column_values = model.properties.map do |property| %><% ".#{property.name}: #{property.name}" %><% end %><%= column_values.join(", ") %>])
             } else {
-                <%= model.name %>.create(id<%= model.property_exclude_id_key_value_pairs %>)
+                <%= model.name %>.create(<%= model.property_key_value_pairs %>)
             }
             return self
         }

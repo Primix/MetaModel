@@ -5,8 +5,8 @@
         element.update(#{model.foreign_id}: id)
     }
 
-    func create#{property.type}(id: Int, content: String) -> #{property.type}? {
-        return #{property.type}.create(id, content: content, #{model.foreign_id}: id)
+    func create#{property.type}(#{property.relation_model.property_key_type_pairs_without_property model.foreign_id}) -> #{property.type}? {
+        return #{property.type}.create(#{property.relation_model.property_key_value_pairs_without_property model.foreign_id}, #{model.foreign_id}: self.id)
     }
 
     func delete#{property.type}(id: Int) {
@@ -46,7 +46,7 @@
             return #{property.type}.find(id)
         }
         set {
-            #{property.type}.filter(.#{model.name.to_s.camelize(:lower)}Id, value: id).deleteAll
+            #{property.type}.filter(.#{model.name.camelize(:lower)}Id, value: id).deleteAll
             guard var newValue = newValue else { return }
             newValue.update(articleId: id)
         }

@@ -2,13 +2,14 @@ module MetaModel
 
   class Property
     attr_accessor :name
+    attr_accessor :relation_model
     attr_reader   :json_key
     attr_reader   :type
     attr_reader   :modifiers
 
     def initialize(json_key, type = :string, *modifiers)
       @json_key = json_key
-      @name = json_key.to_s.camelize(:lower).to_sym
+      @name = json_key.to_s.camelize(:lower)
       @type = convert_symbol_to_type type
 
       @modifiers = {}
@@ -34,18 +35,38 @@ module MetaModel
     end
 
     def database_type
-      if self.type == "String"
-        return "TEXT"
-      elsif self.type == "Int" || self.type == "Bool"
-        return "INTEGER"
-      elsif self.type == "Double"
-        return "REAL"
+      case type_without_optional
+        when "String" then "TEXT"
+        when "Int"    then "INTEGER"
+        when "Bool"   then "INTEGER"
+        when "Double" then "REAL"
+        when "NSDate" then "REAL"
+        else raise Informative, "Unsupported type #{self.type}"
       end
     end
 
     def real_type
-      ["Int", "Bool"].include?(type_without_optional) ? "Int64" : type_without_optional
+      case type_without_optional
+      when "String" then "String"
+      when "Int"    then "Int64"
+      when "Bool"   then "Int64"
+      when "Double" then "Double"
+      when "NSDate" then "Double"
+      else raise Informative, "Unsupported type #{self.type}"
+      end
     end
+
+    def convert_symbol_to_type(symbol)
+      case symbol
+      when :int    then "Int"
+      when :double then "Double"
+      when :bool   then "Bool"
+      when :string then "String"
+      when :date   then "NSDate"
+      else symbol.to_s.camelize
+      end
+    end
+
 
     def is_array?
       @type.pluralize == str
@@ -88,11 +109,6 @@ module MetaModel
     end
 
     private
-
-    def convert_symbol_to_type(symbol)
-      symbol.to_s.capitalize
-    end
-
   end
 
 end

@@ -24,7 +24,11 @@ module MetaModel
     }
 
     def self.run(argv)
-      super([METAMODEL_COMMAND_ALIAS[argv.first]] + argv[1..-1])
+      if METAMODEL_COMMAND_ALIAS[argv.first]
+        super([METAMODEL_COMMAND_ALIAS[argv.first]] + argv[1..-1])
+      else
+        super(argv)
+      end
     end
 
     def initialize(argv)
