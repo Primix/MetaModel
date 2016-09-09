@@ -17,8 +17,6 @@ let db =  try! Connection("\(path)/metamodel_db.sqlite3")
 public class MetaModel {
     public static func initialize() {
         validateMetaModelTables()
-        <% models.each do |model| %><%= "#{model.name}.initialize()" %>
-        <% end %>
     }
     static func validateMetaModelTables() {
         createMetaModelTable()
@@ -26,12 +24,13 @@ public class MetaModel {
         <% models.each do |model| %><%= """if infos[#{model.name}.tableName] != \"#{model.hash_value}\" {
             updateMetaModelTableInfos(#{model.name}.tableName, hashValue: \"#{model.hash_value}\")
             #{model.name}.deinitialize()
+            #{model.name}.initialize()
         }""" %>
         <% end %>
     }
 }
 
-func executeSQL(sql: String, verbose: Bool = true, success: (() -> ())? = nil) -> Statement? {
+func executeSQL(sql: String, verbose: Bool = false, success: (() -> ())? = nil) -> Statement? {
     if verbose {
         print("-> Begin Transaction")
     }
@@ -54,9 +53,9 @@ func executeSQL(sql: String, verbose: Bool = true, success: (() -> ())? = nil) -
     } catch let error {
         let endDate = NSDate()
         let interval = endDate.timeIntervalSinceDate(startDate) * 1000
+        print("\tSQL (\(interval.format("0.2"))ms) \(sql)")
+        print("\t\(error)")
         if verbose {
-            print("\tSQL (\(interval.format("0.2"))ms) \(sql)")
-            print("\t\(error)")
             print("-> Rollback transaction")
             print("\n")
         }
