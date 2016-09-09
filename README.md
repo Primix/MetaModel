@@ -61,8 +61,6 @@ And then run `meta build` will automatically generate all the code you need.
 sudo gem install metamodel --verbose
 ```
 
-**System Requirements**: Current version of MetaModel requires macOS with Ruby 2.2.2 or above
-
 ## Quick Start
 
 After installation , run `meta init` in your iOS project root folder which will make a `meta` directory in current folder.
