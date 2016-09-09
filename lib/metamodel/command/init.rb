@@ -9,20 +9,23 @@ module MetaModel
       DESC
 
       def initialize(argv)
-        @meta_path = Pathname.pwd + 'meta'
+        @metafile_path = Pathname.pwd + 'Metafile'
         @project_path = argv.shift_argument
         super
       end
 
       def validate!
         super
-        raise Informative, 'Existing meta folder in directory' unless config.meta_path_in_dir(Pathname.pwd).nil?
+        raise Informative, 'Existing Metafile in directory' unless config.metafile_in_dir(Pathname.pwd).nil?
       end
 
       def run
         UI.section "Initialing MetaModel project" do
-          UI.section "Creating `meta` folder for MetaModel" do
-            FileUtils.mkdir(@meta_path)
+          UI.section "Creating `Metafile` for MetaModel" do
+            FileUtils.touch(@metafile_path)
+            @metafile_path.open('w') do |source|
+              source.puts "metamodel_version '#{VERSION}'\n\n"
+            end
           end
         end
       end

@@ -37,11 +37,19 @@ print(Person.all)
 Use a meta file in `./meta` folder to define your model:
 
 ```ruby
-define :User do
-  # define User model like this
-  attr :nickname, :string
-  attr :avatar, :string?
-  attr :email, :string, :unique, default: "default@gmail.com"
+metamodel_version '0.1.0'
+
+define :Article do
+  attr :title, :string
+  attr :content, :string
+
+  has_many :comments, :comment
+end
+
+define :Comment do
+  attr :content, :string
+
+  belongs_to :article, :article
 end
 ```
 
@@ -65,21 +73,21 @@ $ meta init
 
 Initialing MetaModel project
 
-Creating `meta` folder for MetaModel
+Creating `Metafile` for MetaModel
 ```
 
 Generate your model meta file with `meta generate`.
 
 ```shell
-$ meta generate User
+$ meta generate Article
 
 Generating model meta file
 
--> Adding `user.rb` to meta folder
+-> Adding `Article model to Metafile
 
-[!] `user.rb` has already generated, use the command below to edit it.
+[!] Adding `Article` model scaffold to Metafile, use the command below to edit it.
 
-  vim meta/user.rb
+  vim Metafile
 ```
 
 Edit meta file using vim, Emacs or other editor and run `meta build`.
@@ -90,14 +98,13 @@ $ meta build
 Building MetaModel.framework in project
   Existing project `./metamodel/MetaModel.xcodeproj`
 
-Analyzing meta files
-  -> Resolving `user.rb`
+Analyzing Metafile
+  -> Resolving `Article`
+  -> Resolving `Comment`
 
 Generating model files
-  -> Using User.swift file
-
-Generating MetaModel.framework
-  -> MetaModel.framework located in current folder
+  -> Using Article.swift file
+  -> Using Comment.swift file
 
 [!] Please drag MetaModel.framework into Embedded Binaries phrase.
 ```

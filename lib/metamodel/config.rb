@@ -46,7 +46,7 @@ module MetaModel
       current_path = Pathname.new(current_dir)
       unless @installation_root
         until current_path.root?
-          if meta_path_in_dir(current_path)
+          if metafile_in_dir(current_path)
             @installation_root = current_path
             break
           else
@@ -77,33 +77,33 @@ module MetaModel
       "./metamodel/MetaModel.xcodeproj"
     end
 
-    # Returns whether or not meta folder is in current project.
+    # Returns whether or not metafile is in current project.
     #
     # @return [Bool]
     #
-    def meta_folder
-      Pathname.new(meta_path).exist?
+    def metefile_exist?
+      Pathname.new(metafile_path).exist?
     end
 
-    # Returns the path of the meta.
+    # Returns the path of the Metafile.
     #
     # @return [Pathname]
     # @return [Nil]
     #
-    def meta_path
-      @meta_path_in_dir ||= installation_root + 'meta'
+    def metafile_path
+      @metafile_in_dir ||= installation_root + 'Metafile'
     end
 
-    # Returns the path of the meta folder in the given dir if any exists.
+    # Returns the path of the Metafile in the given dir if any exists.
     #
     # @param  [Pathname] dir
     #         The directory where to look for the meta.
     #
-    # @return [Pathname] The path of the meta.
+    # @return [Pathname] The path of the metafile.
     # @return [Nil] If not meta was found in the given dir
     #
-    def meta_path_in_dir(dir)
-      candidate = dir + 'meta'
+    def metafile_in_dir(dir)
+      candidate = dir + 'Metafile'
       if candidate.exist?
         return candidate
       end

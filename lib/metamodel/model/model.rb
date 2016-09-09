@@ -52,17 +52,17 @@ module MetaModel
       @properties.map { |property| "#{property.name.to_s}: #{property.name.to_s}" }.join(", ")
     end
 
-    def property_key_type_pairs
-      key_type_pairs_with_property(@properties, false)
-    end
-
     def property_exclude_id_key_value_pairs(prefix = true, cast = false)
       result = ""
       if cast
-        result = properties_exclude_id.map { |property| "#{property.name.to_s}: #{property.type_without_optional == "Int" ? "Int(#{property.name.to_s})" : property.name.to_s}" }.join(", ")
+        result = properties_exclude_id.map do |property|
+          needs_cast = ["Int", "Bool"].include? property.type_without_optional
+          "#{property.name.to_s}: #{needs_cast ? "#{property.type_without_optional}(#{property.name.to_s})" : property.name.to_s}"
+        end.join(", ")
       else
         result = properties_exclude_id.map { |property| "#{property.name.to_s}: #{property.name.to_s}" }.join(", ")
       end
+
       return result unless prefix
       return result.length > 0 ? ", #{result}" : ""
     end
@@ -71,15 +71,8 @@ module MetaModel
       key_type_pairs_with_property(properties_exclude_id, prefix)
     end
 
-    def key_type_pairs_with_property(properties, prefix = true)
-      result = properties.map { |property|
-        has_default_value = property.has_default_value?
-        default_value = property.type_without_optional == "String" ?
-          "\"#{property.default_value}\"" : property.default_value
-        "#{property.name.to_s}: #{property.type.to_s}#{if has_default_value then " = " + "#{default_value}" end}"
-      }.join(", ")
-      return result unless prefix
-      return result.length > 0 ? ", #{result}" : ""
+    def property_key_type_pairs_without_prefix
+      key_type_pairs_with_property(@properties, false)
     end
 
     def build_table
@@ -98,7 +91,22 @@ module MetaModel
       end
 
       table + "(_id INTEGER PRIMARY KEY, #{(main_sql + foreign_sql).compact.join(", ")});"
+
     end
+
+    private
+
+    def key_type_pairs_with_property(properties, prefix = true)
+      result = properties.map { |property|
+        has_default_value = property.has_default_value?
+        default_value = property.type_without_optional == "String" ?
+          "\"#{property.default_value}\"" : property.default_value
+        "#{property.name.to_s}: #{property.type.to_s}#{if has_default_value then " = " + "#{default_value}" end}"
+      }.join(", ")
+      return result unless prefix
+      return result.length > 0 ? ", #{result}" : ""
+    end
+
   end
 
 end

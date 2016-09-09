@@ -1,10 +1,10 @@
 module MetaModel
 
   class Property
-    attr_reader :json_key
     attr_accessor :name
-    attr_reader :type
-    attr_reader :modifiers
+    attr_reader   :json_key
+    attr_reader   :type
+    attr_reader   :modifiers
 
     def initialize(json_key, type = :string, *modifiers)
       @json_key = json_key
@@ -34,18 +34,17 @@ module MetaModel
     end
 
     def database_type
-      lowercase_type = self.type.downcase
-      if lowercase_type == "string"
+      if self.type == "String"
         return "TEXT"
-      elsif lowercase_type == "int"
+      elsif self.type == "Int" || self.type == "Bool"
         return "INTEGER"
-      elsif lowercase_type == "double"
+      elsif self.type == "Double"
         return "REAL"
       end
     end
 
     def real_type
-      type_without_optional == "Int" ? "Int64" : type_without_optional
+      ["Int", "Bool"].include?(type_without_optional) ? "Int64" : type_without_optional
     end
 
     def is_array?

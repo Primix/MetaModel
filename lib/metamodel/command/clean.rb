@@ -17,6 +17,7 @@ module MetaModel
       def run
         UI.section "Removing MetaModel project" do
           FileUtils.rm_rf 'MetaModel'
+          FileUtils.rm_rf 'MetaModel.framework'
           UI.message "Already clean up the whole MetaModel project from current folder"
         end
       end

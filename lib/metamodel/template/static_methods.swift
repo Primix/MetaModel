@@ -3,17 +3,20 @@ public extension <%= model.name %> {
         let deleteAllSQL = "DELETE FROM \(tableName.unwrapped)"
         executeSQL(deleteAllSQL)
     }
-    static func count() -> Int {
-        let countSQL = "SELECT count(*) FROM \(tableName.unwrapped)"
-        guard let count = executeScalarSQL(countSQL) as? Int64 else { return 0 }
-        return Int(count)
+
+    static var count: Int {
+        get {
+            let countSQL = "SELECT count(*) FROM \(tableName.unwrapped)"
+            guard let count = executeScalarSQL(countSQL) as? Int64 else { return 0 }
+            return Int(count)
+        }
     }
 
-    static func new(<%= model.property_key_type_pairs %>) -> <%= model.name %> {
+    static func new(<%= model.property_key_type_pairs_without_prefix %>) -> <%= model.name %> {
         return <%= model.name %>(<%= model.property_key_value_pairs %>)
     }
 
-    static func create(<%= model.property_key_type_pairs %>) -> <%= model.name %>? {
+    static func create(<%= model.property_key_type_pairs_without_prefix %>) -> <%= model.name %>? {
         if <%= model.properties.select { |p| p.name.to_s.downcase.end_with? "id" }.map { |p| "#{p.name} == 0" }.join(" || ") %> { return nil }
 
         var columnsSQL: [<%= model.name %>.Column] = []
