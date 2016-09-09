@@ -16,10 +16,9 @@ module MetaModel
 
       def run
         verify_meta_exists!
-        UI.section "Generating model meta file" do
+        UI.section "Generating model scaffold" do
           title_options = { :verbose_prefix => '-> '.green }
           UI.titled_section "Adding `#{@model_name.camelize} model to Metafile", title_options do
-            p @metafile_path
             @metafile_path.open('a') do |source|
               source.puts model_template(@model_name)
             end
