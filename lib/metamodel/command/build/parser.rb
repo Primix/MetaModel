@@ -14,16 +14,10 @@ module MetaModel
         end
 
         def parse
-          UI.section "Analyzing meta files" do
-            meta_path = config.meta_path
-            metas = Dir[meta_path + "*.rb"]
-            metas.each do |meta_file|
-              UI.message '-> '.green + "Resolving `#{File.basename(meta_file)}`"
-              meta_code = File.read(meta_path + meta_file)
-              eval meta_code
-            end
+          UI.section "Analyzing Metafile" do
+            metafile_path = config.metafile_path
+            eval File.read(metafile_path)
           end
-          p @models
           @models
         end
 
@@ -35,6 +29,7 @@ module MetaModel
         end
 
         def define(model_name)
+          UI.message '-> '.green + "Resolving `#{model_name.to_s.camelize}`"
           @models << Model.new(model_name)
           yield
         end

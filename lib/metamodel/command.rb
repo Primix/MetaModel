@@ -34,7 +34,7 @@ module MetaModel
     #
     # @return [void]
     def verify_meta_exists!
-      unless config.meta_folder
+      unless config.metefile_exist?
         raise Informative, "No `meta' folder found in the project directory."
       end
     end

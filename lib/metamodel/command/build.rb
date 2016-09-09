@@ -110,7 +110,7 @@ module MetaModel
 
       def validate!
         super
-        raise Informative, 'No meta folder in directory' unless config.meta_path_in_dir(Pathname.pwd)
+        raise Informative, 'No Metafile in current directory' unless config.metafile_in_dir(Pathname.pwd)
       end
 
       private
