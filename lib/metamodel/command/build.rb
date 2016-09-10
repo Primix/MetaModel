@@ -5,6 +5,7 @@ module MetaModel
     class Build < Command
       require 'metamodel/command/build/resolver'
       require 'metamodel/command/build/renderer'
+      require 'metamodel/command/build/translator'
 
       self.summary = "Build a MetaModel.framework from Metafile"
       self.description = <<-DESC
@@ -12,8 +13,7 @@ module MetaModel
         generate model swift file and build MetaModel.framework.
       DESC
 
-      @@models = []
-      @@associations = []
+      attr_accessor :models
 
       def initialize(argv)
         super
@@ -22,9 +22,11 @@ module MetaModel
       def run
         UI.section "Building MetaModel.framework in project" do
           clone_project
-          resolve_template
-          # validate_models
-          # render_model_files
+          models, associations = resolve_template
+          @models = compact_associtions_into_models models, associations
+          puts @models
+          validate_models
+          render_model_files
           # update_initialize_method
           # build_metamodel_framework
         end
@@ -43,31 +45,28 @@ module MetaModel
       end
 
       def resolve_template
-        Resolver.resolve
+        resolver = Resolver.new
+        resolver.resolve
+      end
+
+      def compact_associtions_into_models(models, associations)
+        Translator.new(models, associations).translate
       end
 
       def validate_models
         existing_types = @models.map { |m| m.properties.map { |property| property.type } }.flatten.uniq
         unsupported_types = existing_types - supported_types
         raise Informative, "Unsupported types #{unsupported_types}" unless unsupported_types == []
-
-        @@models.each do |main|
-          main.relation_properties.each do |property|
-            @@models.each do |secondary|
-              property.relation_model = secondary if property.type == secondary.name
-            end
-          end
-        end
       end
 
       def render_model_files
         UI.section "Generating model files" do
-          Renderer.render(@@models)
+          Renderer.render(@models)
         end
       end
       def update_initialize_method
         template = File.read File.expand_path(File.join(File.dirname(__FILE__), "../template/metamodel.swift"))
-        result = ErbalT::render_from_hash(template, { :models => @@models })
+        result = ErbalT::render_from_hash(template, { :models => @models })
         model_path = Pathname.new("./metamodel/MetaModel/MetaModel.swift")
         File.write model_path, result
       end

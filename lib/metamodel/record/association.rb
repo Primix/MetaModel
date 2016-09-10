@@ -3,9 +3,9 @@ module MetaModel
     class Association
       attr_reader :name
       attr_reader :relation
-      attr_reader :major_model
-      attr_reader :secondary_model
       attr_reader :through
+      attr_accessor :major_model
+      attr_accessor :secondary_model
 
       def initialize(name, major_model, secondary_model, relation, through = nil)
         @name            = name.to_s.camelize :lower
