@@ -2,6 +2,8 @@
 
 # MetaModel
 
+[![Join the chat at https://gitter.im/MModel/MetaModel](https://badges.gitter.im/MModel/MetaModel.svg)](https://gitter.im/MModel/MetaModel?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![License](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/draveness/metamodel/blob/master/LICENSE)
 [![Gem](https://img.shields.io/gem/v/metamodel.svg?style=flat)](http://rubygems.org/gems/metamodel)
 
