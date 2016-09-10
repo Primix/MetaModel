@@ -107,10 +107,12 @@ module MetaModel
       properties.enum_for(:each_with_index).map do |property, index|
         has_default_value = property.has_default_value?
         default_value = property.type_without_optional == "String" ? "\"#{property.default_value}\"" : property.default_value
+
+        result = "#{property.name}: #{property.type.to_s}#{if has_default_value then " = " + "#{default_value}" end}"
         if index == 0
-          "#{property.name} #{property.name}: #{property.type.to_s}#{if has_default_value then " = " + "#{default_value}" end}"
+          "#{property.name} #{result}"
         else
-          "#{property.name}: #{property.type.to_s}#{if has_default_value then " = " + "#{default_value}" end}"
+          result
         end
       end.join(", ")
     end
