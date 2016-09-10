@@ -1,7 +1,7 @@
 module MetaModel
   class Command
     class Build
-      class Parser
+      class Resolver
 
         include Config::Mixin
 
@@ -9,11 +9,15 @@ module MetaModel
         require 'metamodel/model/property'
         require 'metamodel/command/build/renderer'
 
+        attr_accessor :models
+        attr_accessor :associations
+
         def initialize
           @models = []
+          @associations = []
         end
 
-        def parse
+        def resolve
           UI.section "Analyzing Metafile" do
             metafile_path = config.metafile_path
             eval File.read(metafile_path)

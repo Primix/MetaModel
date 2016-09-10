@@ -3,7 +3,7 @@ require 'git'
 module MetaModel
   class Command
     class Build < Command
-      require 'metamodel/command/build/parser'
+      require 'metamodel/command/build/resolver'
       require 'metamodel/command/build/renderer'
 
       self.summary = "Build a MetaModel.framework from Metafile"
@@ -21,7 +21,7 @@ module MetaModel
       def run
         UI.section "Building MetaModel.framework in project" do
           clone_project
-          parse_template
+          resolve_template
           validate_models
           render_model_files
           update_initialize_method
@@ -41,9 +41,9 @@ module MetaModel
         end
       end
 
-      def parse_template
-        parser = Parser.new
-        @models = parser.parse
+      def resolve_template
+        resolver = Resolver.new
+        @models = resolver.resolve
       end
 
       def validate_models
