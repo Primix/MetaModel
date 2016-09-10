@@ -35,7 +35,7 @@
         }
         set {
             guard let newValue = newValue else { return }
-            update(#{association.type.camelize(:lower)}Id: newValue.id)
+            update(#{association.secondary_model.foreign_id}: newValue.id)
         }
     }
 

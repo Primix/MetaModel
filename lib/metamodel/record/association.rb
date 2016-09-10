@@ -21,11 +21,11 @@ module MetaModel
       end
 
       def has_many?
-        @modifiers == :has_many
+        @relation == :has_many
       end
 
       def belongs_to?
-        @modifiers == :belongs_to
+        @relation == :belongs_to
       end
 
       def type

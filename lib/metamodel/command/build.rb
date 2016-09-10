@@ -24,11 +24,10 @@ module MetaModel
           clone_project
           models, associations = resolve_template
           @models = compact_associtions_into_models models, associations
-          puts @models
           validate_models
           render_model_files
-          # update_initialize_method
-          # build_metamodel_framework
+          update_initialize_method
+          build_metamodel_framework
         end
         UI.notice "Please drag MetaModel.framework into Embedded Binaries phrase.\n"
       end
@@ -64,6 +63,7 @@ module MetaModel
           Renderer.render(@models)
         end
       end
+#
       def update_initialize_method
         template = File.read File.expand_path(File.join(File.dirname(__FILE__), "../template/metamodel.swift"))
         result = ErbalT::render_from_hash(template, { :models => @models })
