@@ -26,6 +26,18 @@ module MetaModel
             association
           end
 
+          satisfy_constraint = @associations.reduce([]) do |remain, association|
+            expect = remain.select { |assoc| assoc.expect_constraint? association }
+            if expect.empty?
+              remain << association
+            else
+              remain.delete expect.first
+            end
+            remain
+          end
+          raise Informative, "Unsatisfied constraints in #{satisfy_constraint.map { |x| x.major_model.name }}" \
+           if satisfy_constraint.size > 0
+
           @associations.each do |association|
             major_model = association.major_model
             secondary_model = association.secondary_model

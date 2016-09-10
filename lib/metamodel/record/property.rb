@@ -34,10 +34,8 @@ module MetaModel
       def database_type
         case type_without_optional
           when "String" then "TEXT"
-          when "Int"    then "INTEGER"
-          when "Bool"   then "INTEGER"
-          when "Double" then "REAL"
-          when "NSDate" then "REAL"
+          when "Int", "Bool" then "INTEGER"
+          when "Double", "NSDate" then "REAL"
           else raise Informative, "Unsupported type #{self.type}"
         end
       end
@@ -45,10 +43,8 @@ module MetaModel
       def real_type
         case type_without_optional
         when "String" then "String"
-        when "Int"    then "Int64"
-        when "Bool"   then "Int64"
-        when "Double" then "Double"
-        when "NSDate" then "Double"
+        when "Int", "Bool" then "Int64"
+        when "Double", "NSDate" then "Double"
         else raise Informative, "Unsupported type #{self.type}"
         end
       end
