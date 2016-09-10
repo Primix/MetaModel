@@ -104,10 +104,14 @@ module MetaModel
     end
 
     def key_type_pairs_with_property(properties)
-      properties.map do |property|
+      properties.enum_for(:each_with_index).map do |property, index|
         has_default_value = property.has_default_value?
         default_value = property.type_without_optional == "String" ? "\"#{property.default_value}\"" : property.default_value
-        "#{property.name} #{property.name}: #{property.type.to_s}#{if has_default_value then " = " + "#{default_value}" end}"
+        if index == 0
+          "#{property.name} #{property.name}: #{property.type.to_s}#{if has_default_value then " = " + "#{default_value}" end}"
+        else
+          "#{property.name}: #{property.type.to_s}#{if has_default_value then " = " + "#{default_value}" end}"
+        end
       end.join(", ")
     end
 
