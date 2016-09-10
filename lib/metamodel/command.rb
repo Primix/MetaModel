@@ -28,7 +28,6 @@ module MetaModel
     }
 
     def self.run(argv)
-      argv.map! { |arg| METAMODEL_OPTION_ALIAS[arg] || arg }
       if METAMODEL_COMMAND_ALIAS[argv.first]
         super([METAMODEL_COMMAND_ALIAS[argv.first]] + argv[1..-1])
       else
@@ -36,11 +35,17 @@ module MetaModel
       end
     end
 
+    def self.options
+      [
+        ['--skip-build', 'Skip building MetaModel framework process']
+      ].concat(super)
+    end
+
     def initialize(argv)
-      super
+      config.skip_build = argv.flag?("skip-build", false)
       # config.verbose = self.verbose?
-      config.skip_build = true if argv.include? "--skip-build"
       config.verbose = true
+      super
     end
 
     #-------------------------------------------------------------------------#

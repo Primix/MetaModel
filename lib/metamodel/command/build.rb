@@ -3,6 +3,7 @@ require 'git'
 module MetaModel
   class Command
     class Build < Command
+      include Config::Mixin
       require 'metamodel/command/build/resolver'
       require 'metamodel/command/build/renderer'
       require 'metamodel/command/build/translator'
@@ -27,7 +28,7 @@ module MetaModel
           validate_models
           render_model_files
           update_initialize_method
-          build_metamodel_framework
+          build_metamodel_framework unless config.skip_build?
         end
         UI.notice "Please drag MetaModel.framework into Embedded Binaries phrase.\n"
       end

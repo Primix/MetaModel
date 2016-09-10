@@ -13,7 +13,7 @@ module MetaModel
 
     public
 
-    attr_accessor :skip_build?
+    attr_accessor :skip_build
     alias_method :skip_build?, :skip_build
 
 
