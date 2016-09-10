@@ -30,8 +30,8 @@ public extension <%= model.name %> {
     static func findBy(id id: Int) -> <%= model.name %>? {
         return <%= model.relation_name %>().findBy(id: id).first
     }
-
-    <% model.properties_exclude_id.each do |property| %><%= """static func findBy(#{property.name} #{property.name}: #{property.type_without_optional}) -\> #{model.name}? {
+    <% model.properties_exclude_id.each do |property| %><%= """
+    static func findBy(#{property.name} #{property.name}: #{property.type_without_optional}) -\> #{model.name}? {
         return #{model.relation_name}().findBy(#{property.name}: #{property.name}).first
     }
     """ %><% end %>
