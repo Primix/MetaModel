@@ -1,4 +1,4 @@
- public struct <%= model.name %> {
+public struct <%= model.name %> {
     <% model.properties.each do |property| %><%= """public var #{property.name}: #{property.type}""" %>
     <% end %>
     static let tableName = "<%= model.table_name %>"

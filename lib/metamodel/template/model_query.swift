@@ -3,6 +3,18 @@ public extension <%= model.name %> {
         get { return <%= model.relation_name %>() }
     }
 
+    static var first: <%= model.name %>? {
+        get {
+            return <%= model.relation_name %>().orderBy(.id, asc: true).first
+        }
+    }
+
+    static var last: <%= model.name %>? {
+        get {
+            return <%= model.relation_name %>().orderBy(.id, asc: false).first
+        }
+    }
+
     static func first(length: UInt) -> <%= model.relation_name %> {
         return <%= model.relation_name %>().orderBy(.id, asc: true).limit(length)
     }

@@ -25,7 +25,7 @@ module MetaModel
           validate_models
           render_model_files
           update_initialize_method
-          build_metamodel_framework
+          # build_metamodel_framework
         end
         UI.notice "Please drag MetaModel.framework into Embedded Binaries phrase.\n"
       end
