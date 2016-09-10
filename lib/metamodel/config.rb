@@ -8,9 +8,14 @@ module MetaModel
     DEFAULTS = {
       :verbose             => true,
       :silent              => false,
+      :skip_build          => false,
     }
 
     public
+
+    attr_accessor :skip_build?
+    alias_method :skip_build?, :skip_build
+
 
     #-------------------------------------------------------------------------#
 
