@@ -3,12 +3,12 @@ module MetaModel
     class Model
       attr_reader :name
       attr_reader :properties
-      attr_reader :relation_properties
+      attr_reader :associations
 
       def initialize(name)
         @name = name.to_s
         @properties = []
-        @relation_properties = []
+        @associations = []
 
         validate
       end
@@ -38,10 +38,7 @@ module MetaModel
       def validate
         property_keys = @properties.map { |property| property.name }
 
-        unless property_keys.include? "id"
-          property_id = Property.new(:id, :int, :unique, :default => 0)
-          @properties << property_id
-        end
+        @properties << Property.new(:id, :int, :unique, :default => 0) unless property_keys.include? "id"
       end
 
       def hash_value

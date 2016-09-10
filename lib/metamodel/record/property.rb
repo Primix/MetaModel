@@ -2,13 +2,10 @@ module MetaModel
   module Record
     class Property
       attr_accessor :name
-      attr_accessor :relation_model
-      attr_reader   :json_key
       attr_reader   :type
       attr_reader   :modifiers
 
       def initialize(json_key, type = :string, *modifiers)
-        @json_key = json_key
         @name = json_key.to_s.camelize(:lower)
         @type = convert_symbol_to_type type
 
@@ -86,18 +83,6 @@ module MetaModel
 
       def is_optional?
         @type.to_s.end_with? "?"
-      end
-
-      def has_one?
-        @modifiers.include? :has_one
-      end
-
-      def has_many?
-        @modifiers.include? :has_many
-      end
-
-      def belongs_to?
-        @modifiers.include? :belongs_to
       end
 
       def has_default_value?
