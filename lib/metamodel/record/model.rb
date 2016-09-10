@@ -6,7 +6,7 @@ module MetaModel
       attr_reader :associations
 
       def initialize(name)
-        @name = name.to_s
+        @name = name.to_s.camelize
         @properties = []
         @associations = []
 
@@ -85,7 +85,6 @@ module MetaModel
         end
 
         table + "(_id INTEGER PRIMARY KEY, #{(main_sql + foreign_sql).compact.join(", ")});"
-
       end
 
       private

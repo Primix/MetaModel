@@ -7,8 +7,8 @@ module MetaModel
       attr_reader :secondary_model
       attr_reader :through
 
-      def initialize(name, major_model, secondary_model, relation, through)
-        @name            = name
+      def initialize(name, major_model, secondary_model, relation, through = nil)
+        @name            = name.to_s.camelize :lower
         @relation        = relation
         @through         = through
         @major_model     = major_model

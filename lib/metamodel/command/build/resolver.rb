@@ -7,10 +7,13 @@ module MetaModel
 
         require 'metamodel/record/model'
         require 'metamodel/record/property'
+        require 'metamodel/record/association'
         require 'metamodel/command/build/renderer'
 
         attr_accessor :models
         attr_accessor :associations
+
+        attr_accessor :current_model
 
         def initialize
           @models = []
@@ -22,7 +25,6 @@ module MetaModel
             metafile_path = config.metafile_path
             eval File.read(metafile_path)
           end
-          @models
         end
 
         private
@@ -34,37 +36,36 @@ module MetaModel
 
         def define(model_name)
           UI.message '-> '.green + "Resolving `#{model_name.to_s.camelize}`"
-          @models << Record::Model.new(model_name)
+          @current_model = Record::Model.new(model_name)
           yield
+          @models << @current_model
         end
 
         def attr(key, type = :string, *args)
           current_model.properties << Record::Property.new(key, type, args)
         end
 
-        def has_one(name, model = nil)
-          model = name.to_s.singularize.camelize if model.nil?
-          current_model.relation_properties << Record::Property.new(name, model, :has_one)
+        def has_one(name, model_name = nil)
+          model_name = name.to_s.singularize.camelize if model_name.nil?
+          association = Record::Association.new(name, current_model.name, model_name, :has_one)
+          @associations << association
         end
 
-        def has_many(name, model = nil)
-          model = name.to_s.singularize.camelize if model.nil?
-          property = Record::Property.new(name, model, :has_many)
-          raise Informative, "Property type in has_many relation can't be optional" if property.is_optional?
-          current_model.relation_properties << property
+        def has_many(name, model_name = nil)
+          model_name = name.to_s.singularize.camelize if model_name.nil?
+          raise Informative, "has_many relation can't be created with optional model name" if model_name.end_with? "?"
+          association = Record::Association.new(name, current_model.name, model_name, :has_many)
+          @associations << association
         end
 
-        def belongs_to(name, model = nil)
-          model = name.to_s.singularize.camelize if model.nil?
-          current_model.relation_properties << Record::Property.new(name, model, :belongs_to)
-          current_model.properties << Record::Property.new("#{name}_id".camelize, "Int", :foreign, :default => 0)
+        def belongs_to(name, model_name = nil)
+          model_name = name.to_s.singularize.camelize if model_name.nil?
+          association = Record::Association.new(name, current_model.name, model_name, :has_many)
+          @associations << association
         end
 
         private
 
-        def current_model
-          @models.last
-        end
       end
     end
   end

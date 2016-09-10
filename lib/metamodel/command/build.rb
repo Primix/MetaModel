@@ -22,9 +22,9 @@ module MetaModel
         UI.section "Building MetaModel.framework in project" do
           clone_project
           resolve_template
-          validate_models
-          render_model_files
-          update_initialize_method
+          # validate_models
+          # render_model_files
+          # update_initialize_method
           # build_metamodel_framework
         end
         UI.notice "Please drag MetaModel.framework into Embedded Binaries phrase.\n"
