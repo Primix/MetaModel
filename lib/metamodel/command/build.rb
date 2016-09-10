@@ -12,7 +12,8 @@ module MetaModel
         generate model swift file and build MetaModel.framework.
       DESC
 
-      attr_accessor :models
+      @@models = []
+      @@associations = []
 
       def initialize(argv)
         super
@@ -42,8 +43,7 @@ module MetaModel
       end
 
       def resolve_template
-        resolver = Resolver.new
-        @models = resolver.resolve
+        Resolver.resolve
       end
 
       def validate_models
@@ -51,9 +51,9 @@ module MetaModel
         unsupported_types = existing_types - supported_types
         raise Informative, "Unsupported types #{unsupported_types}" unless unsupported_types == []
 
-        @models.each do |main|
+        @@models.each do |main|
           main.relation_properties.each do |property|
-            @models.each do |secondary|
+            @@models.each do |secondary|
               property.relation_model = secondary if property.type == secondary.name
             end
           end
@@ -62,12 +62,12 @@ module MetaModel
 
       def render_model_files
         UI.section "Generating model files" do
-          Renderer.render(@models)
+          Renderer.render(@@models)
         end
       end
       def update_initialize_method
         template = File.read File.expand_path(File.join(File.dirname(__FILE__), "../template/metamodel.swift"))
-        result = ErbalT::render_from_hash(template, { :models => @models })
+        result = ErbalT::render_from_hash(template, { :models => @@models })
         model_path = Pathname.new("./metamodel/MetaModel/MetaModel.swift")
         File.write model_path, result
       end
