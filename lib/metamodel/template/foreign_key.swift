@@ -1,23 +1,23 @@
-<% model.relation_properties.each do |property| %><% if property.has_many? %>
+<% model.associations.each do |association| %><% if association.has_many? %>
 <%= """public extension #{model.name} {
-    func append#{property.type}(element: #{property.type}) {
+    func append#{association.type}(element: #{association.type}) {
         var element = element
         element.update(#{model.foreign_id}: id)
     }
 
-    func create#{property.type}(#{property.relation_model.property_key_type_pairs_without_property model.foreign_id}) -> #{property.type}? {
-        return #{property.type}.create(#{property.relation_model.property_key_value_pairs_without_property model.foreign_id}, #{model.foreign_id}: self.id)
+    func create#{association.type}(#{association.secondary_model.property_key_type_pairs_without_property model.foreign_id}) -> #{association.type}? {
+        return #{association.type}.create(#{association.secondary_model.property_key_value_pairs_without_property model.foreign_id}, #{model.foreign_id}: self.id)
     }
 
-    func delete#{property.type}(id: Int) {
-        #{property.type}.filter(.#{model.foreign_id}, value: id).findBy(id: id).first?.delete
+    func delete#{association.type}(id: Int) {
+        #{association.type}.filter(.#{model.foreign_id}, value: id).findBy(id: id).first?.delete
     }
-    var #{property.name}: [#{property.type}] {
+    var #{association.name}: [#{association.type}] {
         get {
-            return #{property.type}.filter(.id, value: id).result
+            return #{association.type}.filter(.id, value: id).result
         }
         set {
-            #{property.name}.forEach { (element) in
+            #{association.name}.forEach { (element) in
                 var element = element
                 element.update(#{model.foreign_id}: 0)
             }
@@ -27,28 +27,28 @@
             }
         }
     }
-}""" %><% elsif property.belongs_to? %>
+}""" %><% elsif association.belongs_to? %>
 <%= """public extension #{model.name} {
-    var #{property.name}: #{property.type}? {
+    var #{association.name}: #{association.type}? {
         get {
-            return #{property.type}.find(id)
+            return #{association.type}.find(id)
         }
         set {
             guard let newValue = newValue else { return }
-            update(#{property.type.camelize(:lower)}Id: newValue.id)
+            update(#{association.type.camelize(:lower)}Id: newValue.id)
         }
     }
 
-}""" %><% elsif property.has_one? %>
+}""" %><% elsif association.has_one? %>
 <%= """public extension #{model.name} {
-    var #{property.name}: #{property.type}? {
+    var #{association.name}: #{association.type}? {
         get {
-            return #{property.type}.find(id)
+            return #{association.type}.find(id)
         }
         set {
-            #{property.type}.filter(.#{model.name.camelize(:lower)}Id, value: id).deleteAll
+            #{association.type}.filter(.#{model.foreign_id}, value: id).deleteAll
             guard var newValue = newValue else { return }
-            newValue.update(articleId: id)
+            newValue.update(#{model.foreign_id}: id)
         }
     }
 }"""%><% end %><% end %>

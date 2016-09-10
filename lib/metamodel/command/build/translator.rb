@@ -18,7 +18,7 @@ module MetaModel
           name_model_hash = Hash[@models.collect { |model| [model.name, model] }]
           @associations.map! do |association|
             major_model = name_model_hash[association.major_model]
-            major_model.associations << major_model
+            major_model.associations << association
             association.major_model = major_model
             association.secondary_model = name_model_hash[association.secondary_model]
             raise Informative, "Associations not satisfied in `Metafile`" \

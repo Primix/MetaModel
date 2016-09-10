@@ -2,6 +2,7 @@ module MetaModel
   module Record
     class Association
       attr_reader :name
+      attr_reader :type
       attr_reader :relation
       attr_reader :through
       attr_accessor :major_model
@@ -25,6 +26,14 @@ module MetaModel
 
       def belongs_to?
         @modifiers == :belongs_to
+      end
+
+      def type
+        case @relation
+        when :has_one    then secondary_model.name
+        when :has_many   then secondary_model.name
+        when :belongs_to then major_model.name
+        end
       end
     end
   end
