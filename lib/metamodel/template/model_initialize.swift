@@ -9,7 +9,7 @@ public struct <%= model.name %> {
         var unwrapped: String { get { return self.rawValue.unwrapped } }
     }
 
-    public init(<%= model.property_key_type_pairs %>) {
+    public init(<%= model.property_key_type_pairs false %>) {
         <% model.properties.each do |property| %><%= """self.#{property.name} = #{property.name}" %>
         <% end %>
     }
