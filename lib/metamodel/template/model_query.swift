@@ -31,7 +31,7 @@ public extension <%= model.name %> {
 
     static func findBy(<%= model.property_key_type_pairs(true, true) %>) -> <%= model.relation_name %> {
         var attributes: [<%= model.name %>.Column: Any] = [:]
-        <% model.properties_exclude_id.each do |property| %><%= "if (#{property.name} != #{property.type_without_optional}DefaultValue) { attributes[.#{property.name}] = #{property.name} }" %>
+        <% model.properties.each do |property| %><%= "if (#{property.name} != #{property.type_without_optional}DefaultValue) { attributes[.#{property.name}] = #{property.name} }" %>
         <% end %>return <%= model.relation_name %>().filter(attributes)
     }
 
@@ -75,7 +75,7 @@ public extension <%= model.relation_name %> {
 
     func findBy(<%= model.property_key_type_pairs(true, true) %>) -> Self {
         var attributes: [<%= model.name %>.Column: Any] = [:]
-        <% model.properties_exclude_id.each do |property| %><%= "if (#{property.name} != #{property.type_without_optional}DefaultValue) { attributes[.#{property.name}] = #{property.name} }" %>
+        <% model.properties.each do |property| %><%= "if (#{property.name} != #{property.type_without_optional}DefaultValue) { attributes[.#{property.name}] = #{property.name} }" %>
         <% end %>return self.filter(attributes)
     }
 
