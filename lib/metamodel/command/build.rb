@@ -82,14 +82,16 @@ module MetaModel
             BITCODE_GENERATION_MODE=bitcode \
             ONLY_ACTIVE_ARCH=NO \
             CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGN_IDENTITY="
+            CODE_SIGN_IDENTITY= \
+            clean build"
           build_iphonesimulator = "xcodebuild -scheme MetaModel \
             -project MetaModel/MetaModel.xcodeproj \
             -configuration Release -sdk iphonesimulator \
             -derivedDataPath './metamodel' \
             ONLY_ACTIVE_ARCH=NO \
             CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGN_IDENTITY="
+            CODE_SIGN_IDENTITY= \
+            clean build"
           result = system "#{build_iphoneos} > /dev/null &&
             #{build_iphonesimulator} > /dev/null"
 
