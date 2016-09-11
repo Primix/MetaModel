@@ -61,12 +61,12 @@ module MetaModel
         key_type_pairs_with_property @properties, remove_extra_param, use_default_value
       end
 
-      def property_key_type_pairs_without_property(property)
-        key_type_pairs_with_property @properties.select { |element| element.name != property }
-      end
-
       def property_exclude_id_key_type_pairs(remove_extra_param = true, use_default_value = false)
         key_type_pairs_with_property properties_exclude_id, remove_extra_param, use_default_value
+      end
+
+      def property_key_type_pairs_without_property(property)
+        key_type_pairs_with_property @properties.select { |element| element.name != property }
       end
 
       def build_table

@@ -11,11 +11,11 @@
     }
 
     func delete#{association.type}(id: Int) {
-        #{association.type}.filter(.#{model.foreign_id}, value: id).findBy(id: id).first?.delete
+        #{association.type}.findBy(#{model.foreign_id}: id).first?.delete
     }
     var #{association.name}: [#{association.type}] {
         get {
-            return #{association.type}.filter(.id, value: id).result
+            return #{association.type}.filter(id: id).result
         }
         set {
             #{association.name}.forEach { (element) in
@@ -47,7 +47,7 @@
             return #{association.type}.find(id)
         }
         set {
-            #{association.type}.filter(.#{model.foreign_id}, value: id).deleteAll
+            #{association.type}.findBy(#{model.foreign_id}: id).deleteAll
             guard var newValue = newValue else { return }
             newValue.update(#{model.foreign_id}: id)
         }

@@ -29,20 +29,14 @@ public extension <%= model.name %> {
         return <%= model.relation_name %>().find(id).first
     }
 
-    static func findBy(id id: Int) -> <%= model.name %>? {
-        return <%= model.relation_name %>().findBy(id: id).first
-    }
-    <% model.properties_exclude_id.each do |property| %><%= """
-    static func findBy(#{property.name} #{property.name}: #{property.type_without_optional}) -\> #{model.name}? {
-        return #{model.relation_name}().findBy(#{property.name}: #{property.name}).first
-    }
-    """ %><% end %>
-    static func filter(column: <%= model.name %>.Column, value: Any) -> <%= model.relation_name %> {
-        return <%= model.relation_name %>().filter([column: value])
+    static func findBy(<%= model.property_key_type_pairs(true, true) %>) -> <%= model.relation_name %> {
+        var attributes: [<%= model.name %>.Column: Any] = [:]
+        <% model.properties_exclude_id.each do |property| %><%= "if (#{property.name} != #{property.type_without_optional}DefaultValue) { attributes[.#{property.name}] = #{property.name} }" %>
+        <% end %>return <%= model.relation_name %>().filter(attributes)
     }
 
-    static func filter(conditions: [<%= model.name %>.Column: Any]) -> <%= model.relation_name %> {
-        return <%= model.relation_name %>().filter(conditions)
+    static func filter(<%= model.property_key_type_pairs(true, true) %>) -> <%= model.relation_name %> {
+        return findBy(<%= model.property_key_value_pairs %>)
     }
 
     static func limit(length: UInt, offset: UInt = 0) -> <%= model.relation_name %> {
@@ -76,17 +70,19 @@ public extension <%= model.name %> {
 
 public extension <%= model.relation_name %> {
     func find(id: Int) -> Self {
-        return self.findBy(id: id)
+        return findBy(id: id)
     }
 
-    func findBy(id id: Int) -> Self {
-        return self.filter([.id: id]).limit(1)
+    func findBy(<%= model.property_key_type_pairs(true, true) %>) -> Self {
+        var attributes: [<%= model.name %>.Column: Any] = [:]
+        <% model.properties_exclude_id.each do |property| %><%= "if (#{property.name} != #{property.type_without_optional}DefaultValue) { attributes[.#{property.name}] = #{property.name} }" %>
+        <% end %>return self.filter(attributes)
     }
 
-    <% model.properties_exclude_id.each do |property| %><%= """func findBy(#{property.name} #{property.name}: #{property.type_without_optional}) -\> Self {
-        return self.filter([.#{property.name}: #{property.name}])
-    }""" %>
-    <% end %>
+    func filter(<%= model.property_key_type_pairs(true, true) %>) -> Self {
+        return findBy(<%= model.property_key_value_pairs %>)
+    }
+
     func filter(conditions: [<%= model.name %>.Column: Any]) -> Self {
         for (column, value) in conditions {
             let columnSQL = "\(expandColumn(column))"
