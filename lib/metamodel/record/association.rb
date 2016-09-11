@@ -46,8 +46,8 @@ module MetaModel
       end
 
       def validate_dependent(dependent)
-        supported_dependent_options = %w[:nullify :destroy]
-        raise Infomavtive, "Unknown dependent option #{dependent}, \
+        supported_dependent_options = [:nullify, :destroy]
+        raise Informative, "Unknown dependent option #{dependent}, \
           MetaModel only supports #{supported_dependent_options} now" \
           unless supported_dependent_options.include? dependent
       end
