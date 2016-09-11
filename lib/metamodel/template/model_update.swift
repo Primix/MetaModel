@@ -1,10 +1,10 @@
-public extension <%= model.name %> {
-    var itself: String { get { return "WHERE \(<%= model.name %>.tableName.unwrapped).\("id".unwrapped) = \(id)" } }
+// MARK: - Update
 
+public extension <%= model.name %> {
     <% model.properties_exclude_id.each do |property| %><%= """mutating func update(#{property.name} #{property.name}: #{property.type}) -> #{model.name} {
         return self.update([.#{property.name}: #{property.name}])
-    }""" %>
-    <% end %>
+    }
+    """ %><% end %>
     mutating func update(attributes: [<%= model.name %>.Column: Any]) -> <%= model.name %> {
         var setSQL: [String] = []
         if let attributes = attributes as? [<%= model.name %>.Column: Unwrapped] {
@@ -34,6 +34,15 @@ public extension <%= model.name %> {
                 <%= model.name %>.create(<%= model.property_key_value_pairs %>)
             }
             return self
+        }
+    }
+}
+
+public extension <%= model.relation_name %> {
+    public func updateAll(column: <%= model.name %>.Column, value: Any) {
+        self.result.forEach { (element) in
+            var element = element
+            element.update([column: value])
         }
     }
 }

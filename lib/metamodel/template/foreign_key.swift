@@ -1,3 +1,4 @@
+// MARK: - Association
 <% model.associations.each do |association| %><% if association.has_many? %>
 <%= """public extension #{model.name} {
     func append#{association.type}(element: #{association.type}) {

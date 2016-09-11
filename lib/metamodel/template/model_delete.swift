@@ -1,3 +1,5 @@
+// MARK: - Delete
+
 public extension <%= model.name %> {
     var delete: Bool {
         get {
@@ -9,5 +11,14 @@ public extension <%= model.name %> {
     static func deleteAll() {
         let deleteAllSQL = "DELETE FROM \(tableName.unwrapped)"
         executeSQL(deleteAllSQL)
+    }
+}
+
+public extension <%= model.relation_name %> {
+    var deleteAll: Bool {
+        get {
+            self.result.forEach { $0.delete }
+            return true
+        }
     }
 }
