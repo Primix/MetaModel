@@ -6,7 +6,8 @@ public extension <%= model.name %> {
             let deleteSQL = "DELETE FROM \(<%= model.name %>.tableName.unwrapped) \(itself)"
             executeSQL(deleteSQL)<% model.associations.select { |a| a.dependent == :destroy }.each do |association| %>
             <%= association.secondary_model_instance + ".delete" %>
-            <% end %>return true
+            <% end %>
+            return true
         }
     }
     static var deleteAll: Bool { get { return <%= model.relation_name %>().deleteAll } }
