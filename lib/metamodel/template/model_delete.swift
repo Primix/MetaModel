@@ -4,8 +4,8 @@ public extension <%= model.name %> {
     var delete: Bool {
         get {
             let deleteSQL = "DELETE FROM \(<%= model.name %>.tableName.unwrapped) \(itself)"
-            executeSQL(deleteSQL)
-            <% model.associations.select { |a| a.dependent == :destroy }.each do |association| %><%= "#{association.secondary_model.name}.findBy(#{model.foreign_id}: id).delete" %>
+            executeSQL(deleteSQL)<% model.associations.select { |a| a.dependent == :destroy }.each do |association| %>
+            <%= association.secondary_model_instance + ".delete" %>
             <% end %>return true
         }
     }

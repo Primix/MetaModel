@@ -37,6 +37,14 @@ module MetaModel
         result
       end
 
+      def secondary_model_instance
+        case relation
+        when :has_many, :has_one then "#{secondary_model.name}.findBy(#{major_model.foreign_id}: id)"
+        when :belongs_to then "#{secondary_model.name}.findBy(id: #{secondary_model.foreign_id})"
+        else ""
+        end
+      end
+
       #-------------------------------------------------------------------------#
 
       # @!group Validation
