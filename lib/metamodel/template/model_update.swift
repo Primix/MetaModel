@@ -1,10 +1,12 @@
 // MARK: - Update
 
 public extension <%= model.name %> {
-    <% model.properties_exclude_id.each do |property| %><%= """mutating func update(#{property.name} #{property.name}: #{property.type}) -> #{model.name} {
-        return self.update([.#{property.name}: #{property.name}])
+    mutating func update(<%= model.property_exclude_id_key_type_pairs(true, true) %>) -> <%= model.name %> {
+        var attributes: [<%= model.name %>.Column: Any] = [:]
+        <% model.properties_exclude_id.each do |property| %><%= "if (#{property.name} != #{property.type_without_optional}DefaultValue) { attributes[.#{property.name}] = #{property.name} }" %>
+        <% end %>return self.update(attributes)
     }
-    """ %><% end %>
+
     mutating func update(attributes: [<%= model.name %>.Column: Any]) -> <%= model.name %> {
         var setSQL: [String] = []
         if let attributes = attributes as? [<%= model.name %>.Column: Unwrapped] {

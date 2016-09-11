@@ -57,16 +57,16 @@ module MetaModel
         key_value_pairs_with_property properties_exclude_id, cast
       end
 
-      def property_key_type_pairs(extra = true)
-        key_type_pairs_with_property @properties, extra
+      def property_key_type_pairs(extra = true, default = false)
+        key_type_pairs_with_property @properties, extra, default
       end
 
       def property_key_type_pairs_without_property(property)
         key_type_pairs_with_property @properties.select { |element| element.name != property }
       end
 
-      def property_exclude_id_key_type_pairs
-        key_type_pairs_with_property properties_exclude_id
+      def property_exclude_id_key_type_pairs(extra = true, default = false)
+        key_type_pairs_with_property properties_exclude_id, extra, default
       end
 
       def build_table
@@ -99,12 +99,13 @@ module MetaModel
         end.join(", ")
       end
 
-      def key_type_pairs_with_property(properties, extra = true)
+      def key_type_pairs_with_property(properties, extra = true, default = false)
         properties.enum_for(:each_with_index).map do |property, index|
           has_default_value = property.has_default_value?
           default_value = property.type_without_optional == "String" ? "\"#{property.default_value}\"" : property.default_value
 
           result = "#{property.name}: #{property.type.to_s}#{if has_default_value then " = " + "#{default_value}" end}"
+          result = "#{property.name}: #{property.type.to_s} = #{property.type_without_optional}DefaultValue" if default
           if index == 0 && extra
             "#{property.name} #{result}"
           else
