@@ -30,6 +30,6 @@ extension <%= model.name %> {
     }
 }
 
-public extension <%= model.name %> {
+extension <%= model.name %> {
     var itself: String { get { return "WHERE \(Article.tableName.unwrapped).\("id".unwrapped) = \(id)" } }
 }
