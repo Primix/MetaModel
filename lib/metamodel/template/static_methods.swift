@@ -1,9 +1,4 @@
 public extension <%= model.name %> {
-    static func deleteAll() {
-        let deleteAllSQL = "DELETE FROM \(tableName.unwrapped)"
-        executeSQL(deleteAllSQL)
-    }
-
     static var count: Int {
         get {
             let countSQL = "SELECT count(*) FROM \(tableName.unwrapped)"

@@ -28,8 +28,8 @@ module MetaModel
         result &= self.major_model == constraint.secondary_model
         result &= self.secondary_model == constraint.major_model
         result &= case [self.relation, constraint.relation]
-          when [:has_one, :belongs_to], [:has_many, :belongs_to] then true
-          when [:belongs_to, :has_many], [:belongs_to, :has_one] then true
+          when [:has_one, :belongs_to], [:belongs_to, :has_one] then true
+          when [:belongs_to, :has_many], [:has_many, :belongs_to] then true
           when [:has_many, :has_many] then
             self.through == constraint.through
           else false

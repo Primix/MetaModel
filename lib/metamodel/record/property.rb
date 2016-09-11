@@ -35,7 +35,7 @@ module MetaModel
         case type_without_optional
           when "String" then "TEXT"
           when "Int", "Bool" then "INTEGER"
-          when "Double", "NSDate" then "REAL"
+          when "Double", "NSDate", "Float" then "REAL"
           else raise Informative, "Unsupported type #{self.type}"
         end
       end
@@ -44,7 +44,7 @@ module MetaModel
         case type_without_optional
         when "String" then "String"
         when "Int", "Bool" then "Int64"
-        when "Double", "NSDate" then "Double"
+        when "Double", "NSDate", "Float" then "Double"
         else raise Informative, "Unsupported type #{self.type}"
         end
       end

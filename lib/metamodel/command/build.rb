@@ -131,6 +131,7 @@ module MetaModel
       CURRENT_SUPPORTED_BUILT_IN_TYPES = %w[
         Int
         Double
+        Float
         String
         Bool
         NSDate
