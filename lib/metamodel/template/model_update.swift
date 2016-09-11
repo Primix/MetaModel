@@ -26,6 +26,7 @@ public extension <%= model.name %> {
         }
         return self
     }
+
     var save: <%= model.name %> {
         mutating get {
             if let _ = <%= model.name %>.find(id) {
@@ -34,6 +35,12 @@ public extension <%= model.name %> {
                 <%= model.name %>.create(<%= model.property_key_value_pairs %>)
             }
             return self
+        }
+    }
+
+    var commit: <%= model.name %> {
+        mutating get {
+            return save
         }
     }
 }
