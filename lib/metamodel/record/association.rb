@@ -19,6 +19,8 @@ module MetaModel
         @dependent       = dependent
         @major_model     = major_model
         @secondary_model = secondary_model
+
+        validate_association
       end
 
       def expect_constraint?(constraint)
@@ -29,11 +31,31 @@ module MetaModel
           when [:has_one, :belongs_to], [:has_many, :belongs_to] then true
           when [:belongs_to, :has_many], [:belongs_to, :has_one] then true
           when [:has_many, :has_many] then
-            self.through && constraint.through
+            self.through == constraint.through
           else false
         end
         result
       end
+
+      #-------------------------------------------------------------------------#
+
+      # @!group Validation
+
+      def validate_association
+        validate_dependent(@dependent)
+      end
+
+      def validate_dependent(dependent)
+        supported_dependent_options = %w[:nullify :destroy]
+        raise Infomavtive, "Unknown dependent option #{dependent}, \
+          MetaModel only supports #{supported_dependent_options} now" \
+          unless supported_dependent_options.include? dependent
+      end
+
+
+      #-------------------------------------------------------------------------#
+
+      # @!group Relation
 
       def has_one?
         @relation == :has_one
