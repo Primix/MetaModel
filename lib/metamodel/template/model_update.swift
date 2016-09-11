@@ -1,13 +1,14 @@
 // MARK: - Update
 
 public extension <%= model.name %> {
-    mutating func update(<%= model.property_exclude_id_key_type_pairs(true, true) %>) -> <%= model.name %> {
+    mutating func update(<%= model.property_exclude_id_key_type_pairs(true, true) %>) {
         var attributes: [<%= model.name %>.Column: Any] = [:]
         <% model.properties_exclude_id.each do |property| %><%= "if (#{property.name} != #{property.type_without_optional}DefaultValue) { attributes[.#{property.name}] = #{property.name} }" %>
-        <% end %>return self.update(attributes)
+        <% end %>
+        self.update(attributes)
     }
 
-    mutating func update(attributes: [<%= model.name %>.Column: Any]) -> <%= model.name %> {
+    mutating func update(attributes: [<%= model.name %>.Column: Any]) {
         var setSQL: [String] = []
         if let attributes = attributes as? [<%= model.name %>.Column: Unwrapped] {
             for (key, value) in attributes {
@@ -26,7 +27,6 @@ public extension <%= model.name %> {
                 }
             }
         }
-        return self
     }
 
     var save: <%= model.name %> {
@@ -48,10 +48,18 @@ public extension <%= model.name %> {
 }
 
 public extension <%= model.relation_name %> {
-    public func updateAll(column: <%= model.name %>.Column, value: Any) {
-        self.result.forEach { (element) in
+    public func updateAll(<%= model.property_exclude_id_key_type_pairs(true, true) %>) -> Self {
+        return update(<%= model.property_exclude_id_key_value_pairs %>)
+    }
+
+    public func update(<%= model.property_exclude_id_key_type_pairs(true, true) %>) -> Self {
+        var attributes: [<%= model.name %>.Column: Any] = [:]
+        <% model.properties_exclude_id.each do |property| %><%= "if (#{property.name} != #{property.type_without_optional}DefaultValue) { attributes[.#{property.name}] = #{property.name} }" %>
+        <% end %>
+        result.forEach { (element) in
             var element = element
-            element.update([column: value])
+            element.update(attributes)
         }
+        return self
     }
 }

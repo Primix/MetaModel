@@ -13,6 +13,10 @@ module MetaModel
         validate
       end
 
+      def contains?(property)
+        @properties.select { |prop| prop.name == property }.size > 0
+      end
+
       def properties_exclude_id
         @properties.select { |property| property.name != "id" }
       end

@@ -32,7 +32,7 @@
 <%= """public extension #{model.name} {
     var #{association.name}: #{association.type}? {
         get {
-            return #{association.secondary_model_instance}
+            return #{association.secondary_model_instance}.first
         }
         set {
             guard let newValue = newValue else { return }
@@ -44,7 +44,7 @@
 <%= """public extension #{model.name} {
     var #{association.name}: #{association.type}? {
         get {
-            return #{association.secondary_model_instance}
+            return #{association.secondary_model_instance}.first
         }
         set {
             #{association.type}.findBy(#{model.foreign_id}: id).deleteAll
