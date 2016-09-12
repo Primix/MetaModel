@@ -7,22 +7,22 @@ public extension <%= model.name %> {
 
     static var first: <%= model.name %>? {
         get {
-            return <%= model.relation_name %>().orderBy(.id, asc: true).first
+            return <%= model.relation_name %>().orderBy(._id, asc: true).first
         }
     }
 
     static var last: <%= model.name %>? {
         get {
-            return <%= model.relation_name %>().orderBy(.id, asc: false).first
+            return <%= model.relation_name %>().orderBy(._id, asc: false).first
         }
     }
 
     static func first(length: UInt) -> <%= model.relation_name %> {
-        return <%= model.relation_name %>().orderBy(.id, asc: true).limit(length)
+        return <%= model.relation_name %>().orderBy(._id, asc: true).limit(length)
     }
 
     static func last(length: UInt) -> <%= model.relation_name %> {
-        return <%= model.relation_name %>().orderBy(.id, asc: false).limit(length)
+        return <%= model.relation_name %>().orderBy(._id, asc: false).limit(length)
     }
 
     static func find(id: Int) -> <%= model.name %>? {
@@ -69,10 +69,6 @@ public extension <%= model.name %> {
 }
 
 public extension <%= model.relation_name %> {
-    func find(id: Int) -> Self {
-        return findBy(id: id)
-    }
-
     func findBy(<%= model.property_key_type_pairs(true, true) %>) -> Self {
         var attributes: [<%= model.name %>.Column: Any] = [:]
         <% model.properties.each do |property| %><%= "if (#{property.name} != #{property.type_without_optional}DefaultValue) { attributes[.#{property.name}] = #{property.name} }" %>

@@ -27,9 +27,23 @@ extension <%= model.name %> {
         <% model.properties.each_with_index do |property, index| %><%= """let #{property.name}: #{property.real_type} = values[#{index+1}] as! #{property.real_type}""" %>
         <% end %>
         self.init(<%= model.property_key_value_pairs true %>)
+
+        let _id: Int64 = values[0] as! Int64
+        self._id = Int(_id)
     }
 }
 
 extension <%= model.name %> {
-    var itself: String { get { return "WHERE \(<%= model.name %>.tableName.unwrapped).\("id".unwrapped) = \(id)" } }
+    var itself: String { get { return "WHERE \(<%= model.name %>.tableName.unwrapped).\("_id".unwrapped) = \(_id)" } }
+}
+
+extension <%= model.relation_name %> {
+    func find(_id: Int) -> Self {
+        return filter(_id)
+    }
+
+    func filter(_id: Int) -> Self {
+        self.filter.append("\"_id\" = \(_id)")
+        return self
+    }
 }
