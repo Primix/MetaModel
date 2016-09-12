@@ -21,8 +21,10 @@ module MetaModel
             major_model.associations << association
             association.major_model = major_model
             association.secondary_model = name_model_hash[association.secondary_model]
+            size = association.through ? 3 : 2
+            association.through = name_model_hash[association.through]
             raise Informative, "Associations not satisfied in `Metafile`" \
-              unless [association.major_model, association.secondary_model].compact.size == 2
+              unless [association.major_model, association.secondary_model, association.through].compact.size == size
             association
           end
 
@@ -36,7 +38,7 @@ module MetaModel
             remain
           end
           raise Informative, "Unsatisfied constraints in #{satisfy_constraint.map \
-            { |x| "#{x.major_model.name}.#{x.relation}.#{x.dependent}"}}" \
+            { |x| x.debug_description }}" \
             if satisfy_constraint.size > 0
 
           @associations.each do |association|
