@@ -33,12 +33,6 @@ module MetaModel
         "#{name}Relation"
       end
 
-      def all_properties
-        all_properties = properties.clone
-        all_properties.push Property.primary_id
-        all_properties
-      end
-
       def validate
         property_keys = @properties.map { |property| property.name }
 
