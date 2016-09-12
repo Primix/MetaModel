@@ -13,7 +13,9 @@
 
     var #{association.name}: #{association.secondary_model.relation_name} {
         get {
-            return #{association.type}.filter(#{model.foreign_id}: _id)
+            var result = #{association.type}.filter(#{model.foreign_id}: _id)
+            result.#{model.foreign_id} = _id
+            return result
         }
         set {
             #{association.name}.forEach { (element) in
@@ -24,6 +26,7 @@
                 var element = element
                 element.update(#{model.foreign_id}: _id)
             }
+            #{association.name}.#{model.foreign_id} = _id
         }
     }
 }""" %><% elsif association.belongs_to? %>
