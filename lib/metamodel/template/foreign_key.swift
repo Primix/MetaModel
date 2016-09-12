@@ -1,16 +1,6 @@
 // MARK: - Association
 <% model.associations.each do |association| %><% if association.has_many? %>
 <%= """public extension #{model.name} {
-    func append#{association.type}(element: #{association.type}) {
-        var element = element
-        element.update(#{model.foreign_id}: _id)
-    }
-
-    func create#{association.type}(#{association.secondary_model.property_key_type_pairs_without_property model.foreign_id}) -> #{association.type}? {""" %>
-        return <%= "#{association.type}.create(" %><% if association.secondary_model.properties_exclude_property(model.foreign_id).count == 0 then %><%= "" %><% else %><%= "#{association.secondary_model.property_key_value_pairs_without_property(model.foreign_id)}, #{model.foreign_id}: _id" %><% end %>)
-    }
-<%= """
-
     var #{association.name}: #{association.secondary_model.relation_name} {
         get {
             var result = #{association.type}.filter(#{model.foreign_id}: _id)
