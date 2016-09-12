@@ -1,5 +1,3 @@
-require 'active_support/core_ext/string/strip'
-
 module MetaModel
 
   class PlainInformative < StandardError; end
@@ -14,6 +12,7 @@ module MetaModel
 
   require 'pathname'
   require 'active_support/inflector'
+  require 'active_support/core_ext/string'
 
   require 'metamodel/version'
   require 'metamodel/config'
