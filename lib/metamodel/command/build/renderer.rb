@@ -1,21 +1,10 @@
-require 'erb'
-require 'ostruct'
 require 'xcodeproj'
+require 'metamodel/erbal_template'
 
 module MetaModel
   class Command
     class Build
       class Renderer
-        class ErbalT < OpenStruct
-          def self.render_from_hash(t, h)
-            ErbalT.new(h).render(t)
-          end
-
-          def render(template)
-            ERB.new(template).result(binding)
-          end
-        end
-
         class << self
 
           def templates
@@ -44,7 +33,7 @@ module MetaModel
             file_refs = []
             models.each do |model|
               result = templates.map { |template|
-                ErbalT::render_from_hash(template, { :model => model })
+                ErbalTemplate::render_from_hash(template, { :model => model })
               }.join("\n")
               model_path = Pathname.new("./metamodel/MetaModel/#{model.name}.swift")
               File.write model_path, result

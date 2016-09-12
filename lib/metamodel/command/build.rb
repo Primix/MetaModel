@@ -67,7 +67,7 @@ module MetaModel
 #
       def update_initialize_method
         template = File.read File.expand_path(File.join(File.dirname(__FILE__), "../template/metamodel.swift"))
-        result = ErbalT::render_from_hash(template, { :models => @models })
+        result = Renderer::ErbalTemplate::render_from_hash(template, { :models => @models })
         model_path = Pathname.new("./metamodel/MetaModel/MetaModel.swift")
         File.write model_path, result
       end
@@ -119,16 +119,6 @@ module MetaModel
       end
 
       private
-
-      class ErbalT < OpenStruct
-        def self.render_from_hash(t, h)
-          ErbalT.new(h).render(t)
-        end
-
-        def render(template)
-          ERB.new(template).result(binding)
-        end
-      end
 
       CURRENT_SUPPORTED_BUILT_IN_TYPES = %w[
         Int
