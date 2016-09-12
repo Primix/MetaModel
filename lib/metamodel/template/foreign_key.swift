@@ -10,13 +10,10 @@
         return <%= "#{association.type}.create(" %><% if association.secondary_model.properties_exclude_property(model.foreign_id).count == 0 then %><%= "" %><% else %><%= "#{association.secondary_model.property_key_value_pairs_without_property(model.foreign_id)}, #{model.foreign_id}: _id" %><% end %>)
     }
 <%= """
-    func delete#{association.type}(id: Int) {
-        #{association.type}.find(_id)?.delete
-    }
 
-    var #{association.name}: [#{association.type}] {
+    var #{association.name}: #{association.secondary_model.relation_name} {
         get {
-            return #{association.type}.filter(#{model.foreign_id}: _id).result
+            return #{association.type}.filter(#{model.foreign_id}: _id)
         }
         set {
             #{association.name}.forEach { (element) in

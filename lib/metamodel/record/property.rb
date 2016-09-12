@@ -74,7 +74,7 @@ module MetaModel
       end
 
       def is_foreign?
-        @modifiers.include? :foreign
+        @modifiers[:foreign]
       end
 
       def is_optional?

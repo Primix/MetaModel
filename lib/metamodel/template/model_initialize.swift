@@ -21,7 +21,7 @@ public struct <%= model.name %> {
     }
 
     static public func create(<%= model.property_key_type_pairs %>) -> <%= model.name %>? {
-        if <%= model.properties.select { |p| p.name.downcase.end_with? "id" }.map { |p| "#{p.name} == 0" }.join(" || ") %> { return nil }
+        //if <%= model.properties.select { |p| p.name.downcase.end_with? "id" }.map { |p| "#{p.name} == 0" }.push("false == true").join(" || ") %> { return nil }
 
         var columnsSQL: [<%= model.name %>.Column] = []
         var valuesSQL: [Unwrapped] = []
@@ -38,4 +38,12 @@ public struct <%= model.name %> {
         guard let _ = executeSQL(insertSQL) else { return nil }
         return <%= model.name %>(<%= model.property_key_value_pairs %>)
     }
+}
+
+public extension <%= model.relation_name %> {
+    <% model.all_foreign_properties.each do |property| %>
+    func create(<%= model.property_key_type_pairs_without_property property.name %>) -> <%= model.name %>? {
+        return <%= model.name %>.create(<% if model.properties_exclude_property(property).count == 0 %><%= "#{property}: property" %><% else %><%= model.property_key_value_pairs %><% end %>)
+    }
+    <% end %>
 }

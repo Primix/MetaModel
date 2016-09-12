@@ -15,6 +15,10 @@ module MetaModel
         @properties.select { |prop| prop.name == property }.size > 0
       end
 
+      def all_foreign_properties
+        @properties.select { |element| element.is_foreign? }
+      end
+
       def properties_exclude_id
         properties_exclude_property "id"
       end
