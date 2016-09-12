@@ -43,10 +43,7 @@ module MetaModel
             major_model = association.major_model
             secondary_model = association.secondary_model
             case association.relation
-            when :has_one then
-              property = Record::Property.new(major_model.foreign_id, :int, :foreign, :default => 0)
-              secondary_model.properties << property
-            when :has_many then
+            when :has_one, :has_many then
               property = Record::Property.new(major_model.foreign_id, :int, :foreign, :default => 0)
               secondary_model.properties << property
             when :belongs_to then
