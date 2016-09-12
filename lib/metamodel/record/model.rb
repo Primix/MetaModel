@@ -18,11 +18,7 @@ module MetaModel
       end
 
       def properties_exclude_id
-        @properties.select { |property| property.name != "id" }
-      end
-
-      def all_properties
-        properties + Property.primary_id
+        properties_exclude_property "id"
       end
 
       def properties_exclude_property(property)
