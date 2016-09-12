@@ -3,8 +3,8 @@
 <%= """public extension #{model.name} {
     var #{association.name}: #{association.secondary_model.relation_name} {
         get {
-            var result = #{association.type}.filter(#{model.foreign_id}: _id)
-            result.#{model.foreign_id} = _id
+            var result = #{association.type}.filter(#{model.foreign_id}: privateId)
+            result.#{model.foreign_id} = privateId
             return result
         }
         set {
@@ -14,9 +14,9 @@
             }
             newValue.forEach { (element) in
                 var element = element
-                element.update(#{model.foreign_id}: _id)
+                element.update(#{model.foreign_id}: privateId)
             }
-            #{association.name}.#{model.foreign_id} = _id
+            #{association.name}.#{model.foreign_id} = privateId
         }
     }
 }""" %><% elsif association.belongs_to? %>
@@ -27,7 +27,7 @@
         }
         set {
             guard let newValue = newValue else { return }
-            update(#{association.secondary_model.foreign_id}: newValue._id)
+            update(#{association.secondary_model.foreign_id}: newValue.privateId)
         }
     }
 
@@ -38,9 +38,9 @@
             return #{association.secondary_model_instance}.first
         }
         set {
-            #{association.type}.findBy(#{model.foreign_id}: _id).deleteAll
+            #{association.type}.findBy(#{model.foreign_id}: privateId).deleteAll
             guard var newValue = newValue else { return }
-            newValue.update(#{model.foreign_id}: _id)
+            newValue.update(#{model.foreign_id}: privateId)
         }
     }
 }"""%><% end %><% end %>

@@ -1,5 +1,5 @@
 public struct <%= model.name %> {
-    var _id: Int = 0
+    var privateId: Int = 0
     <% model.properties.each do |property| %><%= """public var #{property.name}: #{property.type}""" %>
     <% end %>
     static let tableName = "<%= model.table_name %>"
@@ -7,7 +7,7 @@ public struct <%= model.name %> {
     public enum Column: String, Unwrapped {
         <% model.properties.each do |property| %><%= """case #{property.name} = \"#{property.name}\"""" %>
         <% end %>
-        case _id = "_id"
+        case privateId = "privateId"
         var unwrapped: String { get { return self.rawValue.unwrapped } }
     }
 
@@ -38,7 +38,7 @@ public struct <%= model.name %> {
         guard let _ = executeSQL(insertSQL),
           let lastInsertRowId = executeScalarSQL("SELECT last_insert_rowid();") as? Int64 else { return nil }
         var result = <%= model.name %>(<%= model.property_key_value_pairs %>)
-        result._id = Int(lastInsertRowId)
+        result.privateId = Int(lastInsertRowId)
         return result
     }
 }

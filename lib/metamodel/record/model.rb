@@ -28,7 +28,7 @@ module MetaModel
       end
 
       def foreign_id
-        "#{name}_id".camelize(:lower)
+        "#{name}Id".camelize(:lower)
       end
 
       def table_name
@@ -79,10 +79,10 @@ module MetaModel
         foreign_sql = @properties.map do |property|
           next unless property.is_foreign?
           reference_table_name = property.type.tableize
-          "FOREIGN KEY(#{property.name}) REFERENCES #{reference_table_name}(_id)"
+          "FOREIGN KEY(#{property.name}) REFERENCES #{reference_table_name}(privateId)"
         end
 
-        table + "(_id INTEGER PRIMARY KEY, #{(main_sql + foreign_sql).compact.join(", ")});"
+        table + "(privateId INTEGER PRIMARY KEY, #{(main_sql + foreign_sql).compact.join(", ")});"
       end
 
       private

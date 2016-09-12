@@ -20,8 +20,8 @@ module MetaModel
 
       class << self
         def primary_id
-          property = Property.new(:_id, :int, :primary)
-          property.name = :_id
+          property = Property.new(:privateId, :int, :primary)
+          property.name = :privateId
           property
         end
       end

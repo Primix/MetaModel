@@ -30,22 +30,22 @@ extension <%= model.name %> {
         <% end %>
         self.init(<%= model.property_key_value_pairs true %>)
 
-        let _id: Int64 = values[0] as! Int64
-        self._id = Int(_id)
+        let privateId: Int64 = values[0] as! Int64
+        self.privateId = Int(privateId)
     }
 }
 
 extension <%= model.name %> {
-    var itself: String { get { return "WHERE \(<%= model.name %>.tableName.unwrapped).\("_id".unwrapped) = \(_id)" } }
+    var itself: String { get { return "WHERE \(<%= model.name %>.tableName.unwrapped).\("privateId".unwrapped) = \(privateId)" } }
 }
 
 extension <%= model.relation_name %> {
-    func find(_id: Int) -> Self {
-        return filter(_id)
+    func find(privateId: Int) -> Self {
+        return filter(privateId)
     }
 
-    func filter(_id: Int) -> Self {
-        self.filter.append("\"_id\" = \(_id)")
+    func filter(privateId: Int) -> Self {
+        self.filter.append("\"privateId\" = \(privateId)")
         return self
     }
 }

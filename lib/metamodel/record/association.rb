@@ -48,7 +48,7 @@ module MetaModel
 
       def secondary_model_instance
         case relation
-        when :has_many, :has_one then "#{secondary_model.name}.find(_id)"
+        when :has_many, :has_one then "#{secondary_model.name}.find(privateId)"
         when :belongs_to then "#{secondary_model.name}.find(#{secondary_model.foreign_id})"
         else ""
         end

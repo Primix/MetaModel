@@ -31,7 +31,7 @@ public extension <%= model.name %> {
 
     var save: <%= model.name %> {
         mutating get {
-            if let _ = <%= model.name %>.find(_id) {
+            if let _ = <%= model.name %>.find(privateId) {
                 update([<% column_values = model.properties.map do |property| %><% ".#{property.name}: #{property.name}" %><% end %><%= column_values.join(", ") %>])
             } else {
                 <%= model.name %>.create(<%= model.property_key_value_pairs %>)
