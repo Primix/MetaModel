@@ -9,8 +9,6 @@ module MetaModel
         @name = name.to_s.camelize
         @properties = []
         @associations = []
-
-        validate
       end
 
       def contains?(property)
@@ -35,10 +33,6 @@ module MetaModel
 
       def relation_name
         "#{name}Relation"
-      end
-
-      def validate
-        property_keys = @properties.map { |property| property.name }
       end
 
       def hash_value
