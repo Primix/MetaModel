@@ -1,5 +1,4 @@
 require 'xcodeproj'
-require 'metamodel/erbal_template'
 
 module MetaModel
   class Command
