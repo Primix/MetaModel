@@ -46,13 +46,11 @@ module MetaModel
             secondary_model = association.secondary_model
             case association.relation
             when :has_one, :has_many then
-              name = major_model.foreign_id
-              name = association.through.foreign_id if association.through
+              name = association.through ? association.through.foreign_id : major_model.foreign_id
               property = Record::Property.new(name, :int, :foreign, :default => 0)
               secondary_model.properties << property
             when :belongs_to then
-              name = secondary_model.foreign_id
-              name = association.through.foreign_id if association.through
+              name = association.through ? association.through.foreign_id : secondary_model.foreign_id
               property = Record::Property.new(name, :int, :foreign, :default => 0)
               major_model.properties << property
             end
