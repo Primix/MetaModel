@@ -21,6 +21,14 @@ module MetaModel
         @properties.select { |property| property.name != "id" }
       end
 
+      def all_properties
+        properties + Property.primary_id
+      end
+
+      def properties_exclude_property(property)
+        @properties.select { |element| element.name != property }
+      end
+
       def foreign_id
         "#{name}_id".camelize(:lower)
       end
@@ -35,8 +43,6 @@ module MetaModel
 
       def validate
         property_keys = @properties.map { |property| property.name }
-
-        @properties << Property.new(:id, :int, :unique, :default => 0) unless property_keys.include? "id"
       end
 
       def hash_value
