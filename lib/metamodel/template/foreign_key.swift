@@ -1,22 +1,11 @@
 // MARK: - Association
 <% model.associations.each do |association| %><% if association.has_many? %>
 <%= """public extension #{model.name} {
-    func append#{association.type}(element: #{association.type}) {
-        var element = element
-        element.update(#{model.foreign_id}: _id)
-    }
-
-    func create#{association.type}(#{association.secondary_model.property_key_type_pairs_without_property model.foreign_id}) -> #{association.type}? {""" %>
-        return <%= "#{association.type}.create(" %><% if association.secondary_model.properties_exclude_property(model.foreign_id).count == 0 then %><%= "" %><% else %><%= "#{association.secondary_model.property_key_value_pairs_without_property(model.foreign_id)}, #{model.foreign_id}: _id" %><% end %>)
-    }
-<%= """
-    func delete#{association.type}(id: Int) {
-        #{association.type}.find(_id)?.delete
-    }
-
-    var #{association.name}: [#{association.type}] {
+    var #{association.name}: #{association.secondary_model.relation_name} {
         get {
-            return #{association.type}.filter(#{model.foreign_id}: _id).result
+            var result = #{association.type}.filter(#{model.foreign_id}: privateId)
+            result.#{model.foreign_id} = privateId
+            return result
         }
         set {
             #{association.name}.forEach { (element) in
@@ -25,8 +14,9 @@
             }
             newValue.forEach { (element) in
                 var element = element
-                element.update(#{model.foreign_id}: _id)
+                element.update(#{model.foreign_id}: privateId)
             }
+            #{association.name}.#{model.foreign_id} = privateId
         }
     }
 }""" %><% elsif association.belongs_to? %>
@@ -37,7 +27,7 @@
         }
         set {
             guard let newValue = newValue else { return }
-            update(#{association.secondary_model.foreign_id}: newValue._id)
+            update(#{association.secondary_model.foreign_id}: newValue.privateId)
         }
     }
 
@@ -48,9 +38,9 @@
             return #{association.secondary_model_instance}.first
         }
         set {
-            #{association.type}.findBy(#{model.foreign_id}: _id).deleteAll
+            #{association.type}.findBy(#{model.foreign_id}: privateId).deleteAll
             guard var newValue = newValue else { return }
-            newValue.update(#{model.foreign_id}: _id)
+            newValue.update(#{model.foreign_id}: privateId)
         }
     }
 }"""%><% end %><% end %>

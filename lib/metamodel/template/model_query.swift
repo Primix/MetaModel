@@ -7,22 +7,22 @@ public extension <%= model.name %> {
 
     static var first: <%= model.name %>? {
         get {
-            return <%= model.relation_name %>().orderBy(._id, asc: true).first
+            return <%= model.relation_name %>().orderBy(.privateId, asc: true).first
         }
     }
 
     static var last: <%= model.name %>? {
         get {
-            return <%= model.relation_name %>().orderBy(._id, asc: false).first
+            return <%= model.relation_name %>().orderBy(.privateId, asc: false).first
         }
     }
 
     static func first(length: UInt) -> <%= model.relation_name %> {
-        return <%= model.relation_name %>().orderBy(._id, asc: true).limit(length)
+        return <%= model.relation_name %>().orderBy(.privateId, asc: true).limit(length)
     }
 
     static func last(length: UInt) -> <%= model.relation_name %> {
-        return <%= model.relation_name %>().orderBy(._id, asc: false).limit(length)
+        return <%= model.relation_name %>().orderBy(.privateId, asc: false).limit(length)
     }
 
     static func find(id: Int) -> <%= model.name %>? {

@@ -20,8 +20,8 @@ module MetaModel
 
       class << self
         def primary_id
-          property = Property.new(:_id, :int, :primary)
-          property.name = :_id
+          property = Property.new(:privateId, :int, :primary)
+          property.name = :privateId
           property
         end
       end
@@ -74,7 +74,7 @@ module MetaModel
       end
 
       def is_foreign?
-        @modifiers.include? :foreign
+        @modifiers[:foreign]
       end
 
       def is_optional?
