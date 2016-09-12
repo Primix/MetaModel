@@ -17,6 +17,7 @@ module MetaModel
 
   require 'metamodel/version'
   require 'metamodel/config'
+  require 'metamodel/erbal_template'
 
   # Loaded immediately after dependencies to ensure proper override of their
   # UI methods.
