@@ -35,8 +35,9 @@ module MetaModel
             end
             remain
           end
-          raise Informative, "Unsatisfied constraints in #{satisfy_constraint.map { |x| x.major_model.name }}" \
-           if satisfy_constraint.size > 0
+          raise Informative, "Unsatisfied constraints in #{satisfy_constraint.map \
+            { |x| "#{x.major_model.name}.#{x.relation}.#{x.dependent}"}}" \
+            if satisfy_constraint.size > 0
 
           @associations.each do |association|
             major_model = association.major_model
