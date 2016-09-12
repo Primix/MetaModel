@@ -35,8 +35,11 @@ public struct <%= model.name %> {
         valuesSQL.append(#{property.name})
         """ %><% end %><% end %>
         let insertSQL = "INSERT INTO \(tableName.unwrapped) (\(columnsSQL.map { $0.rawValue }.joinWithSeparator(", "))) VALUES (\(valuesSQL.map { $0.unwrapped }.joinWithSeparator(", ")))"
-        guard let _ = executeSQL(insertSQL) else { return nil }
-        return <%= model.name %>(<%= model.property_key_value_pairs %>)
+        guard let _ = executeSQL(insertSQL),
+          let lastInsertRowId = executeScalarSQL("SELECT last_insert_rowid();") as? Int64 else { return nil }
+        var result = <%= model.name %>(<%= model.property_key_value_pairs %>)
+        result._id = Int(lastInsertRowId)
+        return result
     }
 }
 
