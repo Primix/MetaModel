@@ -1,4 +1,5 @@
 public struct <%= model.name %> {
+    var _id: Int = 0
     <% model.properties.each do |property| %><%= """public var #{property.name}: #{property.type}""" %>
     <% end %>
     static let tableName = "<%= model.table_name %>"
@@ -6,6 +7,7 @@ public struct <%= model.name %> {
     public enum Column: String, Unwrapped {
         <% model.properties.each do |property| %><%= """case #{property.name} = \"#{property.name}\"""" %>
         <% end %>
+        case _id = "_id"
         var unwrapped: String { get { return self.rawValue.unwrapped } }
     }
 
@@ -24,9 +26,7 @@ public struct <%= model.name %> {
         var columnsSQL: [<%= model.name %>.Column] = []
         var valuesSQL: [Unwrapped] = []
 
-        columnsSQL.append(.id)
-        valuesSQL.append(id)
-        <% model.properties_exclude_id.each do |property| %><% if property.is_optional? %>
+        <% model.properties.each do |property| %><% if property.is_optional? %>
         <%= """if let #{property.name} = #{property.name} {
             columnsSQL.append(.#{property.name})
             valuesSQL.append(#{property.name})

@@ -9,8 +9,6 @@ module MetaModel
         @name = name.to_s.camelize
         @properties = []
         @associations = []
-
-        validate
       end
 
       def contains?(property)
@@ -18,7 +16,11 @@ module MetaModel
       end
 
       def properties_exclude_id
-        @properties.select { |property| property.name != "id" }
+        properties_exclude_property "id"
+      end
+
+      def properties_exclude_property(property)
+        @properties.select { |element| element.name != property }
       end
 
       def foreign_id
@@ -31,12 +33,6 @@ module MetaModel
 
       def relation_name
         "#{name}Relation"
-      end
-
-      def validate
-        property_keys = @properties.map { |property| property.name }
-
-        @properties << Property.new(:id, :int, :unique, :default => 0) unless property_keys.include? "id"
       end
 
       def hash_value
