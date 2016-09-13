@@ -10,7 +10,8 @@ module MetaModel
       attr_accessor :through
 
       def initialize(name, major_model, secondary_model, relation, args)
-        through = args[:through]
+        # through = args[:through]
+        through = nil
         dependent = args[:dependent] || :nullify
 
         @name            = name.to_s.camelize :lower
