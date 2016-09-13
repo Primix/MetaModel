@@ -1,8 +1,6 @@
 // MAKR: - Helper
 
 public class <%= model.relation_name %>: Relation<<%= model.name %>> {
-    <% model.all_foreign_properties.each do |foreign_property| %><%= """var #{foreign_property.name} = 0
-    """%><% end %>
     override init() {
         super.init()
         self.select = "SELECT \(<%= model.name %>.tableName.unwrapped).* FROM \(<%= model.name %>.tableName.unwrapped)"
