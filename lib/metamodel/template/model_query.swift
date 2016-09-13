@@ -30,13 +30,11 @@ public extension <%= model.name %> {
     }
 
     static func findBy(<%= model.property_key_type_pairs(true, true) %>) -> <%= model.relation_name %> {
-        var attributes: [<%= model.name %>.Column: Any] = [:]
-        <% model.properties.each do |property| %><%= "if (#{property.name} != #{property.type_without_optional}DefaultValue) { attributes[.#{property.name}] = #{property.name} }" %>
-        <% end %>return <%= model.relation_name %>().filter(attributes)
+        return <%= model.relation_name %>().findBy(<%= model.property_key_value_pairs %>)
     }
 
     static func filter(<%= model.property_key_type_pairs(true, true) %>) -> <%= model.relation_name %> {
-        return findBy(<%= model.property_key_value_pairs %>)
+        return <%= model.relation_name %>().filter(<%= model.property_key_value_pairs %>)
     }
 
     static func limit(length: UInt, offset: UInt = 0) -> <%= model.relation_name %> {
@@ -44,7 +42,7 @@ public extension <%= model.name %> {
     }
 
     static func take(length: UInt) -> <%= model.relation_name %> {
-        return limit(length)
+        return <%= model.relation_name %>().limit(length)
     }
 
     static func offset(offset: UInt) -> <%= model.relation_name %> {
