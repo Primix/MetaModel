@@ -29,10 +29,10 @@ module MetaModel
           when [:has_one, :belongs_to], [:belongs_to, :has_one] then true
           when [:belongs_to, :has_many] then
             return false if self.dependent == :destroy
-            return false
+            return true
           when [:has_many, :belongs_to] then
             return false if constraint.dependent == :destroy
-            return false
+            return true
           when [:has_many, :has_many] then
             return true
           else false

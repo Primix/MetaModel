@@ -78,7 +78,7 @@ module MetaModel
         #   "FOREIGN KEY(#{property.name}) REFERENCES #{reference_table_name}(privateId)"
         # end
 
-        table + "(privateId INTEGER PRIMARY KEY, #{(main_sql + foreign_sql).compact.join(", ")});"
+        table + "(privateId INTEGER PRIMARY KEY, #{(main_sql).compact.join(", ")});"
       end
 
       private
