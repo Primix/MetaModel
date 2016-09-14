@@ -20,14 +20,15 @@ module MetaModel
     end
 
     def evaluate_model_definition(path)
-      contents ||= File.open(path, 'r:utf-8', &:read)
+      UI.section "Analyzing Metafile" do
+        contents ||= File.open(path, 'r:utf-8', &:read)
 
-      if contents.respond_to?(:encoding) && contents.encoding.name != 'UTF-8'
-        contents.encode!('UTF-8')
+        if contents.respond_to?(:encoding) && contents.encoding.name != 'UTF-8'
+          contents.encode!('UTF-8')
+        end
+
+        eval(contents, nil, path.to_s)
       end
-
-      eval(contents, nil, path.to_s)
-
     end
 
     def self.from_file(path)
@@ -43,33 +44,6 @@ module MetaModel
         raise Informative, "Unsupported Metafile format `#{path}`."
       end
     end
-
-    # def models
-    #   get_hash_value('models', [])
-    # end
-    #
-    # def associations
-    #   get_hash_value('associations', [])
-    # end
-    #
-    # HASH_KEYS = %w(
-    #   models
-    #   associations
-    # ).freeze
-    #
-    # def set_hash_value(key, value)
-    #   unless HASH_KEYS.include?(key)
-    #     raise Informative, "Unsupported hash key `#{key}`"
-    #   end
-    #   internal_hash[key] = value
-    # end
-    #
-    # def get_hash_value(key, default = nil)
-    #   unless HASH_KEYS.include?(key)
-    #     raise Informative, "Unsupported hash key `#{key}`"
-    #   end
-    #   internal_hash.fetch(key, default)
-    # end
 
     def amend_association
       name_model_hash = Hash[@models.collect { |model| [model.name, model] }]

@@ -38,8 +38,12 @@ module MetaModel
 
       def render!
         remove_previous_files_refereneces
-        render_model_files
-        render_association_files
+        UI.section "Generating model files" do
+          render_model_files
+        end
+        UI.section "Generating association files" do
+          render_association_files
+        end
         @project.save
       end
 
@@ -57,7 +61,6 @@ module MetaModel
             target.source_build_phase.remove_file_reference(file_ref) if file_ref && "#{association.class_name}.swift" == file_ref.name
           end
         end
-
       end
 
       def render_model_files
@@ -97,7 +100,7 @@ module MetaModel
           file_name = "#{association.class_name}.swift"
           File.write Pathname.new("./metamodel/MetaModel/#{file_name}"), result
 
-          file_refs << models_group.new_reference(Pathname.new("MetaModel/#{file_name}"))
+          file_refs << association_group.new_reference(Pathname.new("MetaModel/#{file_name}"))
 
           UI.message '-> '.green + "Using #{file_name} file"
         end
