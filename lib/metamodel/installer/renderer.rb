@@ -3,9 +3,9 @@ require 'xcodeproj'
 module MetaModel
   class Installer
     class Renderer
+      include Config::Mixin
 
       attr_reader :project
-      attr_reader :target
 
       attr_reader :models
       attr_reader :associations
@@ -14,39 +14,62 @@ module MetaModel
         @models = models
         @associations = associations
         @project = Xcodeproj::Project.open(Config.instance.metamodel_xcode_project)
-        @target = project.targets.first
       end
 
-      def templates
-        results = []
-        # file_paths = %w{file_header attributes json recordable initialize static_methods instance_methods model_query model_relation}
-        file_paths = %w{file_header table_initialize model_initialize model_update model_query model_delete static_methods helper}
-        file_paths.each do |file_path|
-          template = File.read File.expand_path(File.join(File.dirname(__FILE__), "../template/#{file_path}.swift"))
-          results << template
+      SWIFT_TEMPLATES_FILES = %w(
+        file_header
+        table_initialize
+        model_initialize
+        model_update
+        model_query
+        model_delete
+        static_methods
+        helper
+      )
+
+      def model_swift_templates
+        [].tap do |templates|
+          SWIFT_TEMPLATES_FILES.each do |file_path|
+            template = File.read File.expand_path(File.join(File.dirname(__FILE__), "../template/#{file_path}.swift"))
+            templates << template
+          end
         end
-        results
       end
 
       def render!
+        remove_previous_files_refereneces
         render_model_files
         render_association_files
         @project.save
       end
 
-      def render_model_files
+      def remove_previous_files_refereneces
+        target = @project.targets.first
+
         @models.each do |model|
-          @target.source_build_phase.files_references.each do |file_ref|
-            @target.source_build_phase.remove_file_reference(file_ref) if file_ref && "#{model.name}.swift" == file_ref.name
+          target.source_build_phase.files_references.each do |file_ref|
+            target.source_build_phase.remove_file_reference(file_ref) if file_ref && "#{model.name}.swift" == file_ref.name
           end
         end
+
+        @associations.each do |association|
+          target.source_build_phase.files_references.each do |file_ref|
+            target.source_build_phase.remove_file_reference(file_ref) if file_ref && "#{association.class_name}.swift" == file_ref.name
+          end
+        end
+
+      end
+
+      def render_model_files
+        target = @project.targets.first
+
         models_group = @project.main_group.find_subpath('MetaModel/Models', true)
         models_group.clear
         models_group.set_source_tree('SOURCE_ROOT')
 
         file_refs = []
         @models.each do |model|
-          result = templates.map { |template|
+          result = model_swift_templates.map { |template|
             ErbalTemplate::render_from_hash(template, { :model => model })
           }.join("\n")
           model_path = Pathname.new("./metamodel/MetaModel/#{model.name}.swift")
@@ -56,19 +79,15 @@ module MetaModel
 
           UI.message '-> '.green + "Using #{model.name}.swift file"
         end
-        @target.add_file_references file_refs
+        target.add_file_references file_refs
       end
 
       def render_association_files
-        @associations.each do |association|
-          @target.source_build_phase.files_references.each do |file_ref|
-            @target.source_build_phase.remove_file_reference(file_ref) if file_ref && "#{association.class_name}.swift" == file_ref.name
-          end
-        end
+        target = @project.targets.first
 
-        models_group = @project.main_group.find_subpath('MetaModel/Associations', true)
-        models_group.clear
-        models_group.set_source_tree('SOURCE_ROOT')
+        association_group = @project.main_group.find_subpath('MetaModel/Associations', true)
+        association_group.clear
+        association_group.set_source_tree('SOURCE_ROOT')
 
         file_refs = []
         @associations.each do |association|
@@ -82,7 +101,7 @@ module MetaModel
 
           UI.message '-> '.green + "Using #{file_name} file"
         end
-        @target.add_file_references file_refs
+        target.add_file_references file_refs
       end
 
       private
