@@ -24,7 +24,7 @@ module MetaModel
         UI.section "Building MetaModel.framework in project" do
           clone_project
           models, associations = resolve_template
-          @models = compact_associtions_into_models models, associations
+          @models, @associations = compact_associtions_into_models models, associations
           validate_models
           render_model_files
           update_initialize_method
@@ -61,7 +61,9 @@ module MetaModel
 
       def render_model_files
         UI.section "Generating model files" do
-          Renderer.render(@models)
+          Renderer.new(@models, @associations).tap do |renderer|
+            renderer.render!
+          end
         end
       end
 

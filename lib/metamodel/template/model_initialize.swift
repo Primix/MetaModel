@@ -42,16 +42,3 @@ public struct <%= model.name %> {
         return result
     }
 }
-
-public extension <%= model.relation_name %> {
-    <% model.all_foreign_properties.each do |property| %>
-    func create(<%= model.property_key_type_pairs_without_property property.name %>) -> <%= model.name %>? {
-        return <%= model.name %>.create(<% if model.properties_exclude_property(property).count == 0 %><%= "#{property}: property" %><% else %><%= model.property_key_value_pairs %><% end %>)
-    }
-
-    func append(element: <%= model.name %>) {
-        var element = element
-        element.<%= property.name %> = <%= property.name %>
-    }
-    <% end %>
-}

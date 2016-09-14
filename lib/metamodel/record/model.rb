@@ -15,10 +15,6 @@ module MetaModel
         @properties.select { |prop| prop.name == property }.size > 0
       end
 
-      def all_foreign_properties
-        @properties.select { |element| element.is_foreign? }
-      end
-
       def properties_exclude_id
         properties_exclude_property "id"
       end
@@ -70,19 +66,19 @@ module MetaModel
       def build_table
         table = "CREATE TABLE #{table_name}"
         main_sql = @properties.map do |property|
-          result = "#{property.name} #{property.database_type}"
+          result = "#{property.name.underscore} #{property.database_type}"
           result << " PRIMARY KEY" if property.is_primary?
           result << " UNIQUE" if property.is_unique?
           result << " DEFAULT #{property.default_value}" if property.has_default_value?
           result
         end
-        foreign_sql = @properties.map do |property|
-          next unless property.is_foreign?
-          reference_table_name = property.type.tableize
-          "FOREIGN KEY(#{property.name}) REFERENCES #{reference_table_name}(privateId)"
-        end
+        # foreign_sql = @properties.map do |property|
+        #   next unless property.is_foreign?
+        #   reference_table_name = property.type.tableize
+        #   "FOREIGN KEY(#{property.name}) REFERENCES #{reference_table_name}(privateId)"
+        # end
 
-        table + "(privateId INTEGER PRIMARY KEY, #{(main_sql + foreign_sql).compact.join(", ")});"
+        table + "(private_id INTEGER PRIMARY KEY, #{(main_sql).compact.join(", ")});"
       end
 
       private

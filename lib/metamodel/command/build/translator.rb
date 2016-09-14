@@ -21,10 +21,8 @@ module MetaModel
             major_model.associations << association
             association.major_model = major_model
             association.secondary_model = name_model_hash[association.secondary_model]
-            size = association.through ? 3 : 2
-            association.through = name_model_hash[association.through]
             raise Informative, "Associations not satisfied in `Metafile`" \
-              unless [association.major_model, association.secondary_model, association.through].compact.size == size
+              unless [association.major_model, association.secondary_model].compact.size == 2
             association
           end
 
@@ -41,24 +39,10 @@ module MetaModel
             { |x| x.debug_description }}" \
             if satisfy_constraint.size > 0
 
-          @associations.each do |association|
-            major_model = association.major_model
-            secondary_model = association.secondary_model
-            case association.relation
-            when :has_one, :has_many then
-              name = association.through ? association.through.foreign_id : major_model.foreign_id
-              property = Record::Property.new(name, :int, :foreign, :default => 0)
-              secondary_model.properties << property
-            when :belongs_to then
-              name = association.through ? association.through.foreign_id : secondary_model.foreign_id
-              property = Record::Property.new(name, :int, :foreign, :default => 0)
-              major_model.properties << property
-            end
-          end
-
           @models.each do |model|
             model.properties.uniq! { |prop| [prop.name] }
           end
+          return @models, @associations
         end
       end
     end

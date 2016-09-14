@@ -73,10 +73,6 @@ module MetaModel
         @modifiers.include? :primary
       end
 
-      def is_foreign?
-        @modifiers[:foreign]
-      end
-
       def is_optional?
         @type.to_s.end_with? "?"
       end
