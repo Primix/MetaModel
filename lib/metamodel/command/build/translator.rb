@@ -42,6 +42,7 @@ module MetaModel
           @models.each do |model|
             model.properties.uniq! { |prop| [prop.name] }
           end
+          return @models, @associations
         end
       end
     end
