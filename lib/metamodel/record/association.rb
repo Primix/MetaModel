@@ -20,6 +20,14 @@ module MetaModel
         validate_association
       end
 
+      def class_name
+        "#{major_model.name}#{secondary_model.name}Association".camelize
+      end
+
+      def reverse_class_name
+        "#{secondary_model.name}#{major_model.name}Association".camelize
+      end
+
       def expect_constraint?(constraint)
         result = true
         result &= self.major_model == constraint.secondary_model
