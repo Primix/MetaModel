@@ -1,6 +1,6 @@
 module MetaModel
   class Command
-    class Build
+    class Install
       class Translator
         require 'metamodel/record/model'
         require 'metamodel/record/property'

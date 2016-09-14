@@ -1,6 +1,6 @@
 module MetaModel
   class Command
-    class Build
+    class Install
       class Resolver
 
         include Config::Mixin

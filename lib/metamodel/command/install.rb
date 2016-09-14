@@ -2,7 +2,7 @@ require 'git'
 
 module MetaModel
   class Command
-    class Build < Command
+    class Install < Command
       include Config::Mixin
       require 'metamodel/command/build/resolver'
       require 'metamodel/command/build/renderer'

@@ -5,7 +5,7 @@ module MetaModel
   class Command < CLAide::Command
     require 'metamodel/command/init'
     require 'metamodel/command/generate'
-    require 'metamodel/command/build'
+    require 'metamodel/command/install'
     require 'metamodel/command/clean'
 
     include Config::Mixin
@@ -18,7 +18,7 @@ module MetaModel
 
     METAMODEL_COMMAND_ALIAS = {
       "g"  => "generate",
-      "i"  => "init",
+      "i"  => "install",
       "b"  => "build",
       "c"  => "clean"
     }

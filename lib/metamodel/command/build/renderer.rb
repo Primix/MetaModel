@@ -2,7 +2,7 @@ require 'xcodeproj'
 
 module MetaModel
   class Command
-    class Build
+    class Install
       class Renderer
 
         attr_reader :project
