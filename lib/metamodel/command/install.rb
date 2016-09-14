@@ -13,6 +13,7 @@ module MetaModel
       attr_accessor :models
 
       def initialize(argv)
+        validate!
         super
       end
 
@@ -21,11 +22,6 @@ module MetaModel
           installer = installer_for_config
           installer.prepare
           installer.install!
-          # @models, @associations = compact_associtions_into_models models, associations
-          # validate_models
-          # render_model_files
-          # update_initialize_method
-          # build_metamodel_framework unless config.skip_build?
         end
         UI.notice "Please drag MetaModel.framework into Embedded Binaries phrase.\n"
       end
