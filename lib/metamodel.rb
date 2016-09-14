@@ -25,4 +25,6 @@ module MetaModel
 
   autoload :Command,   'metamodel/command'
   autoload :Parser,    'metamodel/parser'
+  autoload :Installer, 'metamodel/installer'
+  autoload :Metafile,  'metamodel/metafile'
 end

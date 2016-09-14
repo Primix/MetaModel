@@ -115,6 +115,10 @@ module MetaModel
       nil
     end
 
+    def metafile
+      @metafile ||= Metafile.from_file(metafile_path) if metafile_path
+    end
+
     public
 
     #-------------------------------------------------------------------------#

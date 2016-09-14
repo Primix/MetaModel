@@ -48,6 +48,10 @@ module MetaModel
       super
     end
 
+    def installer_for_config
+      Installer.new(config.metafile)
+    end
+
     #-------------------------------------------------------------------------#
 
     private

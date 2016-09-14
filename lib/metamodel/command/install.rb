@@ -4,10 +4,6 @@ module MetaModel
   class Command
     class Install < Command
       include Config::Mixin
-      require 'metamodel/command/build/resolver'
-      require 'metamodel/command/build/renderer'
-      require 'metamodel/command/build/translator'
-
       self.summary = "Build a MetaModel.framework from Metafile"
       self.description = <<-DESC
         Clone a metamodel project template from GitHub, parsing Metafile, validating models,
@@ -23,12 +19,14 @@ module MetaModel
       def run
         UI.section "Building MetaModel.framework in project" do
           clone_project
-          models, associations = resolve_template
-          @models, @associations = compact_associtions_into_models models, associations
-          validate_models
-          render_model_files
-          update_initialize_method
-          build_metamodel_framework unless config.skip_build?
+
+          installer = installer_for_config
+          installer.install!
+          # @models, @associations = compact_associtions_into_models models, associations
+          # validate_models
+          # render_model_files
+          # update_initialize_method
+          # build_metamodel_framework unless config.skip_build?
         end
         UI.notice "Please drag MetaModel.framework into Embedded Binaries phrase.\n"
       end
@@ -44,27 +42,10 @@ module MetaModel
         end
       end
 
-      def resolve_template
-        resolver = Resolver.new
-        resolver.resolve
-      end
-
-      def compact_associtions_into_models(models, associations)
-        Translator.new(models, associations).translate
-      end
-
       def validate_models
         existing_types = @models.map { |m| m.properties.map { |property| property.type } }.flatten.uniq
         unsupported_types = existing_types - supported_types
         raise Informative, "Unsupported types #{unsupported_types}" unless unsupported_types == []
-      end
-
-      def render_model_files
-        UI.section "Generating model files" do
-          Renderer.new(@models, @associations).tap do |renderer|
-            renderer.render!
-          end
-        end
       end
 
       def update_initialize_method
