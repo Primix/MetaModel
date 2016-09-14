@@ -16,6 +16,22 @@ module MetaModel
       @metafile = metafile
     end
 
+    def prepare
+      clone_project
+    end
+
+    def clone_project
+      if File.exist? config.metamodel_xcode_project
+        UI.message "Existing project `#{config.metamodel_xcode_project}`"
+      else
+        UI.section "Cloning MetaModel project into `./metamodel` folder" do
+          Git.clone(config.metamodel_template_uri, 'metamodel', :depth => 1)
+          UI.message "Using `#{config.metamodel_xcode_project}` to build module"
+        end
+      end
+    end
+
+
     def install!
       @models = metafile.models
       @associations = metafile.associations
