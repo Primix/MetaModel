@@ -66,7 +66,7 @@ module MetaModel
       def build_table
         table = "CREATE TABLE #{table_name}"
         main_sql = @properties.map do |property|
-          result = "#{property.name} #{property.database_type}"
+          result = "#{property.name.underscore} #{property.database_type}"
           result << " PRIMARY KEY" if property.is_primary?
           result << " UNIQUE" if property.is_unique?
           result << " DEFAULT #{property.default_value}" if property.has_default_value?
@@ -78,7 +78,7 @@ module MetaModel
         #   "FOREIGN KEY(#{property.name}) REFERENCES #{reference_table_name}(privateId)"
         # end
 
-        table + "(privateId INTEGER PRIMARY KEY, #{(main_sql).compact.join(", ")});"
+        table + "(private_id INTEGER PRIMARY KEY, #{(main_sql).compact.join(", ")});"
       end
 
       private
