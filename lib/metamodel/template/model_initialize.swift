@@ -5,9 +5,9 @@ public struct <%= model.name %> {
     static let tableName = "<%= model.table_name %>"
 
     public enum Column: String, Unwrapped {
-        <% model.properties.each do |property| %><%= """case #{property.name} = \"#{property.name}\"""" %>
+        <% model.properties.each do |property| %><%= """case #{property.name} = \"#{property.name.underscore}\"""" %>
         <% end %>
-        case privateId = "privateId"
+        case privateId = "private_id"
         var unwrapped: String { get { return self.rawValue.unwrapped } }
     }
 
