@@ -4,7 +4,7 @@ extension <%= model.name %> {
         executeSQL(initializeTableSQL)
     }
     static func deinitialize() {
-        let dropTableSQL = "DROP TABLE \(tableName.unwrapped)"
+        let dropTableSQL = "DROP TABLE \(tableName)"
         executeSQL(dropTableSQL)
     }
 }

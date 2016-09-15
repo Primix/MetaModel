@@ -8,7 +8,6 @@ public struct <%= model.name %> {
         <% model.properties.each do |property| %><%= """case #{property.name} = \"#{property.name.underscore}\"""" %>
         <% end %>
         case privateId = "private_id"
-        var unwrapped: String { get { return self.rawValue.unwrapped } }
     }
 
     public init(<%= model.property_key_type_pairs false %>) {
@@ -34,7 +33,7 @@ public struct <%= model.name %> {
         <%= """columnsSQL.append(.#{property.name})
         valuesSQL.append(#{property.name})
         """ %><% end %><% end %>
-        let insertSQL = "INSERT INTO \(tableName.unwrapped) (\(columnsSQL.map { $0.rawValue }.joinWithSeparator(", "))) VALUES (\(valuesSQL.map { $0.unwrapped }.joinWithSeparator(", ")))"
+        let insertSQL = "INSERT INTO \(tableName) (\(columnsSQL.map { $0.rawValue }.joinWithSeparator(", "))) VALUES (\(valuesSQL.map { $0.unwrapped }.joinWithSeparator(", ")))"
         guard let _ = executeSQL(insertSQL),
           let lastInsertRowId = executeScalarSQL("SELECT last_insert_rowid();") as? Int64 else { return nil }
         var result = <%= model.name %>(<%= model.property_key_value_pairs %>)

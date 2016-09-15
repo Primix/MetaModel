@@ -94,13 +94,13 @@ public extension <%= model.relation_name %> {
             }
 
             if let value = value as? String {
-                filterByEqual(value.unwrapped)
+                filterByEqual(value)
             } else if let value = value as? Int {
                 filterByEqual(value)
             } else if let value = value as? Double {
                 filterByEqual(value)
             } else if let value = value as? [String] {
-                filterByIn(value.map { $0.unwrapped })
+                filterByIn(value.map { $0 })
             } else if let value = value as? [Int] {
                 filterByIn(value.map { $0.description })
             } else if let value = value as? [Double] {
@@ -132,7 +132,7 @@ public extension <%= model.relation_name %> {
     }
 
     func orderBy(column: <%= model.name %>.Column, asc: Bool) -> Self {
-        self.order.append("\(expandColumn(column)) \(asc ? "ASC".unwrapped : "DESC".unwrapped)")
+        self.order.append("\(expandColumn(column)) \(asc ? "ASC" : "DESC")")
         return self
     }
 }

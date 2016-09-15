@@ -13,11 +13,11 @@ public extension <%= model.name %> {
         if let attributes = attributes as? [<%= model.name %>.Column: Unwrapped] {
             for (key, value) in attributes {
                 switch key {
-                <% model.properties_exclude_id.each do |property| %><%= """case .#{property.name}: setSQL.append(\"\\(key.unwrapped) = \\(value.unwrapped)\")""" %>
+                <% model.properties_exclude_id.each do |property| %><%= """case .#{property.name}: setSQL.append(\"\\(key) = \\(value.unwrapped)\")""" %>
                 <% end %>default: break
                 }
             }
-            let updateSQL = "UPDATE \(<%= model.name %>.tableName.unwrapped) SET \(setSQL.joinWithSeparator(", ")) \(itself)"
+            let updateSQL = "UPDATE \(<%= model.name %>.tableName) SET \(setSQL.joinWithSeparator(", ")) \(itself)"
             executeSQL(updateSQL) {
                 for (key, value) in attributes {
                     switch key {

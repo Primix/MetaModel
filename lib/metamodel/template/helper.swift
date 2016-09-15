@@ -3,7 +3,7 @@
 public class <%= model.relation_name %>: Relation<<%= model.name %>> {
     override init() {
         super.init()
-        self.select = "SELECT \(<%= model.name %>.tableName.unwrapped).* FROM \(<%= model.name %>.tableName.unwrapped)"
+        self.select = "SELECT \(<%= model.name %>.tableName).* FROM \(<%= model.name %>.tableName)"
     }
 
     override var result: [<%= model.name %>] {
@@ -18,7 +18,7 @@ public class <%= model.relation_name %>: Relation<<%= model.name %>> {
     }
 
     func expandColumn(column: <%= model.name %>.Column) -> String {
-        return "\(<%= model.name %>.tableName.unwrapped).\(column.unwrapped)"
+        return "\(<%= model.name %>.tableName).\(column)"
     }
 }
 
@@ -34,7 +34,7 @@ extension <%= model.name %> {
 }
 
 extension <%= model.name %> {
-    var itself: String { get { return "WHERE \(<%= model.name %>.tableName.unwrapped).\("private_id".unwrapped) = \(privateId)" } }
+    var itself: String { get { return "WHERE \(<%= model.name %>.tableName).\("private_id") = \(privateId)" } }
 }
 
 extension <%= model.relation_name %> {

@@ -3,7 +3,7 @@
 public extension <%= model.name %> {
     var delete: Bool {
         get {
-            let deleteSQL = "DELETE FROM \(<%= model.name %>.tableName.unwrapped) \(itself)"
+            let deleteSQL = "DELETE FROM \(<%= model.name %>.tableName) \(itself)"
             executeSQL(deleteSQL)
             return true
         }
