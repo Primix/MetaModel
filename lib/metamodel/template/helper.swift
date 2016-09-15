@@ -34,7 +34,7 @@ extension <%= model.name %> {
 }
 
 extension <%= model.name %> {
-    var itself: String { get { return "WHERE \(<%= model.name %>.tableName).\("private_id") = \(privateId)" } }
+    var itself: String { get { return "WHERE \(<%= model.name %>.tableName).private_id = \(privateId)" } }
 }
 
 extension <%= model.relation_name %> {
@@ -47,7 +47,7 @@ extension <%= model.relation_name %> {
     }
 
     func filter(privateId: Int) -> Self {
-        self.filter.append("\"private_id\" = \(privateId)")
+        self.filter.append("private_id = \(privateId)")
         return self
     }
 }
