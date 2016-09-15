@@ -27,7 +27,7 @@ struct <%= association.class_name %> {
         var models: [#{association.class_name}] = []
         guard let stmt = executeSQL(query) else { return models }
         for values in stmt {
-            let association = #{association.class_name})(values: values)
+            let association = #{association.class_name}(values: values)
             models.append(association)
         }
         return models
