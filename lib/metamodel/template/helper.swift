@@ -42,6 +42,10 @@ extension <%= model.relation_name %> {
         return filter(privateId)
     }
 
+    func find(privateIds: [Int]) -> Self {
+        return filter([.privateId: privateIds])
+    }
+
     func filter(privateId: Int) -> Self {
         self.filter.append("\"privateId\" = \(privateId)")
         return self

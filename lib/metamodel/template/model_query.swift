@@ -29,6 +29,10 @@ public extension <%= model.name %> {
         return <%= model.relation_name %>().find(id).first
     }
 
+    static func find(ids: [Int]) -> <%= model.relation_name %> {
+        return <%= model.relation_name %>().find(ids)
+    }
+
     static func findBy(<%= model.property_key_type_pairs(true, true) %>) -> <%= model.relation_name %> {
         return <%= model.relation_name %>().findBy(<%= model.property_key_value_pairs %>)
     }
