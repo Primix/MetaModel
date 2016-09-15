@@ -28,6 +28,14 @@ module MetaModel
         "#{secondary_model.name}#{major_model.name}Association".camelize
       end
 
+      def major_model_id
+        major_model.foreign_id
+      end
+
+      def secondary_model_id
+        secondary_model.foreign_id
+      end
+
       def expect_constraint?(constraint)
         result = true
         result &= self.major_model == constraint.secondary_model

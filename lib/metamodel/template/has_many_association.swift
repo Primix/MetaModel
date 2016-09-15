@@ -12,13 +12,13 @@ typealias <%= association.reverse_class_name %> = <%= association.class_name %>
 
 struct <%= association.class_name %> {
     var privateId: Int = 0
-    var <%= association.major_model.foreign_id %>: Int = 0
-    var <%= association.secondary_model.foreign_id %>: Int = 0
+    var <%= association.major_model_id %>: Int = 0
+    var <%= association.secondary_model_id %>: Int = 0
 
     enum Association: String {
         case privateId = "private_id"
-        case <%= association.major_model.foreign_id %> = "<%= association.major_model.foreign_id.underscore %>"
-        case <%= association.secondary_model.foreign_id %> = "<%= association.secondary_model.foreign_id.underscore %>"
+        case <%= association.major_model_id %> = "<%= association.major_model_id.underscore %>"
+        case <%= association.secondary_model_id %> = "<%= association.secondary_model_id.underscore %>"
     }
     <% [association.major_model, association.secondary_model].each do |model| %>
     <%= """static func findBy(#{model.foreign_id} #{model.foreign_id}: Int) -> [#{association.class_name}] {
@@ -39,12 +39,18 @@ struct <%= association.class_name %> {
 }
 
 extension <%= association.class_name %> {
+    static func create(<%= association.major_model_id %> <%= association.major_model_id %>: Int, <%= association.secondary_model_id %>: Int) {
+        executeSQL("INSERT INTO \(<%= association.class_name %>.tableName) (<%= association.major_model_id %>, <%= association.secondary_model_id %>) VALUES (\(<%= association.major_model_id %>), \(<%= association.secondary_model_id %>)))")
+    }
+}
+
+extension <%= association.class_name %> {
     init(values: Array<Optional<Binding>>) {
         let privateId: Int64 = values[0] as! Int64
-        let <%= association.major_model.foreign_id %>: Int64 = values[1] as! Int64
-        let <%= association.secondary_model.foreign_id %>: Int64 = values[2] as! Int64
+        let <%= association.major_model_id %>: Int64 = values[1] as! Int64
+        let <%= association.secondary_model_id %>: Int64 = values[2] as! Int64
 
-        self.init(privateId: Int(privateId), <%= association.major_model.foreign_id %>: Int(<%= association.major_model.foreign_id %>), <%= association.secondary_model.foreign_id %>: Int(<%= association.secondary_model.foreign_id %>))
+        self.init(privateId: Int(privateId), <%= association.major_model_id %>: Int(<%= association.major_model_id %>), <%= association.secondary_model_id %>: Int(<%= association.secondary_model_id %>))
     }
 }
 
@@ -54,10 +60,10 @@ extension <%= association.class_name %> {
     static func initialize() {
         let initializeTableSQL = "CREATE TABLE \(tableName)(" +
           "private_id INTEGER PRIMARY KEY, " +
-          "<%= association.major_model.foreign_id.underscore %> INTEGER NOT NULL, " +
-          "<%= association.secondary_model.foreign_id.underscore %> INTEGER NOT NULL, " +
-          "FOREIGN KEY(<%= association.major_model.foreign_id.underscore %>) REFERENCES <%= association.major_model.table_name %>(private_id)," +
-          "FOREIGN KEY(<%= association.secondary_model.foreign_id.underscore %>) REFERENCES <%= association.secondary_model.table_name %>(private_id)" +
+          "<%= association.major_model_id.underscore %> INTEGER NOT NULL, " +
+          "<%= association.secondary_model_id.underscore %> INTEGER NOT NULL, " +
+          "FOREIGN KEY(<%= association.major_model_id.underscore %>) REFERENCES <%= association.major_model.table_name %>(private_id)," +
+          "FOREIGN KEY(<%= association.secondary_model_id.underscore %>) REFERENCES <%= association.secondary_model.table_name %>(private_id)" +
         ");"
 
         executeSQL(initializeTableSQL)
@@ -71,7 +77,7 @@ extension <%= association.class_name %> {
 public extension <%= association.major_model.name %> {
    var <%= association.name %>: <%= association.secondary_model.relation_name %> {
         get {
-            let ids = <%= association.class_name %>.findBy(<%= association.major_model.foreign_id %>: privateId).map { $0.<%= association.secondary_model.foreign_id %> }
+            let ids = <%= association.class_name %>.findBy(<%= association.major_model_id %>: privateId).map { $0.<%= association.secondary_model_id %> }
             return <%= association.secondary_model.name %>.find(ids)
         }
     }
