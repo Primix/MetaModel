@@ -92,10 +92,12 @@ module MetaModel
         association_group.clear
         association_group.set_source_tree('SOURCE_ROOT')
 
+        has_many_association_template = File.read File.expand_path(File.join(File.dirname(__FILE__), "../template/has_many_association.swift"))
+        belongs_to_association_template = File.read File.expand_path(File.join(File.dirname(__FILE__), "../template/belongs_to_association.swift"))
+
         file_refs = []
         @associations.each do |association|
-          # next unless association.relation.to_s.start_with? "has"
-          template = File.read File.expand_path(File.join(File.dirname(__FILE__), "../template/association.swift"))
+          template = association.relation == :has_many ? has_many_association_template : belongs_to_association_template
           result = ErbalTemplate::render_from_hash(template, { :association => association })
           file_name = "#{association.class_name}.swift"
           File.write Pathname.new("./metamodel/MetaModel/#{file_name}"), result

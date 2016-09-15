@@ -8,7 +8,6 @@
 
 import Foundation
 
-<% if association.relation.to_s.start_with? "has" %>
 typealias <%= association.reverse_class_name %> = <%= association.class_name %>
 
 struct <%= association.class_name %> {
@@ -77,13 +76,3 @@ public extension <%= association.major_model.name %> {
         }
     }
 }
-<% else %>
-public extension <%= association.major_model.name %> {
-   var <%= association.name %>: <%= association.secondary_model.name %>? {
-        get {
-            guard let id = <%= association.class_name %>.findBy(<%= association.major_model.foreign_id %>: privateId).first?.commentId else { return nil }
-            return <%= association.secondary_model.name %>.find(id)
-        }
-    }
-}
-<% end %>
