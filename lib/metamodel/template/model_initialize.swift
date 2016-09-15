@@ -4,10 +4,12 @@ public struct <%= model.name %> {
     <% end %>
     static let tableName = "<%= model.table_name %>"
 
-    public enum Column: String, Unwrapped {
+    public enum Column: String, CustomStringConvertible {
         <% model.properties.each do |property| %><%= """case #{property.name} = \"#{property.name.underscore}\"""" %>
         <% end %>
         case privateId = "private_id"
+
+        public var description: String { get { return self.rawValue } }
     }
 
     public init(<%= model.property_key_type_pairs false %>) {

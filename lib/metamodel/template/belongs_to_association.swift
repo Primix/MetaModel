@@ -10,7 +10,7 @@ import Foundation
 
 extension <%= association.class_name %> {
     static func create(<%= association.major_model_id %> <%= association.major_model_id %>: Int, <%= association.secondary_model_id %>: Int) {
-        executeSQL("INSERT INTO \(<%= association.class_name %>.tableName) (<%= association.major_model_id %>, <%= association.secondary_model_id %>) VALUES (\(<%= association.major_model_id %>), \(<%= association.secondary_model_id %>)))")
+        executeSQL("INSERT INTO \(<%= association.class_name %>.tableName) (<%= association.major_model_id.underscore %>, <%= association.secondary_model_id.underscore %>) VALUES (\(<%= association.major_model_id %>), \(<%= association.secondary_model_id %>))")
     }
 }
 

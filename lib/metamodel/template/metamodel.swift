@@ -27,5 +27,12 @@ public class MetaModel {
             #{model.name}.initialize()
         }""" %>
         <% end %>
+
+        <% associations.each do |association| %><% if association.relation.to_s.start_with? "has" %><%= """if infos[#{association.class_name}.tableName] != \"#{association.hash_value}\" {
+            updateMetaModelTableInfos(#{association.class_name}.tableName, hashValue: \"#{association.hash_value}\")
+            #{association.class_name}.deinitialize()
+            #{association.class_name}.initialize()
+        }""" %>
+        <% end %><% end %>
     }
 }

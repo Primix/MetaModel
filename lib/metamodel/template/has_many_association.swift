@@ -15,10 +15,11 @@ struct <%= association.class_name %> {
     var <%= association.major_model_id %>: Int = 0
     var <%= association.secondary_model_id %>: Int = 0
 
-    enum Association: String {
+    enum Association: String, CustomStringConvertible {
         case privateId = "private_id"
         case <%= association.major_model_id %> = "<%= association.major_model_id.underscore %>"
         case <%= association.secondary_model_id %> = "<%= association.secondary_model_id.underscore %>"
+        var description: String { get { return self.rawValue } }
     }
     <% [association.major_model, association.secondary_model].each do |model| %>
     <%= """static func findBy(#{model.foreign_id} #{model.foreign_id}: Int) -> [#{association.class_name}] {
@@ -40,7 +41,7 @@ struct <%= association.class_name %> {
 
 extension <%= association.class_name %> {
     static func create(<%= association.major_model_id %> <%= association.major_model_id %>: Int, <%= association.secondary_model_id %>: Int) {
-        executeSQL("INSERT INTO \(<%= association.class_name %>.tableName) (<%= association.major_model_id %>, <%= association.secondary_model_id %>) VALUES (\(<%= association.major_model_id %>), \(<%= association.secondary_model_id %>)))")
+        executeSQL("INSERT INTO \(<%= association.class_name %>.tableName) (<%= association.major_model_id.underscore %>, <%= association.secondary_model_id.underscore %>) VALUES (\(<%= association.major_model_id %>), \(<%= association.secondary_model_id %>))")
     }
 }
 
@@ -84,5 +85,15 @@ public extension <%= association.major_model.name %> {
             <%= association.class_name %>.findBy(<%= association.major_model_id %>: privateId).forEach { $0.delete() }
             newValue.forEach { <%= association.class_name %>.create(<%= association.major_model_id %>: privateId, <%= association.secondary_model_id %>: $0.privateId) }
         }
+    }
+
+    func create<%= association.secondary_model.name %>(<%= association.secondary_model.property_key_type_pairs %>) -> <%= association.secondary_model.name %>? {
+        guard let result = <%= association.secondary_model.name %>.create(<%= association.secondary_model.property_key_value_pairs %>) else { return nil }
+        <%= association.class_name %>.create(<%= association.major_model_id %>: privateId, <%= association.secondary_model_id %>: result.privateId)
+        return result
+    }
+
+    func append<%= association.secondary_model.name %>(<%= association.secondary_model.property_key_type_pairs %>) -> <%= association.secondary_model.name %>? {
+        return create<%= association.secondary_model.name %>(<%= association.secondary_model.property_key_value_pairs %>)
     }
 }

@@ -36,6 +36,10 @@ module MetaModel
         secondary_model.foreign_id
       end
 
+      def hash_value
+        self.hash.to_s(16)
+      end
+
       def expect_constraint?(constraint)
         result = true
         result &= self.major_model == constraint.secondary_model
