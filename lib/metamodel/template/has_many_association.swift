@@ -75,10 +75,14 @@ extension <%= association.class_name %> {
 }
 
 public extension <%= association.major_model.name %> {
-   var <%= association.name %>: <%= association.secondary_model.relation_name %> {
+    var <%= association.name %>: [<%= association.secondary_model.name %>] {
         get {
             let ids = <%= association.class_name %>.findBy(<%= association.major_model_id %>: privateId).map { $0.<%= association.secondary_model_id %> }
-            return <%= association.secondary_model.name %>.find(ids)
+            return <%= association.secondary_model.name %>.find(ids).result
+        }
+        set {
+            <%= association.class_name %>.findBy(<%= association.major_model_id %>: privateId).forEach { $0.delete() }
+            newValue.forEach { <%= association.class_name %>.create(<%= association.major_model_id %>: privateId, <%= association.secondary_model_id %>: $0.privateId) }
         }
     }
 }
