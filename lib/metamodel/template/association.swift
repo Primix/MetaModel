@@ -33,6 +33,9 @@ struct <%= association.class_name %> {
         return models
     }""" %>
     <% end %>
+    func delete() {
+        executeSQL("DELETE * FROM \(<%= association.class_name %>.tableName) WHERE \(Association.privateId) = \(privateId)")
+    }
 }
 
 extension <%= association.class_name %> {
