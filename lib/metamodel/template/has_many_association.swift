@@ -56,7 +56,6 @@ extension <%= association.class_name %> {
 }
 
 extension <%= association.class_name %> {
-
     static let tableName = "<%= association.class_name.underscore %>"
     static func initialize() {
         let initializeTableSQL = "CREATE TABLE \(tableName)(" +
@@ -68,10 +67,38 @@ extension <%= association.class_name %> {
         ");"
 
         executeSQL(initializeTableSQL)
+        initializeTrigger()
     }
+
     static func deinitialize() {
         let dropTableSQL = "DROP TABLE \(tableName)"
         executeSQL(dropTableSQL)
+        deinitializeTrigger()
+    }
+
+    static func initializeTrigger() {
+        let majorDeleteTrigger = "CREATE TRIGGER <%= association.major_model.name.underscore %>_delete_trigger " +
+            "AFTER DELETE ON <%= association.major_model.table_name %> " +
+            "FOR EACH ROW BEGIN " +
+                "DELETE FROM \(tableName) WHERE private_id = OLD.private_id; " +
+            "END;";
+
+        let secondaryDeleteTrigger = "CREATE TRIGGER <%= association.secondary_model.name.underscore %>_delete_trigger " +
+            "AFTER DELETE ON <%= association.secondary_model.table_name %> " +
+            "FOR EACH ROW BEGIN " +
+                "DELETE FROM \(tableName) WHERE private_id = OLD.private_id; " +
+            "END;";
+
+        executeSQL(majorDeleteTrigger)
+        executeSQL(secondaryDeleteTrigger)
+    }
+
+    static func deinitializeTrigger() {
+        let dropMajorTrigger = "DROP TRIGGER IF EXISTS <%= association.major_model.name.underscore %>_delete_trigger;"
+        executeSQL(dropMajorTrigger)
+
+        let dropSecondaryTrigger = "DROP TRIGGER IF EXISTS <%= association.secondary_model.name.underscore %>_delete_trigger;"
+        executeSQL(dropSecondaryTrigger)
     }
 }
 
