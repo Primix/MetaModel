@@ -8,12 +8,13 @@
 
 import Foundation
 
+<% if association.relation.to_s.start_with? "has" %>
 typealias <%= association.reverse_class_name %> = <%= association.class_name %>
 
 struct <%= association.class_name %> {
-    private var privateId: Int = 0
-    private var <%= association.major_model.foreign_id %>: Int = 0
-    private var <%= association.secondary_model.foreign_id %>: Int = 0
+    var privateId: Int = 0
+    var <%= association.major_model.foreign_id %>: Int = 0
+    var <%= association.secondary_model.foreign_id %>: Int = 0
 
     enum Association: String {
         case privateId = "private_id"
@@ -21,7 +22,7 @@ struct <%= association.class_name %> {
         case <%= association.secondary_model.foreign_id %> = "<%= association.secondary_model.foreign_id.underscore %>"
     }
     <% [association.major_model, association.secondary_model].each do |model| %>
-    <%= """static func findBy#{model.foreign_id.camelize}(#{model.foreign_id}: Int) -> [#{association.class_name}] {
+    <%= """static func findBy(#{model.foreign_id} #{model.foreign_id}: Int) -> [#{association.class_name}] {
         let query = \"SELECT * FROM \\(tableName) WHERE \\(Association.#{model.foreign_id}) = \\(#{model.foreign_id})\"
 
         var models: [#{association.class_name}] = []
@@ -67,3 +68,22 @@ extension <%= association.class_name %> {
         executeSQL(dropTableSQL)
     }
 }
+
+public extension <%= association.major_model.name %> {
+   var <%= association.name %>: <%= association.secondary_model.relation_name %> {
+        get {
+            let ids = <%= association.class_name %>.findBy(<%= association.major_model.foreign_id %>: privateId).map { $0.<%= association.secondary_model.foreign_id %> }
+            return <%= association.secondary_model.name %>.find(ids)
+        }
+    }
+}
+<% else %>
+public extension <%= association.major_model.name %> {
+   var <%= association.name %>: <%= association.secondary_model.name %>? {
+        get {
+            guard let id = <%= association.class_name %>.findBy(<%= association.major_model.foreign_id %>: privateId).first?.commentId else { return nil }
+            return <%= association.secondary_model.name %>.find(id)
+        }
+    }
+}
+<% end %>

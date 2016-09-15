@@ -94,7 +94,7 @@ module MetaModel
 
         file_refs = []
         @associations.each do |association|
-          next unless association.relation.to_s.start_with? "has"
+          # next unless association.relation.to_s.start_with? "has"
           template = File.read File.expand_path(File.join(File.dirname(__FILE__), "../template/association.swift"))
           result = ErbalTemplate::render_from_hash(template, { :association => association })
           file_name = "#{association.class_name}.swift"
