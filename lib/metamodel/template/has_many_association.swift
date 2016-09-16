@@ -23,7 +23,7 @@ struct <%= association.class_name %> {
     }
     <% [association.major_model, association.secondary_model].each do |model| %>
     <%= """static func findBy(#{model.foreign_id} #{model.foreign_id}: Int) -> [#{association.class_name}] {
-        let query = \"SELECT * FROM \\(tableName) WHERE \\(Association.#{model.foreign_id}) = \\(#{model.foreign_id})\"
+        let query = \"SELECT * FROM \\(tableName) WHERE #{model.foreign_id.underscore} = \\(#{model.foreign_id})\"
 
         var models: [#{association.class_name}] = []
         guard let stmt = executeSQL(query) else { return models }
@@ -35,7 +35,7 @@ struct <%= association.class_name %> {
     }""" %>
     <% end %>
     func delete() {
-        executeSQL("DELETE * FROM \(<%= association.class_name %>.tableName) WHERE \(Association.privateId) = \(privateId)")
+        executeSQL("DELETE * FROM \(<%= association.class_name %>.tableName) WHERE private_id = \(privateId)")
     }
 }
 
