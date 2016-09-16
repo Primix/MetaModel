@@ -16,26 +16,6 @@ module MetaModel
         @project = Xcodeproj::Project.open(Config.instance.metamodel_xcode_project)
       end
 
-      SWIFT_TEMPLATES_FILES = %w(
-        file_header
-        table_initialize
-        model_initialize
-        model_update
-        model_query
-        model_delete
-        static_methods
-        helper
-      )
-
-      def model_swift_templates
-        [].tap do |templates|
-          SWIFT_TEMPLATES_FILES.each do |file_path|
-            template = File.read File.expand_path(File.join(File.dirname(__FILE__), "../template/#{file_path}.swift"))
-            templates << template
-          end
-        end
-      end
-
       def render!
         remove_previous_files_refereneces
         UI.section "Generating model files" do
@@ -92,9 +72,6 @@ module MetaModel
         association_group.clear
         association_group.set_source_tree('SOURCE_ROOT')
 
-        has_many_association_template = File.read File.expand_path(File.join(File.dirname(__FILE__), "../template/has_many_association.swift"))
-        belongs_to_association_template = File.read File.expand_path(File.join(File.dirname(__FILE__), "../template/belongs_to_association.swift"))
-
         file_refs = []
         @associations.each do |association|
           template = association.relation == :has_many ? has_many_association_template : belongs_to_association_template
@@ -111,6 +88,33 @@ module MetaModel
 
       private
 
+      SWIFT_TEMPLATES_FILES = %w(
+        file_header
+        table_initialize
+        model_initialize
+        model_update
+        model_query
+        model_delete
+        static_methods
+        helper
+      )
+
+      def model_swift_templates
+        [].tap do |templates|
+          SWIFT_TEMPLATES_FILES.each do |file_path|
+            template = File.read File.expand_path(File.join(File.dirname(__FILE__), "../template/model/#{file_path}.swift"))
+            templates << template
+          end
+        end
+      end
+
+      def has_many_association_template
+        File.read File.expand_path(File.join(File.dirname(__FILE__), "../template/association/has_many_association.swift"))
+      end
+
+      def belongs_to_association_template
+        File.read File.expand_path(File.join(File.dirname(__FILE__), "../template/association/belongs_to_association.swift"))
+      end
     end
   end
 end

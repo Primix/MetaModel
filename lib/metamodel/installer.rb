@@ -24,6 +24,7 @@ module MetaModel
       end
 
       update_initialize_method
+      update_packing_file
       build_metamodel_framework unless config.skip_build?
     end
 
@@ -31,6 +32,13 @@ module MetaModel
       template = File.read File.expand_path(File.join(File.dirname(__FILE__), "./template/metamodel.swift"))
       result = ErbalTemplate::render_from_hash(template, { :models => @models, :associations => @associations })
       model_path = Pathname.new("./metamodel/MetaModel/MetaModel.swift")
+      File.write model_path, result
+    end
+
+    def update_packing_file
+      template = File.read File.expand_path(File.join(File.dirname(__FILE__), "./template/packing.swift"))
+      result = ErbalTemplate::render_from_hash(template, { :models => @models, :associations => @associations })
+      model_path = Pathname.new("./metamodel/MetaModel/Packing.swift")
       File.write model_path, result
     end
 

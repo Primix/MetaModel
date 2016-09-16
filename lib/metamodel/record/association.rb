@@ -91,6 +91,10 @@ module MetaModel
         @relation == :belongs_to
       end
 
+      def is_active?
+        has_one? || has_many?
+      end
+
       def type
         case @relation
         when :has_one, :has_many, :belongs_to then secondary_model.name

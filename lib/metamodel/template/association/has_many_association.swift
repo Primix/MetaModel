@@ -48,16 +48,6 @@ extension <%= association.class_name %> {
     }
 }
 
-extension <%= association.class_name %>: Packing {
-    init(values: Array<Optional<Binding>>) {
-        let privateId: Int64 = values[0] as! Int64
-        let <%= association.major_model_id %>: Int64 = values[1] as! Int64
-        let <%= association.secondary_model_id %>: Int64 = values[2] as! Int64
-
-        self.init(privateId: Int(privateId), <%= association.major_model_id %>: Int(<%= association.major_model_id %>), <%= association.secondary_model_id %>: Int(<%= association.secondary_model_id %>))
-    }
-}
-
 extension <%= association.class_name %> {
     static let tableName = "<%= association.class_name.underscore %>"
     static func initialize() {

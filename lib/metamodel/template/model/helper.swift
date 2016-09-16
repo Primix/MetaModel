@@ -17,17 +17,6 @@ public class <%= model.relation_name %>: Relation<<%= model.name %>> {
     }
 }
 
-extension <%= model.name %>: Packing {
-    init(values: Array<Optional<Binding>>) {
-        <% model.properties.each_with_index do |property, index| %><%= """let #{property.name}: #{property.real_type} = values[#{index+1}] as! #{property.real_type}""" %>
-        <% end %>
-        self.init(<%= model.property_key_value_pairs true %>)
-
-        let privateId: Int64 = values[0] as! Int64
-        self.privateId = Int(privateId)
-    }
-}
-
 extension <%= model.name %> {
     var itself: String { get { return "WHERE \(<%= model.name %>.tableName).private_id = \(privateId)" } }
 }
