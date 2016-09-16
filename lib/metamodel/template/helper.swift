@@ -8,12 +8,7 @@ public class <%= model.relation_name %>: Relation<<%= model.name %>> {
 
     override var result: [<%= model.name %>] {
         get {
-            var models: [<%= model.name %>] = []
-            guard let stmt = executeSQL(query) else { return models }
-            for values in stmt {
-                models.append(<%= model.name %>(values: values))
-            }
-            return models
+            return MetaModels.fromQuery(query)
         }
     }
 
@@ -22,7 +17,7 @@ public class <%= model.relation_name %>: Relation<<%= model.name %>> {
     }
 }
 
-extension <%= model.name %> {
+extension <%= model.name %>: Packing {
     init(values: Array<Optional<Binding>>) {
         <% model.properties.each_with_index do |property, index| %><%= """let #{property.name}: #{property.real_type} = values[#{index+1}] as! #{property.real_type}""" %>
         <% end %>

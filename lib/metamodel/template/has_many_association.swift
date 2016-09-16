@@ -21,18 +21,21 @@ struct <%= association.class_name %> {
         case <%= association.secondary_model_id %> = "<%= association.secondary_model_id.underscore %>"
         var description: String { get { return self.rawValue } }
     }
-    <% [association.major_model, association.secondary_model].each do |model| %>
-    <%= """static func findBy(#{model.foreign_id} #{model.foreign_id}: Int) -> [#{association.class_name}] {
-        let query = \"SELECT * FROM \\(tableName) WHERE #{model.foreign_id.underscore} = \\(#{model.foreign_id})\"
-
-        var models: [#{association.class_name}] = []
-        guard let stmt = executeSQL(query) else { return models }
-        for values in stmt {
-            let association = #{association.class_name}(values: values)
-            models.append(association)
-        }
-        return models
-    }""" %>
+    <% [association.major_model, association.secondary_model].zip([association.secondary_model, association.major_model]).each do |first, second| %>
+    static func fetch<%= first.table_name.camelize %>(<%= second.foreign_id %> <%= second.foreign_id %>: Int, first: Bool = false) -> [<%= first.name %>] {
+        var query = "SELECT * FROM <%= first.table_name %> WHERE <%= first.table_name %>.private_id IN (" +
+            "SELECT private_id " +
+            "FROM \(tableName) " +
+            "WHERE \(Association.<%= second.foreign_id %>) = \(<%= second.foreign_id %>)" +
+        ")"
+        if first { query += "LIMIT 1" }
+        return MetaModels.fromQuery(query)
+    }
+    <% end %><% [association.major_model, association.secondary_model].each do |model| %>
+    static func findBy(<%= model.foreign_id %> <%= model.foreign_id %>: Int) -> [<%= association.class_name %>] {
+        let query = "SELECT * FROM \(tableName) WHERE <%= model.foreign_id.underscore %> = \(<%= model.foreign_id %>)"
+        return MetaModels.fromQuery(query)
+    }
     <% end %>
     func delete() {
         executeSQL("DELETE * FROM \(<%= association.class_name %>.tableName) WHERE private_id = \(privateId)")
@@ -45,7 +48,7 @@ extension <%= association.class_name %> {
     }
 }
 
-extension <%= association.class_name %> {
+extension <%= association.class_name %>: Packing {
     init(values: Array<Optional<Binding>>) {
         let privateId: Int64 = values[0] as! Int64
         let <%= association.major_model_id %>: Int64 = values[1] as! Int64
@@ -105,8 +108,7 @@ extension <%= association.class_name %> {
 public extension <%= association.major_model.name %> {
     var <%= association.name %>: [<%= association.secondary_model.name %>] {
         get {
-            let ids = <%= association.class_name %>.findBy(<%= association.major_model_id %>: privateId).map { $0.<%= association.secondary_model_id %> }
-            return <%= association.secondary_model.name %>.find(ids).result
+            return <%= association.class_name %>.fetch<%= association.secondary_model.name.tableize.camelize %>(<%= association.major_model.foreign_id %>: privateId)
         }
         set {
             <%= association.class_name %>.findBy(<%= association.major_model_id %>: privateId).forEach { $0.delete() }
