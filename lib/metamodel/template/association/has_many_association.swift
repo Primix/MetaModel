@@ -37,8 +37,10 @@ struct <%= association.class_name %> {
         return MetaModels.fromQuery(query)
     }
     <% end %>
-    @discardableResult func delete() {
-        executeSQL("DELETE * FROM \(<%= association.class_name %>.tableName) WHERE private_id = \(privateId)")
+    var delete: Void {
+        get {
+            executeSQL("DELETE * FROM \(<%= association.class_name %>.tableName) WHERE private_id = \(privateId)")
+        }
     }
 }
 
@@ -101,7 +103,7 @@ public extension <%= association.major_model.name %> {
             return <%= association.class_name %>.fetch<%= association.secondary_model.name.tableize.camelize %>(<%= association.major_model.foreign_id %>: privateId)
         }
         set {
-            <%= association.class_name %>.findBy(<%= association.major_model_id %>: privateId).forEach { $0.delete() }
+            <%= association.class_name %>.findBy(<%= association.major_model_id %>: privateId).forEach { $0.delete }
             newValue.forEach { <%= association.class_name %>.create(<%= association.major_model_id %>: privateId, <%= association.secondary_model_id %>: $0.privateId) }
         }
     }
