@@ -7,37 +7,37 @@ public extension <%= model.name %> {
 
     static var first: <%= model.name %>? {
         get {
-            return <%= model.relation_name %>().orderBy(.privateId, asc: true).first
+            return <%= model.relation_name %>().orderBy(column: .privateId, asc: true).first
         }
     }
 
     static var last: <%= model.name %>? {
         get {
-            return <%= model.relation_name %>().orderBy(.privateId, asc: false).first
+            return <%= model.relation_name %>().orderBy(column: .privateId, asc: false).first
         }
     }
 
     static func first(length: UInt) -> <%= model.relation_name %> {
-        return <%= model.relation_name %>().orderBy(.privateId, asc: true).limit(length)
+        return <%= model.relation_name %>().orderBy(column: .privateId, asc: true).limit(length)
     }
 
     static func last(length: UInt) -> <%= model.relation_name %> {
-        return <%= model.relation_name %>().orderBy(.privateId, asc: false).limit(length)
+        return <%= model.relation_name %>().orderBy(column: .privateId, asc: false).limit(length)
     }
 
-    static func find(id: Int) -> <%= model.name %>? {
-        return <%= model.relation_name %>().find(id).first
+    internal static func find(_ privateId: Int) -> <%= model.name %>? {
+        return <%= model.relation_name %>().find(privateId).first
     }
 
-    static func find(ids: [Int]) -> <%= model.relation_name %> {
-        return <%= model.relation_name %>().find(ids)
+    internal static func find(_ privateIds: [Int]) -> <%= model.relation_name %> {
+        return <%= model.relation_name %>().find(privateIds)
     }
 
-    static func findBy(<%= model.property_key_type_pairs(true, true) %>) -> <%= model.relation_name %> {
+    static func findBy(<%= model.property_key_type_pairs(true) %>) -> <%= model.relation_name %> {
         return <%= model.relation_name %>().findBy(<%= model.property_key_value_pairs %>)
     }
 
-    static func filter(<%= model.property_key_type_pairs(true, true) %>) -> <%= model.relation_name %> {
+    static func filter(<%= model.property_key_type_pairs(true) %>) -> <%= model.relation_name %> {
         return <%= model.relation_name %>().filter(<%= model.property_key_value_pairs %>)
     }
 
@@ -54,30 +54,30 @@ public extension <%= model.name %> {
     }
 
     static func groupBy(columns: <%= model.name %>.Column...) -> <%= model.relation_name %> {
-        return <%= model.relation_name %>().groupBy(columns)
+        return <%= model.relation_name %>().groupBy(columns: columns)
     }
 
     static func groupBy(columns: [<%= model.name %>.Column]) -> <%= model.relation_name %> {
-        return <%= model.relation_name %>().groupBy(columns)
+        return <%= model.relation_name %>().groupBy(columns: columns)
     }
 
     static func orderBy(column: <%= model.name %>.Column) -> <%= model.relation_name %> {
-        return <%= model.relation_name %>().orderBy(column)
+        return <%= model.relation_name %>().orderBy(column: column)
     }
 
     static func orderBy(column: <%= model.name %>.Column, asc: Bool) -> <%= model.relation_name %> {
-        return <%= model.relation_name %>().orderBy(column, asc: asc)
+        return <%= model.relation_name %>().orderBy(column: column, asc: asc)
     }
 }
 
 public extension <%= model.relation_name %> {
-    func findBy(<%= model.property_key_type_pairs(true, true) %>) -> Self {
+    func findBy(<%= model.property_key_type_pairs(true) %>) -> Self {
         var attributes: [<%= model.name %>.Column: Any] = [:]
         <% model.properties.each do |property| %><%= "if (#{property.name} != #{property.type_without_optional}DefaultValue) { attributes[.#{property.name}] = #{property.name} }" %>
-        <% end %>return self.filter(attributes)
+        <% end %>return self.filter(conditions: attributes)
     }
 
-    func filter(<%= model.property_key_type_pairs(true, true) %>) -> Self {
+    func filter(<%= model.property_key_type_pairs(true) %>) -> Self {
         return findBy(<%= model.property_key_value_pairs %>)
     }
 
@@ -85,12 +85,12 @@ public extension <%= model.relation_name %> {
         for (column, value) in conditions {
             let columnSQL = "\(expandColumn(column))"
 
-            func filterByEqual(value: Any) {
+            func filterByEqual(_ value: Any) {
                 self.filter.append("\(columnSQL) = \(value)")
             }
 
-            func filterByIn(value: [String]) {
-                self.filter.append("\(columnSQL) IN (\(value.joinWithSeparator(", ")))")
+            func filterByIn(_ value: [String]) {
+                self.filter.append("\(columnSQL) IN (\(value.joined(separator: ", ")))")
             }
 
             if let value = value as? String {
@@ -115,7 +115,7 @@ public extension <%= model.relation_name %> {
     }
 
     func groupBy(columns: <%= model.name %>.Column...) -> Self {
-        return self.groupBy(columns)
+        return self.groupBy(columns: columns)
     }
 
     func groupBy(columns: [<%= model.name %>.Column]) -> Self {

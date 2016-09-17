@@ -22,7 +22,7 @@ struct <%= association.class_name %> {
         var description: String { get { return self.rawValue } }
     }
     <% [association.major_model, association.secondary_model].zip([association.secondary_model, association.major_model]).each do |first, second| %>
-    static func fetch<%= first.table_name.camelize %>(<%= second.foreign_id %> <%= second.foreign_id %>: Int, first: Bool = false) -> [<%= first.name %>] {
+    static func fetch<%= first.table_name.camelize %>(<%= second.foreign_id %>: Int, first: Bool = false) -> [<%= first.name %>] {
         var query = "SELECT * FROM <%= first.table_name %> WHERE <%= first.table_name %>.private_id IN (" +
             "SELECT private_id " +
             "FROM \(tableName) " +
@@ -32,18 +32,18 @@ struct <%= association.class_name %> {
         return MetaModels.fromQuery(query)
     }
     <% end %><% [association.major_model, association.secondary_model].each do |model| %>
-    static func findBy(<%= model.foreign_id %> <%= model.foreign_id %>: Int) -> [<%= association.class_name %>] {
+    static func findBy(<%= model.foreign_id %>: Int) -> [<%= association.class_name %>] {
         let query = "SELECT * FROM \(tableName) WHERE <%= model.foreign_id.underscore %> = \(<%= model.foreign_id %>)"
         return MetaModels.fromQuery(query)
     }
     <% end %>
-    func delete() {
+    @discardableResult func delete() {
         executeSQL("DELETE * FROM \(<%= association.class_name %>.tableName) WHERE private_id = \(privateId)")
     }
 }
 
 extension <%= association.class_name %> {
-    static func create(<%= association.major_model_id %> <%= association.major_model_id %>: Int, <%= association.secondary_model_id %>: Int) {
+    static func create(<%= association.major_model_id %>: Int, <%= association.secondary_model_id %>: Int) {
         executeSQL("INSERT INTO \(<%= association.class_name %>.tableName) (<%= association.major_model_id.underscore %>, <%= association.secondary_model_id.underscore %>) VALUES (\(<%= association.major_model_id %>), \(<%= association.secondary_model_id %>))")
     }
 }
@@ -106,13 +106,13 @@ public extension <%= association.major_model.name %> {
         }
     }
 
-    func create<%= association.secondary_model.name %>(<%= association.secondary_model.property_key_type_pairs %>) -> <%= association.secondary_model.name %>? {
+    @discardableResult func create<%= association.secondary_model.name %>(<%= association.secondary_model.property_key_type_pairs %>) -> <%= association.secondary_model.name %>? {
         guard let result = <%= association.secondary_model.name %>.create(<%= association.secondary_model.property_key_value_pairs %>) else { return nil }
         <%= association.class_name %>.create(<%= association.major_model_id %>: privateId, <%= association.secondary_model_id %>: result.privateId)
         return result
     }
 
-    func append<%= association.secondary_model.name %>(<%= association.secondary_model.property_key_type_pairs %>) -> <%= association.secondary_model.name %>? {
+    @discardableResult func append<%= association.secondary_model.name %>(<%= association.secondary_model.property_key_type_pairs %>) -> <%= association.secondary_model.name %>? {
         return create<%= association.secondary_model.name %>(<%= association.secondary_model.property_key_value_pairs %>)
     }
 }
