@@ -1,23 +1,21 @@
 // MARK: - Delete
 
 public extension <%= model.name %> {
-    var delete: Bool {
+    var delete: Void {
         get {
             let deleteSQL = "DELETE FROM \(<%= model.name %>.tableName) \(itself)"
             executeSQL(deleteSQL)
-            return true
         }
     }
-    static var deleteAll: Bool { get { return <%= model.relation_name %>().deleteAll } }
+    static var deleteAll: Void { get { return <%= model.relation_name %>().deleteAll } }
 }
 
 public extension <%= model.relation_name %> {
-    var delete: Bool { get { return deleteAll } }
+    var delete: Void { get { return deleteAll } }
 
-    var deleteAll: Bool {
+    var deleteAll: Void {
         get {
             self.result.forEach { $0.delete }
-            return true
         }
     }
 }
