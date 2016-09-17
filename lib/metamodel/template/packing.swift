@@ -13,7 +13,7 @@ protocol Packing {
 }
 
 class MetaModels {
-    static func fromQuery<T where T: Packing>(query: String) -> [T] {
+    static func fromQuery<T>(_ query: String) -> [T] where T: Packing {
         var models: [T] = []
         guard let stmt = executeSQL(query) else { return models }
         for values in stmt {

@@ -1,6 +1,6 @@
 // MAKR: - Helper
 
-public class <%= model.relation_name %>: Relation<<%= model.name %>> {
+open class <%= model.relation_name %>: Relation<<%= model.name %>> {
     override init() {
         super.init()
         self.select = "SELECT \(<%= model.name %>.tableName).* FROM \(<%= model.name %>.tableName)"
@@ -12,7 +12,7 @@ public class <%= model.relation_name %>: Relation<<%= model.name %>> {
         }
     }
 
-    func expandColumn(column: <%= model.name %>.Column) -> String {
+    func expandColumn(_ column: <%= model.name %>.Column) -> String {
         return "\(<%= model.name %>.tableName).\(column)"
     }
 }
@@ -22,15 +22,15 @@ extension <%= model.name %> {
 }
 
 extension <%= model.relation_name %> {
-    func find(privateId: Int) -> Self {
+    func find(_ privateId: Int) -> Self {
         return filter(privateId)
     }
 
-    func find(privateIds: [Int]) -> Self {
-        return filter([.privateId: privateIds])
+    func find(_ privateIds: [Int]) -> Self {
+        return filter(conditions: [.privateId: privateIds])
     }
 
-    func filter(privateId: Int) -> Self {
+    func filter(_ privateId: Int) -> Self {
         self.filter.append("private_id = \(privateId)")
         return self
     }

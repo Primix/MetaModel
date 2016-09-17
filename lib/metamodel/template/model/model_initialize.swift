@@ -12,16 +12,16 @@ public struct <%= model.name %> {
         public var description: String { get { return self.rawValue } }
     }
 
-    public init(<%= model.property_key_type_pairs false %>) {
+    public init(<%= model.property_key_type_pairs %>) {
         <% model.properties.each do |property| %><%= """self.#{property.name} = #{property.name}" %>
         <% end %>
     }
 
-    static public func new(<%= model.property_key_type_pairs %>) -> <%= model.name %> {
+    @discardableResult static public func new(<%= model.property_key_type_pairs %>) -> <%= model.name %> {
         return <%= model.name %>(<%= model.property_key_value_pairs %>)
     }
 
-    static public func create(<%= model.property_key_type_pairs %>) -> <%= model.name %>? {
+    @discardableResult static public func create(<%= model.property_key_type_pairs %>) -> <%= model.name %>? {
         //if <%= model.properties.select { |p| p.name.downcase.end_with? "id" }.map { |p| "#{p.name} == 0" }.push("false == true").join(" || ") %> { return nil }
 
         var columnsSQL: [<%= model.name %>.Column] = []
@@ -35,7 +35,7 @@ public struct <%= model.name %> {
         <%= """columnsSQL.append(.#{property.name})
         valuesSQL.append(#{property.name})
         """ %><% end %><% end %>
-        let insertSQL = "INSERT INTO \(tableName) (\(columnsSQL.map { $0.rawValue }.joinWithSeparator(", "))) VALUES (\(valuesSQL.map { $0.unwrapped }.joinWithSeparator(", ")))"
+        let insertSQL = "INSERT INTO \(tableName) (\(columnsSQL.map { $0.rawValue }.joined(separator: ", "))) VALUES (\(valuesSQL.map { $0.unwrapped }.joined(separator: ", ")))"
         guard let _ = executeSQL(insertSQL),
           let lastInsertRowId = executeScalarSQL("SELECT last_insert_rowid();") as? Int64 else { return nil }
         var result = <%= model.name %>(<%= model.property_key_value_pairs %>)
