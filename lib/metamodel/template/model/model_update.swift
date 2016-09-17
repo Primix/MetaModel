@@ -18,12 +18,11 @@ public extension <%= model.name %> {
                 }
             }
             let updateSQL = "UPDATE \(<%= model.name %>.tableName) SET \(setSQL.joined(separator: ", ")) \(itself)"
-            executeSQL(updateSQL) {
-                for (key, value) in attributes {
-                    switch key {
-                    <% model.properties_exclude_id.each do |property| %><%= """case .#{property.name}: #{property.name} = value as#{property.is_optional? ? "?" : "!"} #{property.type_without_optional}""" %>
-                    <% end %>default: break
-                    }
+            guard let _ = executeSQL(updateSQL) else { return }
+            for (key, value) in attributes {
+                switch key {
+                <% model.properties_exclude_id.each do |property| %><%= """case .#{property.name}: #{property.name} = value as#{property.is_optional? ? "?" : "!"} #{property.type_without_optional}""" %>
+                <% end %>default: break
                 }
             }
         }
