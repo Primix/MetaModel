@@ -22,7 +22,7 @@ public extension <%= association.major_model.name %> {
         }
         set {
             guard let newValue = newValue else { return }
-            <%= association.class_name %>.findBy(<%= association.major_model_id %>: privateId).forEach { $0.delete() }
+            <%= association.class_name %>.findBy(<%= association.major_model_id %>: privateId).forEach { $0.delete }
             <%= association.class_name %>.create(<%= association.major_model_id %>: newValue.privateId, <%= association.secondary_model_id %>: privateId)
         }
     }
