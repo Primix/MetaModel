@@ -6,7 +6,7 @@
 [![Gem](https://img.shields.io/gem/v/metamodel.svg?style=flat)](http://rubygems.org/gems/metamodel)
 [![Swift](https://img.shields.io/badge/swift-3.0-yellow.svg)](https://img.shields.io/badge/Swift-%203.0%20-yellow.svg)
 
-MetaModel is an iOS framework designed to help developer to deal with data persistent, JSON parsing and a bunch of APIs which provides an approach of handling client side database very easily.
+MetaModel is an iOS framework designed to help developer to deal with data persistent, JSON parsing and offer a bunch of APIs which provides an approach of handling client side database very easily.
 
 > MetaModel is under-development, API may constantly change before gets to 1.0.0.
 
