@@ -23,7 +23,10 @@ module MetaModel
           installer = installer_for_config
           installer.install!
         end
-        UI.notice "Please drag MetaModel.framework into Embedded Binaries phrase.\n"
+        UI.section "Copying MetaModel.framework into Embedded Binaries phrase." do
+          integrate_to_project
+        end
+        # UI.notice "Please drag MetaModel.framework into Embedded Binaries phrase.\n"
       end
 
       def prepare
@@ -39,6 +42,32 @@ module MetaModel
             UI.message "Using `#{config.metamodel_xcode_project}` to build module"
           end
         end
+      end
+
+      def integrate_to_project
+        xcodeprojs = Dir.glob("#{config.installation_root}/*.xcodeproj")
+        project = Xcodeproj::Project.open(xcodeprojs.first)
+        target = project.targets.first
+        return if target.build_phases.find { |build_phase| build_phase.to_s == "[MetaModel] Embedded Frameworks"}
+
+        # Get useful variables
+        frameworks_group = project.main_group.find_subpath('MetaModel', true)
+        frameworks_group.clear
+        frameworks_group.set_source_tree('SOURCE_ROOT')
+        frameworks_build_phase = target.build_phases.find { |build_phase| build_phase.to_s == 'FrameworksBuildPhase' }
+
+        # Add new "Embed Frameworks" build phase to target
+        embedded_frameworks_build_phase = project.new(Xcodeproj::Project::Object::PBXCopyFilesBuildPhase)
+        embedded_frameworks_build_phase.name = '[MetaModel] Embedded Frameworks'
+        embedded_frameworks_build_phase.symbol_dst_subfolder_spec = :frameworks
+        target.build_phases << embedded_frameworks_build_phase
+
+        # Add framework to target as "Embedded Frameworks"
+        framework_ref = frameworks_group.new_file("./MetaModel.framework")
+        build_file = embedded_frameworks_build_phase.add_file_reference(framework_ref)
+        frameworks_build_phase.add_file_reference(framework_ref)
+        build_file.settings = { 'ATTRIBUTES' => ['CodeSignOnCopy', 'RemoveHeadersOnCopy'] }
+        project.save
       end
 
       def validate!

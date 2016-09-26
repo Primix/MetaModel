@@ -17,7 +17,7 @@ extension <%= association.class_name %> {
 public extension <%= association.major_model.name %> {
     var <%= association.name %>: <%= association.secondary_model.name %>? {
         get {
-            guard let id = <%= association.class_name %>.findBy(<%= association.major_model.foreign_id %>: privateId).first?.commentId else { return nil }
+            guard let id = <%= association.class_name %>.findBy(<%= association.major_model.foreign_id %>: privateId).first?.<%= association.secondary_model.foreign_id %> else { return nil }
             return <%= association.secondary_model.name %>.find(id)
         }
         set {
